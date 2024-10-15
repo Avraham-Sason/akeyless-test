@@ -2,7 +2,7 @@ import * as react_jsx_runtime from 'react/jsx-runtime';
 import React, { SetStateAction } from 'react';
 
 interface ButtonProps {
-    label: string;
+    label?: string;
 }
 declare const Button: ({ label }: ButtonProps) => react_jsx_runtime.JSX.Element;
 
