@@ -12,7 +12,7 @@ export const Checkbox = ({ id, checked, setChecked, rotate = true, style }: Chec
     return (
         <div className="checkbox-wrapper-51">
             <input type="checkbox" id={id} className="hidden" checked={checked} onChange={() => setChecked(!checked)} />
-            <label style={{}} htmlFor={id} className="relative block w-[42px] h-[24px] cursor-pointer transform-gpu">
+            <label htmlFor={id} className="relative block w-[42px] h-[24px] cursor-pointer transform-gpu">
                 <div
                     className={`relative top-[1px] left-[1px] w-[40px] h-[22px] rounded-[12px] transition-colors duration-200 ease-in-out ${
                         checked ? "bg-[#52d66b]" : "bg-[#c8ccd4]"
