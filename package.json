@@ -35,6 +35,10 @@
         "./components": {
             "import": "./dist/components/index.mjs",
             "require": "./dist/components/index.js"
+        },
+        "./types": {
+            "import": "./dist/types/index.mjs",
+            "require": "./dist/types/index.js"
         }
     },
     "types": "./dist/index.d.ts",
@@ -42,6 +46,9 @@
         "*": {
             "components": [
                 "./dist/components/index.d.ts"
+            ],
+            "types": [
+                "./dist/types/index.d.ts"
             ]
         }
     }
