@@ -1,3 +1,4 @@
+import '../index.css'
 interface ButtonProps {
     label: string;
 }

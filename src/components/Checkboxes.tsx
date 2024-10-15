@@ -1,4 +1,6 @@
+import "../index.css";
 import React, { SetStateAction } from "react";
+
 interface CheckBoxProps {
     id: string;
     checked: boolean;
