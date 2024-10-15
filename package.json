@@ -1,7 +1,7 @@
 {
     "name": "test_client_commons",
     "version": "1.0.0",
-    "main": "index.js",
+    "main": "./dist/index.js",
     "scripts": {
         "build:components": "tsup src/components/index.ts --format esm,cjs --dts --out-dir dist/components",
         "build": "npm run build:components && tsup src/index.ts --format esm,cjs --dts"
@@ -27,13 +27,19 @@
     "exports": {
         ".": {
             "import": "./dist/index.mjs",
-            "require": "./dist/index.js",
-            "types": "./dist/index.d.ts"
+            "require": "./dist/index.js"
         },
         "./components": {
             "import": "./dist/components/index.mjs",
-            "require": "./dist/components/index.js",
-            "types": "./dist/components/index.d.ts"
+            "require": "./dist/components/index.js"
+        }
+    },
+    "types": "./dist/index.d.ts",
+    "typesVersions": {
+        "*": {
+            "components": [
+                "./dist/components/index.d.ts"
+            ]
         }
     }
 }
