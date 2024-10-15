@@ -72,7 +72,7 @@ var import_jsx_runtime = require("react/jsx-runtime");
 var Button = function(param) {
     var label = param.label;
     return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-        className: "bg-red-500 px-4 py-2",
+        className: "bg-red-500 text-green-500 px-4 py-2",
         children: label || "no label provide"
     });
 };
@@ -94,7 +94,6 @@ var Checkbox = function(param) {
                 }
             }),
             /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("label", {
-                style: {},
                 htmlFor: id,
                 className: "relative block w-[42px] h-[24px] cursor-pointer transform-gpu",
                 children: [
