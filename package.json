@@ -27,11 +27,13 @@
     "exports": {
         ".": {
             "import": "./dist/index.mjs",
-            "require": "./dist/index.js"
+            "require": "./dist/index.js",
+            "types": "./dist/index.d.ts"
         },
         "./components": {
             "import": "./dist/components/index.mjs",
-            "require": "./dist/components/index.js"
+            "require": "./dist/components/index.js",
+            "types": "./dist/components/index.d.ts"
         }
     }
 }
