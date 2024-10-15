@@ -307,20 +307,11 @@ __export(components_exports, {
     Table: function() {
         return Table;
     },
-    emptyFilterSvg: function() {
-        return emptyFilterSvg;
-    },
-    exportToExcelSvg: function() {
-        return exportToExcelSvg;
+    assets: function() {
+        return assets_exports;
     },
     getFixedNumber: function() {
         return getFixedNumber;
-    },
-    slashFilterSvg: function() {
-        return slashFilterSvg;
-    },
-    sortSvg: function() {
-        return sortSvg;
     }
 });
 module.exports = __toCommonJS(components_exports);
@@ -388,6 +379,21 @@ var import_exceljs = __toESM(require("exceljs"));
 var import_file_saver = require("file-saver");
 var import_react = require("react");
 // src/components/tables/assets.tsx
+var assets_exports = {};
+__export(assets_exports, {
+    emptyFilterSvg: function() {
+        return emptyFilterSvg;
+    },
+    exportToExcelSvg: function() {
+        return exportToExcelSvg;
+    },
+    slashFilterSvg: function() {
+        return slashFilterSvg;
+    },
+    sortSvg: function() {
+        return sortSvg;
+    }
+});
 var import_jsx_runtime3 = require("react/jsx-runtime");
 var sortSvg = function(upside_down) {
     return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("svg", {
@@ -987,9 +993,6 @@ var getFixedNumber = function() {
     Button: Button,
     Checkbox: Checkbox,
     Table: Table,
-    emptyFilterSvg: emptyFilterSvg,
-    exportToExcelSvg: exportToExcelSvg,
-    getFixedNumber: getFixedNumber,
-    slashFilterSvg: slashFilterSvg,
-    sortSvg: sortSvg
+    assets: assets,
+    getFixedNumber: getFixedNumber
 });

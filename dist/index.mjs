@@ -255,20 +255,11 @@ __export(components_exports, {
     Table: function() {
         return Table;
     },
-    emptyFilterSvg: function() {
-        return emptyFilterSvg;
-    },
-    exportToExcelSvg: function() {
-        return exportToExcelSvg;
+    assets: function() {
+        return assets_exports;
     },
     getFixedNumber: function() {
         return getFixedNumber;
-    },
-    slashFilterSvg: function() {
-        return slashFilterSvg;
-    },
-    sortSvg: function() {
-        return sortSvg;
     }
 });
 // src/components/Button.tsx
@@ -335,6 +326,21 @@ import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import { useState, useEffect } from "react";
 // src/components/tables/assets.tsx
+var assets_exports = {};
+__export(assets_exports, {
+    emptyFilterSvg: function() {
+        return emptyFilterSvg;
+    },
+    exportToExcelSvg: function() {
+        return exportToExcelSvg;
+    },
+    slashFilterSvg: function() {
+        return slashFilterSvg;
+    },
+    sortSvg: function() {
+        return sortSvg;
+    }
+});
 import { Fragment, jsx as jsx3, jsxs as jsxs2 } from "react/jsx-runtime";
 var sortSvg = function(upside_down) {
     return /* @__PURE__ */ jsxs2("svg", {
@@ -929,6 +935,9 @@ var getFixedNumber = function() {
     var sum_value = number % 1 === 0 ? number : number.toFixed(fix).replace(/\.?0+$/, "");
     return String(sum_value);
 };
+// src/types/index.ts
+var types_exports = {};
 // src/index.ts
 var components = components_exports;
-export { components };
+var types = types_exports;
+export { components, types };

@@ -2,7 +2,7 @@ import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import React, { useState, useEffect } from "react";
 import { emptyFilterSvg, exportToExcelSvg, slashFilterSvg, sortSvg } from "./assets";
-import { FilterProps, TableCellProps, TableHeaderProps, TableProps, TableRowProps } from "./types";
+import { FilterProps, TableCellProps, TableHeaderProps, TableProps, TableRowProps } from "../../types";
 
 const Filter = ({
     filterableColumn,

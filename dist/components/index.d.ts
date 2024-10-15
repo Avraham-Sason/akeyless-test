@@ -15,57 +15,6 @@ interface CheckBoxProps {
 }
 declare const Checkbox: ({ id, checked, setChecked, rotate, style }: CheckBoxProps) => react_jsx_runtime.JSX.Element;
 
-interface TableHeaderProps {
-    headers: string[];
-    lang: "en" | "he";
-    headerStyle?: React.CSSProperties;
-    headerCellStyle?: React.CSSProperties;
-    onSort: (index: number) => void;
-    sortColumn: number | null;
-    sortOrder: "asc" | "desc" | null;
-    onFilterChange: (dataKey: string, value: string) => void;
-    clearFilter: () => void;
-    handleFilterClick: (dataKey: string) => void;
-    filters: Record<string, string[]>;
-    filterOptions: Record<string, any[]>;
-    filterableColumns?: {
-        header: string;
-        dataKey: string;
-        ui?: (option: any) => ReactNode;
-    }[];
-    filterPopupsDisplay: string;
-    sortDisplay: boolean;
-    filter_label: string;
-    sort_label: string;
-    setFilterPopupsDisplay: React.Dispatch<React.SetStateAction<string>>;
-}
-interface FilterProps {
-    filterableColumn?: {
-        header: string;
-        dataKey: string;
-        ui?: (option: any) => ReactNode;
-    };
-    handleFilterClick: (dataKey: string) => void;
-    filterPopupsDisplay: string;
-    filter_label: string;
-    index: number;
-    filterOptions: Record<string, any[]>;
-    filters: Record<string, any[]>;
-    onFilterChange: (dataKey: string, value: string) => void;
-    lang: "en" | "he";
-    headers: string[];
-}
-interface TableRowProps {
-    item: Record<string, any>;
-    rowStyles?: React.CSSProperties;
-    cellStyle?: React.CSSProperties;
-    keysToRender: string[];
-    onRowClick: (data?: any) => void;
-}
-interface TableCellProps {
-    value: any;
-    cellStyle?: React.CSSProperties;
-}
 interface TableProps {
     data: Record<string, any>[];
     headers: string[];
@@ -121,4 +70,12 @@ declare const emptyFilterSvg: (solid?: boolean) => react_jsx_runtime.JSX.Element
 declare const slashFilterSvg: (solid?: boolean) => react_jsx_runtime.JSX.Element;
 declare const exportToExcelSvg: () => react_jsx_runtime.JSX.Element;
 
-export { Button, Checkbox, type FilterProps, Table, type TableCellProps, type TableHeaderProps, type TableProps, type TableRowProps, emptyFilterSvg, exportToExcelSvg, getFixedNumber, slashFilterSvg, sortSvg };
+declare const assets_emptyFilterSvg: typeof emptyFilterSvg;
+declare const assets_exportToExcelSvg: typeof exportToExcelSvg;
+declare const assets_slashFilterSvg: typeof slashFilterSvg;
+declare const assets_sortSvg: typeof sortSvg;
+declare namespace assets {
+  export { assets_emptyFilterSvg as emptyFilterSvg, assets_exportToExcelSvg as exportToExcelSvg, assets_slashFilterSvg as slashFilterSvg, assets_sortSvg as sortSvg };
+}
+
+export { Button, Checkbox, Table, assets, getFixedNumber };

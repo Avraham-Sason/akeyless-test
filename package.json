@@ -4,7 +4,8 @@
     "main": "./dist/index.js",
     "scripts": {
         "build:components": "tsup src/components/index.ts --format esm,cjs --dts --out-dir dist/components",
-        "build": "npm run build:components && tsup src/index.ts --format esm,cjs --dts"
+        "build:types": "tsup src/types/index.ts --format esm,cjs --dts --out-dir dist/types",
+        "build": "npm run build:components && npm run build:types && tsup src/index.ts --format esm,cjs --dts"
     },
     "keywords": [],
     "author": "",
