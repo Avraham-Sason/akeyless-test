@@ -227,13 +227,24 @@ interface LoaderProps {
 }
 declare const Loader: React$1.FC<LoaderProps>;
 
+declare const InputContainer: ({ name, inputType, labelContent, defaultValue, validationName, containerClassName, labelClassName, elementClassName, required, validationType, onKeyDown, }: InputContainerProps) => react_jsx_runtime.JSX.Element;
+declare const SelectContainer: ({ name, labelContent, containerClassName, labelClassName, defaultValue, elementClassName, optionClassName, required, options, }: SelectContainerProps) => react_jsx_runtime.JSX.Element;
+declare const ModularForm: ({ submitFunction, elements, headerContent, buttonContent, formClassName, headerClassName, direction, }: ModularFormProps) => react_jsx_runtime.JSX.Element;
+declare const ConfirmForm: ({ onV, onX, headline, direction }: ConfirmFormProps) => react_jsx_runtime.JSX.Element;
+declare const DatePicker: ({ submit, formClassName, labelsClassName, inputsClassName, buttonClassName, buttonStyle, defaultFrom, defaultTo, direction, }: DatePickerProps) => react_jsx_runtime.JSX.Element;
+
 declare const Components_Button: typeof Button;
 declare const Components_Checkbox: typeof Checkbox;
+declare const Components_ConfirmForm: typeof ConfirmForm;
+declare const Components_DatePicker: typeof DatePicker;
+declare const Components_InputContainer: typeof InputContainer;
 declare const Components_Loader: typeof Loader;
+declare const Components_ModularForm: typeof ModularForm;
+declare const Components_SelectContainer: typeof SelectContainer;
 declare const Components_Table: typeof Table;
 declare const Components_getFixedNumber: typeof getFixedNumber;
 declare namespace Components {
-  export { Components_Button as Button, Components_Checkbox as Checkbox, Components_Loader as Loader, Components_Table as Table, assets$1 as assets, Components_getFixedNumber as getFixedNumber };
+  export { Components_Button as Button, Components_Checkbox as Checkbox, Components_ConfirmForm as ConfirmForm, Components_DatePicker as DatePicker, Components_InputContainer as InputContainer, Components_Loader as Loader, Components_ModularForm as ModularForm, Components_SelectContainer as SelectContainer, Components_Table as Table, assets$1 as assets, Components_getFixedNumber as getFixedNumber };
 }
 
 declare const handleInvalid: (e: React$1.InvalidEvent<HTMLInputElement>, requireError?: string) => void;

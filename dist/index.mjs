@@ -304,8 +304,23 @@ __export(components_exports, {
     Checkbox: function() {
         return Checkbox;
     },
+    ConfirmForm: function() {
+        return ConfirmForm;
+    },
+    DatePicker: function() {
+        return DatePicker;
+    },
+    InputContainer: function() {
+        return InputContainer;
+    },
     Loader: function() {
         return Loader;
+    },
+    ModularForm: function() {
+        return ModularForm;
+    },
+    SelectContainer: function() {
+        return SelectContainer;
     },
     Table: function() {
         return Table;
@@ -1005,6 +1020,10 @@ var Loader = function(param) {
         })
     });
 };
+// src/components/forms/forms.tsx
+import { useState as useState2 } from "react";
+import { useTranslation } from "react-i18next";
+import moment from "moment";
 // src/helpers/index.ts
 var helpers_exports = {};
 __export(helpers_exports, {
@@ -1098,6 +1117,403 @@ var useValidation = function(validationType, requireError) {
         },
         "data-validation": validationType
     };
+};
+// src/components/forms/forms.tsx
+import { jsx as jsx7, jsxs as jsxs5 } from "react/jsx-runtime";
+var InputContainer = function(param) {
+    var _param_name = param.name, name = _param_name === void 0 ? "" : _param_name, _param_inputType = param.inputType, inputType = _param_inputType === void 0 ? "text" : _param_inputType, _param_labelContent = param.labelContent, labelContent = _param_labelContent === void 0 ? "" : _param_labelContent, _param_defaultValue = param.defaultValue, defaultValue = _param_defaultValue === void 0 ? "" : _param_defaultValue, _param_validationName = param.validationName, validationName = _param_validationName === void 0 ? "textNumbers" : _param_validationName, _param_containerClassName = param.containerClassName, containerClassName = _param_containerClassName === void 0 ? "" : _param_containerClassName, _param_labelClassName = param.labelClassName, labelClassName = _param_labelClassName === void 0 ? "" : _param_labelClassName, _param_elementClassName = param.elementClassName, elementClassName = _param_elementClassName === void 0 ? "" : _param_elementClassName, _param_required = param.required, required = _param_required === void 0 ? false : _param_required, validationType = param.validationType, onKeyDown = param.onKeyDown;
+    return /* @__PURE__ */ jsxs5("div", {
+        className: "center ".concat(containerClassName),
+        children: [
+            /* @__PURE__ */ jsxs5("label", {
+                className: "text-start w-[30%] ".concat(labelClassName),
+                htmlFor: name,
+                children: [
+                    labelContent,
+                    " :"
+                ]
+            }),
+            /* @__PURE__ */ jsx7("input", _object_spread_props(_object_spread({
+                className: "w-[70%] bg-none border-b-[1px] border-black ".concat(elementClassName),
+                defaultValue: defaultValue
+            }, useValidation(validationName, validationType)), {
+                required: required,
+                name: name,
+                onKeyDown: onKeyDown,
+                type: inputType
+            }))
+        ]
+    });
+};
+var SelectContainer = function(param) {
+    var _param_name = param.name, name = _param_name === void 0 ? "" : _param_name, _param_labelContent = param.labelContent, labelContent = _param_labelContent === void 0 ? "" : _param_labelContent, _param_containerClassName = param.containerClassName, containerClassName = _param_containerClassName === void 0 ? "" : _param_containerClassName, _param_labelClassName = param.labelClassName, labelClassName = _param_labelClassName === void 0 ? "" : _param_labelClassName, _param_defaultValue = param.defaultValue, defaultValue = _param_defaultValue === void 0 ? "" : _param_defaultValue, _param_elementClassName = param.elementClassName, elementClassName = _param_elementClassName === void 0 ? "" : _param_elementClassName, _param_optionClassName = param.optionClassName, optionClassName = _param_optionClassName === void 0 ? "" : _param_optionClassName, _param_required = param.required, required = _param_required === void 0 ? false : _param_required, _param_options = param.options, options = _param_options === void 0 ? [] : _param_options;
+    var _options_, _options_find;
+    var _useState2 = _sliced_to_array(useState2(false), 2), isOpen = _useState2[0], setIsOpen = _useState2[1];
+    var _useState21 = _sliced_to_array(useState2(defaultValue || ((_options_ = options[0]) === null || _options_ === void 0 ? void 0 : _options_.value) || ""), 2), selectedValue = _useState21[0], setSelectedValue = _useState21[1];
+    var handleOptionClick = function(value) {
+        setSelectedValue(value);
+        setIsOpen(false);
+    };
+    return /* @__PURE__ */ jsxs5("div", {
+        className: "center ".concat(containerClassName),
+        children: [
+            /* @__PURE__ */ jsxs5("label", {
+                className: "text-start w-[30%] ".concat(labelClassName),
+                htmlFor: name,
+                children: [
+                    labelContent,
+                    " :"
+                ]
+            }),
+            /* @__PURE__ */ jsxs5("div", {
+                className: "w-[70%] relative ".concat(elementClassName),
+                onClick: function() {
+                    return setIsOpen(!isOpen);
+                },
+                children: [
+                    /* @__PURE__ */ jsx7("div", {
+                        className: "border-b-[1px] border-black max-h-6 cursor-pointer ".concat(elementClassName),
+                        children: (options === null || options === void 0 ? void 0 : (_options_find = options.find(function(opt) {
+                            return opt.value === selectedValue;
+                        })) === null || _options_find === void 0 ? void 0 : _options_find.label) || selectedValue
+                    }),
+                    isOpen ? /* @__PURE__ */ jsx7("i", {
+                        className: "fa-light fa-chevron-up absolute top-[1px] left-1 cursor-pointer"
+                    }) : /* @__PURE__ */ jsx7("i", {
+                        className: "fa-light fa-chevron-down absolute top-[1px] left-1 cursor-pointer"
+                    }),
+                    isOpen && /* @__PURE__ */ jsx7("div", {
+                        className: "absolute w-full bg-white border border-gray-300 max-h-32 overflow-y-auto z-10",
+                        children: options.map(function(option) {
+                            return /* @__PURE__ */ jsx7("div", {
+                                className: "p-2 cursor-pointer hover:bg-gray-200 ".concat(optionClassName),
+                                onClick: function() {
+                                    return handleOptionClick(option.value);
+                                },
+                                children: option.label
+                            }, option.value);
+                        })
+                    }),
+                    /* @__PURE__ */ jsx7("input", {
+                        value: selectedValue,
+                        type: "hidden",
+                        name: name,
+                        required: required
+                    })
+                ]
+            })
+        ]
+    });
+};
+var ModularForm = function(param) {
+    var _param_submitFunction = param.submitFunction, submitFunction = _param_submitFunction === void 0 ? /*#__PURE__*/ function() {
+        var _ref = _async_to_generator(function(form) {
+            return _ts_generator(this, function(_state) {
+                return [
+                    2
+                ];
+            });
+        });
+        return function(form) {
+            return _ref.apply(this, arguments);
+        };
+    }() : _param_submitFunction, _param_elements = param.elements, elements = _param_elements === void 0 ? [] : _param_elements, headerContent = param.headerContent, _param_buttonContent = param.buttonContent, buttonContent = _param_buttonContent === void 0 ? "" : _param_buttonContent, _param_formClassName = param.formClassName, formClassName = _param_formClassName === void 0 ? "" : _param_formClassName, _param_headerClassName = param.headerClassName, headerClassName = _param_headerClassName === void 0 ? "" : _param_headerClassName, _param_direction = param.direction, direction = _param_direction === void 0 ? "rtl" : _param_direction;
+    var _useState2 = _sliced_to_array(useState2(""), 2), errorMsg = _useState2[0], setErrorMsg = _useState2[1];
+    var _useState21 = _sliced_to_array(useState2(false), 2), isLoading = _useState21[0], setIsLoading = _useState21[1];
+    var t = useTranslation().t;
+    var onSubmit = /*#__PURE__*/ function() {
+        var _ref = _async_to_generator(function(e) {
+            var err;
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        e.preventDefault();
+                        setIsLoading(true);
+                        _state.label = 1;
+                    case 1:
+                        _state.trys.push([
+                            1,
+                            3,
+                            ,
+                            4
+                        ]);
+                        return [
+                            4,
+                            submitFunction(e)
+                        ];
+                    case 2:
+                        _state.sent();
+                        return [
+                            3,
+                            4
+                        ];
+                    case 3:
+                        err = _state.sent();
+                        if (typeof err === "string") {
+                            setErrorMsg(t(err));
+                        }
+                        console.error("Error from submit ModularForm:", err);
+                        return [
+                            3,
+                            4
+                        ];
+                    case 4:
+                        setIsLoading(false);
+                        return [
+                            2
+                        ];
+                }
+            });
+        });
+        return function onSubmit(e) {
+            return _ref.apply(this, arguments);
+        };
+    }();
+    return /* @__PURE__ */ jsxs5("form", {
+        onSubmit: onSubmit,
+        style: {
+            direction: direction
+        },
+        className: "w-[350px] px-5 py-5 flex flex-col gap-5 ".concat(formClassName),
+        children: [
+            /* @__PURE__ */ jsx7("div", {
+                className: "border-b-2 border-[#547f22] pb-2 text-start font-bold text-[20px] ".concat(headerClassName),
+                children: headerContent
+            }),
+            elements.map(function(element, index) {
+                switch(element.type){
+                    case "input":
+                        return /* @__PURE__ */ jsx7(InputContainer, _object_spread({}, element), index);
+                    case "select":
+                        return /* @__PURE__ */ jsx7(SelectContainer, _object_spread({}, element), index);
+                    default:
+                        return null;
+                }
+            }),
+            /* @__PURE__ */ jsxs5("div", {
+                className: "flex justify-between w-full",
+                children: [
+                    /* @__PURE__ */ jsx7("div", {
+                        title: errorMsg,
+                        className: "text-[#f22] text-[18px] max-w-[80%] ellipsis",
+                        children: t(errorMsg)
+                    }),
+                    /* @__PURE__ */ jsx7("button", {
+                        disabled: isLoading,
+                        className: "bg-[#547f22] px-3 py-1 rounded-lg text-white min-w-20",
+                        type: "submit",
+                        children: isLoading ? /* @__PURE__ */ jsx7(Loader, {
+                            size: 25,
+                            color: "#fff"
+                        }) : buttonContent
+                    })
+                ]
+            })
+        ]
+    });
+};
+var ConfirmForm = function(param) {
+    var onV = param.onV, onX = param.onX, _param_headline = param.headline, headline = _param_headline === void 0 ? "" : _param_headline, _param_direction = param.direction, direction = _param_direction === void 0 ? "rtl" : _param_direction;
+    var onConfirm = /*#__PURE__*/ function() {
+        var _ref = _async_to_generator(function() {
+            var error;
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        _state.trys.push([
+                            0,
+                            2,
+                            ,
+                            3
+                        ]);
+                        return [
+                            4,
+                            onV()
+                        ];
+                    case 1:
+                        _state.sent();
+                        return [
+                            3,
+                            3
+                        ];
+                    case 2:
+                        error = _state.sent();
+                        console.error("'onV' failed:", error);
+                        return [
+                            3,
+                            3
+                        ];
+                    case 3:
+                        return [
+                            2
+                        ];
+                }
+            });
+        });
+        return function onConfirm() {
+            return _ref.apply(this, arguments);
+        };
+    }();
+    var onDenied = /*#__PURE__*/ function() {
+        var _ref = _async_to_generator(function() {
+            var error;
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        _state.trys.push([
+                            0,
+                            2,
+                            ,
+                            3
+                        ]);
+                        return [
+                            4,
+                            onX()
+                        ];
+                    case 1:
+                        _state.sent();
+                        return [
+                            3,
+                            3
+                        ];
+                    case 2:
+                        error = _state.sent();
+                        console.error("'onX' failed:", error);
+                        return [
+                            3,
+                            3
+                        ];
+                    case 3:
+                        return [
+                            2
+                        ];
+                }
+            });
+        });
+        return function onDenied() {
+            return _ref.apply(this, arguments);
+        };
+    }();
+    return /* @__PURE__ */ jsxs5("div", {
+        style: {
+            direction: direction,
+            padding: "30px"
+        },
+        className: "full col gap-2",
+        children: [
+            /* @__PURE__ */ jsx7("div", {
+                className: "text-lg font-bold",
+                children: headline
+            }),
+            /* @__PURE__ */ jsxs5("div", {
+                className: "center gap-2 ",
+                children: [
+                    /* @__PURE__ */ jsxs5("button", {
+                        onClick: onDenied,
+                        children: [
+                            " ",
+                            /* @__PURE__ */ jsx7(RedXSvg, {}),
+                            " "
+                        ]
+                    }),
+                    /* @__PURE__ */ jsxs5("button", {
+                        onClick: onConfirm,
+                        children: [
+                            " ",
+                            /* @__PURE__ */ jsx7(GreenVSvg, {}),
+                            " "
+                        ]
+                    })
+                ]
+            })
+        ]
+    });
+};
+var DatePicker = function(param) {
+    var _param_submit = param.submit, submit = _param_submit === void 0 ? /*#__PURE__*/ function() {
+        var _ref = _async_to_generator(function(form) {
+            return _ts_generator(this, function(_state) {
+                return [
+                    2
+                ];
+            });
+        });
+        return function(form) {
+            return _ref.apply(this, arguments);
+        };
+    }() : _param_submit, _param_formClassName = param.formClassName, formClassName = _param_formClassName === void 0 ? "" : _param_formClassName, _param_labelsClassName = param.labelsClassName, labelsClassName = _param_labelsClassName === void 0 ? "" : _param_labelsClassName, _param_inputsClassName = param.inputsClassName, inputsClassName = _param_inputsClassName === void 0 ? "" : _param_inputsClassName, _param_buttonClassName = param.buttonClassName, buttonClassName = _param_buttonClassName === void 0 ? "" : _param_buttonClassName, _param_buttonStyle = param.buttonStyle, buttonStyle = _param_buttonStyle === void 0 ? {} : _param_buttonStyle, defaultFrom = param.defaultFrom, defaultTo = param.defaultTo, _param_direction = param.direction, direction = _param_direction === void 0 ? "rtl" : _param_direction;
+    var t = useTranslation().t;
+    var _useState2 = _sliced_to_array(useState2(false), 2), isLoading = _useState2[0], setIsLoading = _useState2[1];
+    var onSubmit = /*#__PURE__*/ function() {
+        var _ref = _async_to_generator(function(e) {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        e.preventDefault();
+                        setIsLoading(true);
+                        return [
+                            4,
+                            submit(e)
+                        ];
+                    case 1:
+                        _state.sent();
+                        setIsLoading(false);
+                        return [
+                            2
+                        ];
+                }
+            });
+        });
+        return function onSubmit(e) {
+            return _ref.apply(this, arguments);
+        };
+    }();
+    return /* @__PURE__ */ jsxs5("form", {
+        style: {
+            direction: direction
+        },
+        onSubmit: onSubmit,
+        className: "w-full h-10 flex justify-start gap-3 items-center ".concat(formClassName),
+        children: [
+            /* @__PURE__ */ jsxs5("label", {
+                className: "center text-[14px] relative gap-2 ".concat(labelsClassName),
+                htmlFor: "from",
+                children: [
+                    t("from_date"),
+                    /* @__PURE__ */ jsx7("input", {
+                        className: "w-[125px] text-[14px] py-[2px] px-1 rounded-[2px] border-black border-[1px] text-end ".concat(inputsClassName),
+                        type: "date",
+                        name: "from",
+                        defaultValue: defaultFrom || moment(/* @__PURE__ */ new Date()).format("YYYY-MM-DD")
+                    })
+                ]
+            }),
+            /* @__PURE__ */ jsxs5("label", {
+                className: "center text-[14px] relative gap-2 ".concat(labelsClassName),
+                htmlFor: "to",
+                children: [
+                    t("to_date"),
+                    /* @__PURE__ */ jsx7("input", {
+                        className: "w-[125px] text-[14px] py-[2px] px-1 rounded-[2px] border-black border-[1px] text-end ".concat(inputsClassName),
+                        type: "date",
+                        name: "to",
+                        defaultValue: defaultTo || moment(/* @__PURE__ */ new Date()).format("YYYY-MM-DD")
+                    })
+                ]
+            }),
+            /* @__PURE__ */ jsx7("button", {
+                disabled: isLoading,
+                style: buttonStyle,
+                className: "bg-[#699a2c] text-[#fff] font-[500] w-[75px] h-[27px] ".concat(buttonClassName),
+                type: "submit",
+                children: isLoading ? /* @__PURE__ */ jsx7(Loader, {
+                    className: "pt-[2px]",
+                    size: 20,
+                    color: "#fff"
+                }) : t("search")
+            })
+        ]
+    });
 };
 // src/hooks/index.ts
 var hooks_exports = {};
