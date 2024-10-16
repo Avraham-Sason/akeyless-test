@@ -931,4 +931,525 @@ var Loader = function(param) {
         })
     });
 };
-export { Button_default as Button, Checkbox, Loader, Table, assets_exports as assets, getFixedNumber };
+// src/components/forms/forms.tsx
+import { useState as useState2 } from "react";
+import { useTranslation } from "react-i18next";
+import moment from "moment";
+// src/helpers/forms.ts
+var handleInvalid = function(e, requireError) {
+    e.target.setCustomValidity(requireError || "This filed is required !");
+};
+var handleChange = function(e) {
+    e.target.setCustomValidity("");
+    var validation = e.target.getAttribute("data-validation");
+    if (validation === "text") {
+        var cleanedValue = e.target.value.replace(/[^a-zA-Zא-ת\- ]/g, "");
+        e.target.value = cleanedValue;
+    } else if (validation === "numbers") {
+        var cleanedValue1 = e.target.value.replace(/[^0-9\- +]/g, "");
+        e.target.value = cleanedValue1;
+    } else if (validation === "numbersOnly") {
+        var cleanedValue2 = e.target.value.replace(/[^0-9]/g, "");
+        e.target.value = cleanedValue2;
+    } else if (validation === "price") {
+        var cleanedValue3 = e.target.value.replace(/[^0-9\.]/g, "");
+        e.target.value = cleanedValue3;
+    } else if (validation === "textNumbers") {
+        var cleanedValue4 = e.target.value.replace(/[^a-zA-Zא-ת0-9\- +]/g, "");
+        e.target.value = cleanedValue4;
+    } else if (validation === "email") {
+        var cleanedValue5 = e.target.value.replace(/[^a-zA-Zא-ת0-9.@\- ]/g, "");
+        e.target.value = cleanedValue5;
+    } else if (validation === "color") {
+        var cleanedValue6 = e.target.value.replace(/[^#0-9A-Fa-f]/g, "");
+        e.target.value = cleanedValue6;
+    } else if (validation === "address") {
+        var cleanedValue7 = e.target.value.replace(/[^a-zA-Zא-ת0-9\-., ]/g, "");
+        e.target.value = cleanedValue7;
+    } else if (validation === "cars") {
+        var cleanedValue8 = e.target.value.replace(/[^a-zA-Zא-ת0-9,_]/g, "");
+        e.target.value = cleanedValue8;
+    } else if (validation === "charts") {
+        var cleanedValue9 = e.target.value.replace(/[^a-zA-Zא-ת0-9\-.,_@! ]/g, "");
+        e.target.value = cleanedValue9;
+    } else {
+        e.target.value = e.target.value;
+    }
+};
+var handlePaste = function(e) {
+    var validation = e.currentTarget.getAttribute("data-validation");
+    var pasteData = e.clipboardData.getData("text");
+    if (validation === "text") {
+        pasteData = pasteData.replace(/[^a-zA-Zא-ת\- ]/g, "");
+    } else if (validation === "numbers") {
+        pasteData = pasteData.replace(/[^0-9\- +]/g, "");
+    } else if (validation === "numbersOnly") {
+        pasteData = pasteData.replace(/[^0-9]/g, "");
+    } else if (validation === "price") {
+        pasteData = pasteData.replace(/[^0-9\.]/g, "");
+    } else if (validation === "textNumbers") {
+        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9\- +]/g, "");
+    } else if (validation === "email") {
+        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9.@\- ]/g, "");
+    } else if (validation === "color") {
+        pasteData = pasteData.replace(/[^#0-9A-Fa-f]/g, "");
+    } else if (validation === "address") {
+        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9\-., ]/g, "");
+    } else if (validation === "cars") {
+        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9,_]/g, "");
+    } else if (validation === "charts") {
+        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9\-.,_@! ]/g, "");
+    }
+    e.preventDefault();
+    document.execCommand("insertText", false, pasteData);
+};
+var useValidation = function(validationType, requireError) {
+    return {
+        onChange: handleChange,
+        onPaste: handlePaste,
+        onInvalid: function(e) {
+            return handleInvalid(e, requireError);
+        },
+        "data-validation": validationType
+    };
+};
+// src/assets/svg.tsx
+import { jsx as jsx6, jsxs as jsxs4 } from "react/jsx-runtime";
+var RedXSvg = function(param) {
+    var height = param.height, width = param.width, viewBox = param.viewBox;
+    return /* @__PURE__ */ jsxs4("svg", {
+        xmlns: "http://www.w3.org/2000/svg",
+        width: width || "32",
+        height: height || "32",
+        viewBox: viewBox || "0 0 32 32",
+        fill: "none",
+        children: [
+            /* @__PURE__ */ jsx6("path", {
+                d: "M21.0801 10.3C20.6101 9.80996 19.8301 9.79996 19.3401 10.27L15.6101 13.89L11.8801 10.27C11.3901 9.79996 10.6101 9.80996 10.1401 10.3C9.67008 10.79 9.68008 11.57 10.1701 12.04L13.8501 15.61L10.1701 19.18C9.68008 19.65 9.67008 20.43 10.1401 20.92C10.6101 21.41 11.3901 21.42 11.8801 20.95L15.6101 17.33L19.3401 20.95C19.5701 21.17 19.8801 21.3 20.2001 21.3C20.8801 21.29 21.4301 20.73 21.4201 20.04C21.4201 19.72 21.2901 19.41 21.0601 19.19L17.3801 15.62L21.0601 12.05C21.5501 11.58 21.5601 10.8 21.0901 10.31L21.0801 10.3Z",
+                fill: "#FF4C2B"
+            }),
+            /* @__PURE__ */ jsx6("path", {
+                d: "M15.61 0C6.99 0 0 6.99 0 15.61C0.86 36.32 30.36 36.31 31.22 15.61C31.21 6.99 24.23 0 15.61 0ZM15.61 28.76C8.35 28.76 2.47 22.87 2.46 15.61C3.18 -1.84 28.04 -1.83 28.76 15.61C28.76 22.87 22.87 28.75 15.61 28.76Z",
+                fill: "#FF4C2B"
+            })
+        ]
+    });
+};
+var GreenVSvg = function(param) {
+    var height = param.height, width = param.width, viewBox = param.viewBox;
+    return /* @__PURE__ */ jsxs4("svg", {
+        xmlns: "http://www.w3.org/2000/svg",
+        width: width || "32",
+        height: height || "32",
+        viewBox: viewBox || "0 0 32 32",
+        fill: "none",
+        children: [
+            /* @__PURE__ */ jsx6("path", {
+                d: "M15.61 0C6.99 0 0.01 6.99 0 15.61C0.86 36.32 30.36 36.31 31.22 15.61C31.21 6.99 24.23 0 15.61 0ZM15.61 28.76C8.35 28.76 2.47 22.87 2.46 15.61C3.18 -1.84 28.04 -1.83 28.76 15.61C28.76 22.87 22.87 28.75 15.61 28.76Z",
+                fill: "#3B8F08"
+            }),
+            /* @__PURE__ */ jsx6("path", {
+                d: "M21.66 10.15L13.37 18.44L9.58003 14.54C9.10003 14.06 8.32003 14.07 7.84003 14.54C7.38003 15.01 7.36003 15.76 7.82003 16.24L12.48 21.03C12.96 21.52 13.74 21.52 14.23 21.05L23.41 11.87C23.88 11.38 23.87 10.6 23.38 10.13C22.9 9.67003 22.15 9.67003 21.68 10.13L21.66 10.15Z",
+                fill: "#3B8F08"
+            })
+        ]
+    });
+};
+// src/components/forms/forms.tsx
+import { jsx as jsx7, jsxs as jsxs5 } from "react/jsx-runtime";
+var InputContainer = function(param) {
+    var _param_name = param.name, name = _param_name === void 0 ? "" : _param_name, _param_inputType = param.inputType, inputType = _param_inputType === void 0 ? "text" : _param_inputType, _param_labelContent = param.labelContent, labelContent = _param_labelContent === void 0 ? "" : _param_labelContent, _param_defaultValue = param.defaultValue, defaultValue = _param_defaultValue === void 0 ? "" : _param_defaultValue, _param_validationName = param.validationName, validationName = _param_validationName === void 0 ? "textNumbers" : _param_validationName, _param_containerClassName = param.containerClassName, containerClassName = _param_containerClassName === void 0 ? "" : _param_containerClassName, _param_labelClassName = param.labelClassName, labelClassName = _param_labelClassName === void 0 ? "" : _param_labelClassName, _param_elementClassName = param.elementClassName, elementClassName = _param_elementClassName === void 0 ? "" : _param_elementClassName, _param_required = param.required, required = _param_required === void 0 ? false : _param_required, validationType = param.validationType, onKeyDown = param.onKeyDown;
+    return /* @__PURE__ */ jsxs5("div", {
+        className: "center ".concat(containerClassName),
+        children: [
+            /* @__PURE__ */ jsxs5("label", {
+                className: "text-start w-[30%] ".concat(labelClassName),
+                htmlFor: name,
+                children: [
+                    labelContent,
+                    " :"
+                ]
+            }),
+            /* @__PURE__ */ jsx7("input", _object_spread_props(_object_spread({
+                className: "w-[70%] bg-none border-b-[1px] border-black ".concat(elementClassName),
+                defaultValue: defaultValue
+            }, useValidation(validationName, validationType)), {
+                required: required,
+                name: name,
+                onKeyDown: onKeyDown,
+                type: inputType
+            }))
+        ]
+    });
+};
+var SelectContainer = function(param) {
+    var _param_name = param.name, name = _param_name === void 0 ? "" : _param_name, _param_labelContent = param.labelContent, labelContent = _param_labelContent === void 0 ? "" : _param_labelContent, _param_containerClassName = param.containerClassName, containerClassName = _param_containerClassName === void 0 ? "" : _param_containerClassName, _param_labelClassName = param.labelClassName, labelClassName = _param_labelClassName === void 0 ? "" : _param_labelClassName, _param_defaultValue = param.defaultValue, defaultValue = _param_defaultValue === void 0 ? "" : _param_defaultValue, _param_elementClassName = param.elementClassName, elementClassName = _param_elementClassName === void 0 ? "" : _param_elementClassName, _param_optionClassName = param.optionClassName, optionClassName = _param_optionClassName === void 0 ? "" : _param_optionClassName, _param_required = param.required, required = _param_required === void 0 ? false : _param_required, _param_options = param.options, options = _param_options === void 0 ? [] : _param_options;
+    var _options_, _options_find;
+    var _useState2 = _sliced_to_array(useState2(false), 2), isOpen = _useState2[0], setIsOpen = _useState2[1];
+    var _useState21 = _sliced_to_array(useState2(defaultValue || ((_options_ = options[0]) === null || _options_ === void 0 ? void 0 : _options_.value) || ""), 2), selectedValue = _useState21[0], setSelectedValue = _useState21[1];
+    var handleOptionClick = function(value) {
+        setSelectedValue(value);
+        setIsOpen(false);
+    };
+    return /* @__PURE__ */ jsxs5("div", {
+        className: "center ".concat(containerClassName),
+        children: [
+            /* @__PURE__ */ jsxs5("label", {
+                className: "text-start w-[30%] ".concat(labelClassName),
+                htmlFor: name,
+                children: [
+                    labelContent,
+                    " :"
+                ]
+            }),
+            /* @__PURE__ */ jsxs5("div", {
+                className: "w-[70%] relative ".concat(elementClassName),
+                onClick: function() {
+                    return setIsOpen(!isOpen);
+                },
+                children: [
+                    /* @__PURE__ */ jsx7("div", {
+                        className: "border-b-[1px] border-black max-h-6 cursor-pointer ".concat(elementClassName),
+                        children: (options === null || options === void 0 ? void 0 : (_options_find = options.find(function(opt) {
+                            return opt.value === selectedValue;
+                        })) === null || _options_find === void 0 ? void 0 : _options_find.label) || selectedValue
+                    }),
+                    isOpen ? /* @__PURE__ */ jsx7("i", {
+                        className: "fa-light fa-chevron-up absolute top-[1px] left-1 cursor-pointer"
+                    }) : /* @__PURE__ */ jsx7("i", {
+                        className: "fa-light fa-chevron-down absolute top-[1px] left-1 cursor-pointer"
+                    }),
+                    isOpen && /* @__PURE__ */ jsx7("div", {
+                        className: "absolute w-full bg-white border border-gray-300 max-h-32 overflow-y-auto z-10",
+                        children: options.map(function(option) {
+                            return /* @__PURE__ */ jsx7("div", {
+                                className: "p-2 cursor-pointer hover:bg-gray-200 ".concat(optionClassName),
+                                onClick: function() {
+                                    return handleOptionClick(option.value);
+                                },
+                                children: option.label
+                            }, option.value);
+                        })
+                    }),
+                    /* @__PURE__ */ jsx7("input", {
+                        value: selectedValue,
+                        type: "hidden",
+                        name: name,
+                        required: required
+                    })
+                ]
+            })
+        ]
+    });
+};
+var ModularForm = function(param) {
+    var _param_submitFunction = param.submitFunction, submitFunction = _param_submitFunction === void 0 ? /*#__PURE__*/ function() {
+        var _ref = _async_to_generator(function(form) {
+            return _ts_generator(this, function(_state) {
+                return [
+                    2
+                ];
+            });
+        });
+        return function(form) {
+            return _ref.apply(this, arguments);
+        };
+    }() : _param_submitFunction, _param_elements = param.elements, elements = _param_elements === void 0 ? [] : _param_elements, headerContent = param.headerContent, _param_buttonContent = param.buttonContent, buttonContent = _param_buttonContent === void 0 ? "" : _param_buttonContent, _param_formClassName = param.formClassName, formClassName = _param_formClassName === void 0 ? "" : _param_formClassName, _param_headerClassName = param.headerClassName, headerClassName = _param_headerClassName === void 0 ? "" : _param_headerClassName, _param_direction = param.direction, direction = _param_direction === void 0 ? "rtl" : _param_direction;
+    var _useState2 = _sliced_to_array(useState2(""), 2), errorMsg = _useState2[0], setErrorMsg = _useState2[1];
+    var _useState21 = _sliced_to_array(useState2(false), 2), isLoading = _useState21[0], setIsLoading = _useState21[1];
+    var t = useTranslation().t;
+    var onSubmit = /*#__PURE__*/ function() {
+        var _ref = _async_to_generator(function(e) {
+            var err;
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        e.preventDefault();
+                        setIsLoading(true);
+                        _state.label = 1;
+                    case 1:
+                        _state.trys.push([
+                            1,
+                            3,
+                            ,
+                            4
+                        ]);
+                        return [
+                            4,
+                            submitFunction(e)
+                        ];
+                    case 2:
+                        _state.sent();
+                        return [
+                            3,
+                            4
+                        ];
+                    case 3:
+                        err = _state.sent();
+                        if (typeof err === "string") {
+                            setErrorMsg(t(err));
+                        }
+                        console.error("Error from submit ModularForm:", err);
+                        return [
+                            3,
+                            4
+                        ];
+                    case 4:
+                        setIsLoading(false);
+                        return [
+                            2
+                        ];
+                }
+            });
+        });
+        return function onSubmit(e) {
+            return _ref.apply(this, arguments);
+        };
+    }();
+    return /* @__PURE__ */ jsxs5("form", {
+        onSubmit: onSubmit,
+        style: {
+            direction: direction
+        },
+        className: "w-[350px] px-5 py-5 flex flex-col gap-5 ".concat(formClassName),
+        children: [
+            /* @__PURE__ */ jsx7("div", {
+                className: "border-b-2 border-[#547f22] pb-2 text-start font-bold text-[20px] ".concat(headerClassName),
+                children: headerContent
+            }),
+            elements.map(function(element, index) {
+                switch(element.type){
+                    case "input":
+                        return /* @__PURE__ */ jsx7(InputContainer, _object_spread({}, element), index);
+                    case "select":
+                        return /* @__PURE__ */ jsx7(SelectContainer, _object_spread({}, element), index);
+                    default:
+                        return null;
+                }
+            }),
+            /* @__PURE__ */ jsxs5("div", {
+                className: "flex justify-between w-full",
+                children: [
+                    /* @__PURE__ */ jsx7("div", {
+                        title: errorMsg,
+                        className: "text-[#f22] text-[18px] max-w-[80%] ellipsis",
+                        children: t(errorMsg)
+                    }),
+                    /* @__PURE__ */ jsx7("button", {
+                        disabled: isLoading,
+                        className: "bg-[#547f22] px-3 py-1 rounded-lg text-white min-w-20",
+                        type: "submit",
+                        children: isLoading ? /* @__PURE__ */ jsx7(Loader, {
+                            size: 25,
+                            color: "#fff"
+                        }) : buttonContent
+                    })
+                ]
+            })
+        ]
+    });
+};
+var ConfirmForm = function(param) {
+    var onV = param.onV, onX = param.onX, _param_headline = param.headline, headline = _param_headline === void 0 ? "" : _param_headline, _param_direction = param.direction, direction = _param_direction === void 0 ? "rtl" : _param_direction;
+    var onConfirm = /*#__PURE__*/ function() {
+        var _ref = _async_to_generator(function() {
+            var error;
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        _state.trys.push([
+                            0,
+                            2,
+                            ,
+                            3
+                        ]);
+                        return [
+                            4,
+                            onV()
+                        ];
+                    case 1:
+                        _state.sent();
+                        return [
+                            3,
+                            3
+                        ];
+                    case 2:
+                        error = _state.sent();
+                        console.error("'onV' failed:", error);
+                        return [
+                            3,
+                            3
+                        ];
+                    case 3:
+                        return [
+                            2
+                        ];
+                }
+            });
+        });
+        return function onConfirm() {
+            return _ref.apply(this, arguments);
+        };
+    }();
+    var onDenied = /*#__PURE__*/ function() {
+        var _ref = _async_to_generator(function() {
+            var error;
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        _state.trys.push([
+                            0,
+                            2,
+                            ,
+                            3
+                        ]);
+                        return [
+                            4,
+                            onX()
+                        ];
+                    case 1:
+                        _state.sent();
+                        return [
+                            3,
+                            3
+                        ];
+                    case 2:
+                        error = _state.sent();
+                        console.error("'onX' failed:", error);
+                        return [
+                            3,
+                            3
+                        ];
+                    case 3:
+                        return [
+                            2
+                        ];
+                }
+            });
+        });
+        return function onDenied() {
+            return _ref.apply(this, arguments);
+        };
+    }();
+    return /* @__PURE__ */ jsxs5("div", {
+        style: {
+            direction: direction,
+            padding: "30px"
+        },
+        className: "full col gap-2",
+        children: [
+            /* @__PURE__ */ jsx7("div", {
+                className: "text-lg font-bold",
+                children: headline
+            }),
+            /* @__PURE__ */ jsxs5("div", {
+                className: "center gap-2 ",
+                children: [
+                    /* @__PURE__ */ jsxs5("button", {
+                        onClick: onDenied,
+                        children: [
+                            " ",
+                            /* @__PURE__ */ jsx7(RedXSvg, {}),
+                            " "
+                        ]
+                    }),
+                    /* @__PURE__ */ jsxs5("button", {
+                        onClick: onConfirm,
+                        children: [
+                            " ",
+                            /* @__PURE__ */ jsx7(GreenVSvg, {}),
+                            " "
+                        ]
+                    })
+                ]
+            })
+        ]
+    });
+};
+var DatePicker = function(param) {
+    var _param_submit = param.submit, submit = _param_submit === void 0 ? /*#__PURE__*/ function() {
+        var _ref = _async_to_generator(function(form) {
+            return _ts_generator(this, function(_state) {
+                return [
+                    2
+                ];
+            });
+        });
+        return function(form) {
+            return _ref.apply(this, arguments);
+        };
+    }() : _param_submit, _param_formClassName = param.formClassName, formClassName = _param_formClassName === void 0 ? "" : _param_formClassName, _param_labelsClassName = param.labelsClassName, labelsClassName = _param_labelsClassName === void 0 ? "" : _param_labelsClassName, _param_inputsClassName = param.inputsClassName, inputsClassName = _param_inputsClassName === void 0 ? "" : _param_inputsClassName, _param_buttonClassName = param.buttonClassName, buttonClassName = _param_buttonClassName === void 0 ? "" : _param_buttonClassName, _param_buttonStyle = param.buttonStyle, buttonStyle = _param_buttonStyle === void 0 ? {} : _param_buttonStyle, defaultFrom = param.defaultFrom, defaultTo = param.defaultTo, _param_direction = param.direction, direction = _param_direction === void 0 ? "rtl" : _param_direction;
+    var t = useTranslation().t;
+    var _useState2 = _sliced_to_array(useState2(false), 2), isLoading = _useState2[0], setIsLoading = _useState2[1];
+    var onSubmit = /*#__PURE__*/ function() {
+        var _ref = _async_to_generator(function(e) {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        e.preventDefault();
+                        setIsLoading(true);
+                        return [
+                            4,
+                            submit(e)
+                        ];
+                    case 1:
+                        _state.sent();
+                        setIsLoading(false);
+                        return [
+                            2
+                        ];
+                }
+            });
+        });
+        return function onSubmit(e) {
+            return _ref.apply(this, arguments);
+        };
+    }();
+    return /* @__PURE__ */ jsxs5("form", {
+        style: {
+            direction: direction
+        },
+        onSubmit: onSubmit,
+        className: "w-full h-10 flex justify-start gap-3 items-center ".concat(formClassName),
+        children: [
+            /* @__PURE__ */ jsxs5("label", {
+                className: "center text-[14px] relative gap-2 ".concat(labelsClassName),
+                htmlFor: "from",
+                children: [
+                    t("from_date"),
+                    /* @__PURE__ */ jsx7("input", {
+                        className: "w-[125px] text-[14px] py-[2px] px-1 rounded-[2px] border-black border-[1px] text-end ".concat(inputsClassName),
+                        type: "date",
+                        name: "from",
+                        defaultValue: defaultFrom || moment(/* @__PURE__ */ new Date()).format("YYYY-MM-DD")
+                    })
+                ]
+            }),
+            /* @__PURE__ */ jsxs5("label", {
+                className: "center text-[14px] relative gap-2 ".concat(labelsClassName),
+                htmlFor: "to",
+                children: [
+                    t("to_date"),
+                    /* @__PURE__ */ jsx7("input", {
+                        className: "w-[125px] text-[14px] py-[2px] px-1 rounded-[2px] border-black border-[1px] text-end ".concat(inputsClassName),
+                        type: "date",
+                        name: "to",
+                        defaultValue: defaultTo || moment(/* @__PURE__ */ new Date()).format("YYYY-MM-DD")
+                    })
+                ]
+            }),
+            /* @__PURE__ */ jsx7("button", {
+                disabled: isLoading,
+                style: buttonStyle,
+                className: "bg-[#699a2c] text-[#fff] font-[500] w-[75px] h-[27px] ".concat(buttonClassName),
+                type: "submit",
+                children: isLoading ? /* @__PURE__ */ jsx7(Loader, {
+                    className: "pt-[2px]",
+                    size: 20,
+                    color: "#fff"
+                }) : t("search")
+            })
+        ]
+    });
+};
+export { Button_default as Button, Checkbox, ConfirmForm, DatePicker, InputContainer, Loader, ModularForm, SelectContainer, Table, assets_exports as assets, getFixedNumber };

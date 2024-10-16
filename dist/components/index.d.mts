@@ -62,6 +62,64 @@ interface TableProps {
     lang: "en" | "he";
 }
 
+type Direction = "rtl" | "ltr";
+
+interface BaseElementProps {
+    name: string;
+    labelContent: string;
+    defaultValue?: string;
+    required?: boolean;
+    containerClassName?: string;
+    labelClassName?: string;
+    elementClassName?: string;
+}
+interface InputElement extends BaseElementProps {
+    type: "input";
+    validationType?: string;
+    inputType: string;
+    validationName?: string;
+    onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+}
+interface SelectElement extends BaseElementProps {
+    type: "select";
+    options: {
+        value: string;
+        label: string;
+    }[];
+    optionClassName?: string;
+}
+interface InputContainerProps extends Partial<InputElement> {
+}
+interface SelectContainerProps extends Partial<SelectElement> {
+}
+type FormElement = InputElement | SelectElement;
+interface ModularFormProps {
+    submitFunction?: (form: React.FormEvent<HTMLFormElement>) => Promise<void>;
+    elements?: FormElement[];
+    headerContent?: string;
+    buttonContent?: string;
+    formClassName?: string;
+    headerClassName?: string;
+    direction?: Direction;
+}
+interface ConfirmFormProps {
+    onV: () => Promise<void>;
+    onX: () => Promise<void>;
+    headline?: string;
+    direction?: Direction;
+}
+interface DatePickerProps {
+    submit?: (form: React.FormEvent<HTMLFormElement>) => Promise<void>;
+    formClassName?: string;
+    labelsClassName?: string;
+    inputsClassName?: string;
+    buttonClassName?: string;
+    buttonStyle?: React.CSSProperties;
+    defaultFrom?: string;
+    defaultTo?: string;
+    direction?: Direction;
+}
+
 declare const Table: ({ data, headers, searchElement, keysToRender, headerCellStyle, rowStyles, cellStyle, tableContainerClass, tableContainerStyle, headerStyle, tableStyle, containerStyle, containerClassName, searchInputStyle, searchInputClassName, filterableColumns, sortKeys, exportToExcelKeys, dataToAddToExcelTable, sumColumns, includeSearch, excelFileName, summaryLabel, summaryContainerStyle, summaryLabelStyle, summaryRowStyle, searchPlaceHolder, filter_label, sort_label, export_excel_label, onRowClick, lang, }: TableProps) => react_jsx_runtime.JSX.Element;
 declare const getFixedNumber: (number?: number, fix?: number) => string;
 
@@ -86,4 +144,10 @@ interface LoaderProps {
 }
 declare const Loader: React$1.FC<LoaderProps>;
 
-export { Button, Checkbox, Loader, Table, assets, getFixedNumber };
+declare const InputContainer: ({ name, inputType, labelContent, defaultValue, validationName, containerClassName, labelClassName, elementClassName, required, validationType, onKeyDown, }: InputContainerProps) => react_jsx_runtime.JSX.Element;
+declare const SelectContainer: ({ name, labelContent, containerClassName, labelClassName, defaultValue, elementClassName, optionClassName, required, options, }: SelectContainerProps) => react_jsx_runtime.JSX.Element;
+declare const ModularForm: ({ submitFunction, elements, headerContent, buttonContent, formClassName, headerClassName, direction, }: ModularFormProps) => react_jsx_runtime.JSX.Element;
+declare const ConfirmForm: ({ onV, onX, headline, direction }: ConfirmFormProps) => react_jsx_runtime.JSX.Element;
+declare const DatePicker: ({ submit, formClassName, labelsClassName, inputsClassName, buttonClassName, buttonStyle, defaultFrom, defaultTo, direction, }: DatePickerProps) => react_jsx_runtime.JSX.Element;
+
+export { Button, Checkbox, ConfirmForm, DatePicker, InputContainer, Loader, ModularForm, SelectContainer, Table, assets, getFixedNumber };
