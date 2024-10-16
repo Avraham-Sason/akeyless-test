@@ -304,6 +304,9 @@ __export(components_exports, {
     Checkbox: function() {
         return Checkbox;
     },
+    Loader: function() {
+        return Loader;
+    },
     Table: function() {
         return Table;
     },
@@ -988,10 +991,26 @@ var getFixedNumber = function() {
     var sum_value = number % 1 === 0 ? number : number.toFixed(fix).replace(/\.?0+$/, "");
     return String(sum_value);
 };
+// src/components/loaders.tsx
+var import_react_spinners = require("react-spinners");
+var import_jsx_runtime5 = require("react/jsx-runtime");
+var Loader = function(param) {
+    var color = param.color, size = param.size, _param_style = param.style, style = _param_style === void 0 ? {} : _param_style, _param_className = param.className, className = _param_className === void 0 ? "" : _param_className;
+    return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", {
+        className: "flex items-center justify-center ".concat(className),
+        style: style,
+        children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_react_spinners.ClipLoader, {
+            loading: true,
+            color: color || "#699A2C",
+            size: size || 18
+        })
+    });
+};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
     Button: Button,
     Checkbox: Checkbox,
+    Loader: Loader,
     Table: Table,
     assets: assets,
     getFixedNumber: getFixedNumber

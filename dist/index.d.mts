@@ -1,6 +1,20 @@
 import * as react_jsx_runtime from 'react/jsx-runtime';
 import React$1, { SetStateAction, ReactNode } from 'react';
 
+interface SvgProps {
+    width?: string;
+    height?: string;
+    viewBox?: string;
+}
+declare const RedXSvg: ({ height, width, viewBox }: SvgProps) => react_jsx_runtime.JSX.Element;
+declare const GreenVSvg: ({ height, width, viewBox }: SvgProps) => react_jsx_runtime.JSX.Element;
+
+declare const Assets_GreenVSvg: typeof GreenVSvg;
+declare const Assets_RedXSvg: typeof RedXSvg;
+declare namespace Assets {
+  export { Assets_GreenVSvg as GreenVSvg, Assets_RedXSvg as RedXSvg };
+}
+
 interface ButtonProps {
     label?: string;
 }
@@ -113,13 +127,80 @@ interface TableProps {
     lang: "en" | "he";
 }
 
+type Direction = "rtl" | "ltr";
+
+interface BaseElementProps {
+    name: string;
+    labelContent: string;
+    defaultValue?: string;
+    required?: boolean;
+    containerClassName?: string;
+    labelClassName?: string;
+    elementClassName?: string;
+}
+interface InputElement extends BaseElementProps {
+    type: "input";
+    validationType?: string;
+    inputType: string;
+    validationName?: string;
+    onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+}
+interface SelectElement extends BaseElementProps {
+    type: "select";
+    options: {
+        value: string;
+        label: string;
+    }[];
+    optionClassName?: string;
+}
+interface InputContainerProps extends Partial<InputElement> {
+}
+interface SelectContainerProps extends Partial<SelectElement> {
+}
+type FormElement = InputElement | SelectElement;
+interface ModularFormProps {
+    submitFunction?: (form: React.FormEvent<HTMLFormElement>) => Promise<void>;
+    elements?: FormElement[];
+    headerContent?: string;
+    buttonContent?: string;
+    formClassName?: string;
+    headerClassName?: string;
+    direction?: Direction;
+}
+interface ConfirmFormProps {
+    onV: () => Promise<void>;
+    onX: () => Promise<void>;
+    headline?: string;
+    direction?: Direction;
+}
+interface DatePickerProps {
+    submit?: (form: React.FormEvent<HTMLFormElement>) => Promise<void>;
+    formClassName?: string;
+    labelsClassName?: string;
+    inputsClassName?: string;
+    buttonClassName?: string;
+    buttonStyle?: React.CSSProperties;
+    defaultFrom?: string;
+    defaultTo?: string;
+    direction?: Direction;
+}
+
+type Types_BaseElementProps = BaseElementProps;
+type Types_ConfirmFormProps = ConfirmFormProps;
+type Types_DatePickerProps = DatePickerProps;
+type Types_Direction = Direction;
 type Types_FilterProps = FilterProps;
+type Types_InputContainerProps = InputContainerProps;
+type Types_InputElement = InputElement;
+type Types_ModularFormProps = ModularFormProps;
+type Types_SelectContainerProps = SelectContainerProps;
+type Types_SelectElement = SelectElement;
 type Types_TableCellProps = TableCellProps;
 type Types_TableHeaderProps = TableHeaderProps;
 type Types_TableProps = TableProps;
 type Types_TableRowProps = TableRowProps;
 declare namespace Types {
-  export type { Types_FilterProps as FilterProps, Types_TableCellProps as TableCellProps, Types_TableHeaderProps as TableHeaderProps, Types_TableProps as TableProps, Types_TableRowProps as TableRowProps };
+  export type { Types_BaseElementProps as BaseElementProps, Types_ConfirmFormProps as ConfirmFormProps, Types_DatePickerProps as DatePickerProps, Types_Direction as Direction, Types_FilterProps as FilterProps, Types_InputContainerProps as InputContainerProps, Types_InputElement as InputElement, Types_ModularFormProps as ModularFormProps, Types_SelectContainerProps as SelectContainerProps, Types_SelectElement as SelectElement, Types_TableCellProps as TableCellProps, Types_TableHeaderProps as TableHeaderProps, Types_TableProps as TableProps, Types_TableRowProps as TableRowProps };
 }
 
 declare const Table: ({ data, headers, searchElement, keysToRender, headerCellStyle, rowStyles, cellStyle, tableContainerClass, tableContainerStyle, headerStyle, tableStyle, containerStyle, containerClassName, searchInputStyle, searchInputClassName, filterableColumns, sortKeys, exportToExcelKeys, dataToAddToExcelTable, sumColumns, includeSearch, excelFileName, summaryLabel, summaryContainerStyle, summaryLabelStyle, summaryRowStyle, searchPlaceHolder, filter_label, sort_label, export_excel_label, onRowClick, lang, }: TableProps) => react_jsx_runtime.JSX.Element;
@@ -130,24 +211,60 @@ declare const emptyFilterSvg: (solid?: boolean) => react_jsx_runtime.JSX.Element
 declare const slashFilterSvg: (solid?: boolean) => react_jsx_runtime.JSX.Element;
 declare const exportToExcelSvg: () => react_jsx_runtime.JSX.Element;
 
-declare const assets_emptyFilterSvg: typeof emptyFilterSvg;
-declare const assets_exportToExcelSvg: typeof exportToExcelSvg;
-declare const assets_slashFilterSvg: typeof slashFilterSvg;
-declare const assets_sortSvg: typeof sortSvg;
-declare namespace assets {
-  export { assets_emptyFilterSvg as emptyFilterSvg, assets_exportToExcelSvg as exportToExcelSvg, assets_slashFilterSvg as slashFilterSvg, assets_sortSvg as sortSvg };
+declare const assets$1_emptyFilterSvg: typeof emptyFilterSvg;
+declare const assets$1_exportToExcelSvg: typeof exportToExcelSvg;
+declare const assets$1_slashFilterSvg: typeof slashFilterSvg;
+declare const assets$1_sortSvg: typeof sortSvg;
+declare namespace assets$1 {
+  export { assets$1_emptyFilterSvg as emptyFilterSvg, assets$1_exportToExcelSvg as exportToExcelSvg, assets$1_slashFilterSvg as slashFilterSvg, assets$1_sortSvg as sortSvg };
 }
+
+interface LoaderProps {
+    color?: string;
+    size?: number;
+    style?: React$1.CSSProperties;
+    className?: string;
+}
+declare const Loader: React$1.FC<LoaderProps>;
 
 declare const Components_Button: typeof Button;
 declare const Components_Checkbox: typeof Checkbox;
+declare const Components_Loader: typeof Loader;
 declare const Components_Table: typeof Table;
-declare const Components_assets: typeof assets;
 declare const Components_getFixedNumber: typeof getFixedNumber;
 declare namespace Components {
-  export { Components_Button as Button, Components_Checkbox as Checkbox, Components_Table as Table, Components_assets as assets, Components_getFixedNumber as getFixedNumber };
+  export { Components_Button as Button, Components_Checkbox as Checkbox, Components_Loader as Loader, Components_Table as Table, assets$1 as assets, Components_getFixedNumber as getFixedNumber };
 }
 
+declare const handleInvalid: (e: React$1.InvalidEvent<HTMLInputElement>, requireError?: string) => void;
+declare const handleChange: (e: React$1.ChangeEvent<HTMLInputElement>) => void;
+declare const handlePaste: (e: React$1.ClipboardEvent<HTMLInputElement>) => void;
+declare const useValidation: (validationType: string, requireError?: string) => {
+    onChange: (e: React$1.ChangeEvent<HTMLInputElement>) => void;
+    onPaste: (e: React$1.ClipboardEvent<HTMLInputElement>) => void;
+    onInvalid: (e: React$1.InvalidEvent<HTMLInputElement>) => void;
+    "data-validation": string;
+};
+
+declare const Helpers_handleChange: typeof handleChange;
+declare const Helpers_handleInvalid: typeof handleInvalid;
+declare const Helpers_handlePaste: typeof handlePaste;
+declare const Helpers_useValidation: typeof useValidation;
+declare namespace Helpers {
+  export { Helpers_handleChange as handleChange, Helpers_handleInvalid as handleInvalid, Helpers_handlePaste as handlePaste, Helpers_useValidation as useValidation };
+}
+
+declare const useSomeHook: () => void;
+
+declare const Hooks_useSomeHook: typeof useSomeHook;
+declare namespace Hooks {
+  export { Hooks_useSomeHook as useSomeHook };
+}
+
+declare const assets: typeof Assets;
 declare const components: typeof Components;
+declare const helpers: typeof Helpers;
+declare const hooks: typeof Hooks;
 declare const types: typeof Types;
 
-export { components, types };
+export { assets, components, helpers, hooks, types };

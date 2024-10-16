@@ -78,4 +78,12 @@ declare namespace assets {
   export { assets_emptyFilterSvg as emptyFilterSvg, assets_exportToExcelSvg as exportToExcelSvg, assets_slashFilterSvg as slashFilterSvg, assets_sortSvg as sortSvg };
 }
 
-export { Button, Checkbox, Table, assets, getFixedNumber };
+interface LoaderProps {
+    color?: string;
+    size?: number;
+    style?: React$1.CSSProperties;
+    className?: string;
+}
+declare const Loader: React$1.FC<LoaderProps>;
+
+export { Button, Checkbox, Loader, Table, assets, getFixedNumber };

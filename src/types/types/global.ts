@@ -1,1 +1,1 @@
-export type TranslateFunction = (key: string) => string;
+export type Direction = "rtl" | "ltr";

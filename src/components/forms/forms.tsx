@@ -4,67 +4,7 @@ import moment from "moment";
 import { useValidation } from "../../helpers";
 import { GreenVSvg, RedXSvg } from "../../assets";
 import { Loader } from "../loaders";
-
-interface BaseElementProps {
-    name: string;
-    labelContent: string;
-    defaultValue?: string;
-    required?: boolean;
-    containerClassName?: string;
-    labelClassName?: string;
-    elementClassName?: string;
-}
-
-interface InputElement extends BaseElementProps {
-    type: "input";
-    inputType: string;
-    validationName?: string;
-    onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
-}
-
-interface SelectElement extends BaseElementProps {
-    type: "select";
-    options: { value: string; label: string }[];
-    optionClassName?: string;
-}
-
-// Partial types for dynamic rendering of form elements
-interface InputContainerProps extends Partial<InputElement> {}
-interface SelectContainerProps extends Partial<SelectElement> {}
-
-type FormElement = InputElement | SelectElement;
-
-// Props for ModularForm component
-interface ModularFormProps {
-    submitFunction?: (form: React.FormEvent<HTMLFormElement>) => Promise<void>;
-    elements?: FormElement[];
-    headerContent?: string;
-    buttonContent?: string;
-    formClassName?: string;
-    headerClassName?: string;
-    direction?: "rtl" | "ltr";
-}
-
-// Props for ConfirmForm component
-interface ConfirmFormProps {
-    onV: () => Promise<void>;
-    onX: () => Promise<void>;
-    headline?: string;
-    direction?: "rtl" | "ltr";
-}
-
-// Props for DatePicker component
-interface DatePickerProps {
-    submit?: (form: React.FormEvent<HTMLFormElement>) => Promise<void>;
-    formClassName?: string;
-    labelsClassName?: string;
-    inputsClassName?: string;
-    buttonClassName?: string;
-    buttonStyle?: React.CSSProperties;
-    defaultFrom?: string;
-    defaultTo?: string;
-    direction?: "rtl" | "ltr";
-}
+import { ConfirmFormProps, DatePickerProps, InputContainerProps, ModularFormProps, SelectContainerProps } from "../../types";
 
 export const InputContainer = ({
     name = "",
@@ -76,9 +16,9 @@ export const InputContainer = ({
     labelClassName = "",
     elementClassName = "",
     required = false,
+    validationType,
     onKeyDown,
 }: InputContainerProps) => {
-    const { t } = useTranslation();
     return (
         <div className={`center ${containerClassName}`}>
             <label className={`text-start w-[30%] ${labelClassName}`} htmlFor={name}>
@@ -87,7 +27,7 @@ export const InputContainer = ({
             <input
                 className={`w-[70%] bg-none border-b-[1px] border-black ${elementClassName}`}
                 defaultValue={defaultValue}
-                {...useValidation(t, validationName)}
+                {...useValidation(validationName, validationType)}
                 required={required}
                 name={name}
                 onKeyDown={onKeyDown}

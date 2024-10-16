@@ -916,4 +916,19 @@ var getFixedNumber = function() {
     var sum_value = number % 1 === 0 ? number : number.toFixed(fix).replace(/\.?0+$/, "");
     return String(sum_value);
 };
-export { Button_default as Button, Checkbox, Table, assets_exports as assets, getFixedNumber };
+// src/components/loaders.tsx
+import { ClipLoader } from "react-spinners";
+import { jsx as jsx5 } from "react/jsx-runtime";
+var Loader = function(param) {
+    var color = param.color, size = param.size, _param_style = param.style, style = _param_style === void 0 ? {} : _param_style, _param_className = param.className, className = _param_className === void 0 ? "" : _param_className;
+    return /* @__PURE__ */ jsx5("div", {
+        className: "flex items-center justify-center ".concat(className),
+        style: style,
+        children: /* @__PURE__ */ jsx5(ClipLoader, {
+            loading: true,
+            color: color || "#699A2C",
+            size: size || 18
+        })
+    });
+};
+export { Button_default as Button, Checkbox, Loader, Table, assets_exports as assets, getFixedNumber };

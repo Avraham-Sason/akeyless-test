@@ -98,4 +98,62 @@ interface TableProps {
     lang: "en" | "he";
 }
 
-export type { FilterProps, TableCellProps, TableHeaderProps, TableProps, TableRowProps };
+type Direction = "rtl" | "ltr";
+
+interface BaseElementProps {
+    name: string;
+    labelContent: string;
+    defaultValue?: string;
+    required?: boolean;
+    containerClassName?: string;
+    labelClassName?: string;
+    elementClassName?: string;
+}
+interface InputElement extends BaseElementProps {
+    type: "input";
+    validationType?: string;
+    inputType: string;
+    validationName?: string;
+    onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+}
+interface SelectElement extends BaseElementProps {
+    type: "select";
+    options: {
+        value: string;
+        label: string;
+    }[];
+    optionClassName?: string;
+}
+interface InputContainerProps extends Partial<InputElement> {
+}
+interface SelectContainerProps extends Partial<SelectElement> {
+}
+type FormElement = InputElement | SelectElement;
+interface ModularFormProps {
+    submitFunction?: (form: React.FormEvent<HTMLFormElement>) => Promise<void>;
+    elements?: FormElement[];
+    headerContent?: string;
+    buttonContent?: string;
+    formClassName?: string;
+    headerClassName?: string;
+    direction?: Direction;
+}
+interface ConfirmFormProps {
+    onV: () => Promise<void>;
+    onX: () => Promise<void>;
+    headline?: string;
+    direction?: Direction;
+}
+interface DatePickerProps {
+    submit?: (form: React.FormEvent<HTMLFormElement>) => Promise<void>;
+    formClassName?: string;
+    labelsClassName?: string;
+    inputsClassName?: string;
+    buttonClassName?: string;
+    buttonStyle?: React.CSSProperties;
+    defaultFrom?: string;
+    defaultTo?: string;
+    direction?: Direction;
+}
+
+export type { BaseElementProps, ConfirmFormProps, DatePickerProps, Direction, FilterProps, InputContainerProps, InputElement, ModularFormProps, SelectContainerProps, SelectElement, TableCellProps, TableHeaderProps, TableProps, TableRowProps };

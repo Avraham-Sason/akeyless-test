@@ -3,9 +3,7 @@
     "version": "1.0.0",
     "main": "./dist/index.js",
     "scripts": {
-        "build:components": "tsup src/components/index.ts --format esm,cjs --dts --out-dir dist/components",
-        "build:types": "tsup src/types/index.ts --format esm,cjs --dts --out-dir dist/types",
-        "build": "npm run build:components && npm run build:types && tsup src/index.ts --format esm,cjs --dts"
+        "build": "powershell -ExecutionPolicy Bypass -File ./ps/build.ps1"
     },
     "keywords": [],
     "author": "",
@@ -27,7 +25,6 @@
         "autoprefixer": "^10.4.20",
         "postcss": "^8.4.47",
         "tailwindcss": "^3.4.14",
-        "ts-migrate": "^0.0.0",
         "tsup": "^8.3.0",
         "typescript": "^5.6.3"
     },
@@ -36,9 +33,21 @@
             "import": "./dist/index.mjs",
             "require": "./dist/index.js"
         },
+        "./assets": {
+            "import": "./dist/assets/index.mjs",
+            "require": "./dist/assets/index.js"
+        },
         "./components": {
             "import": "./dist/components/index.mjs",
             "require": "./dist/components/index.js"
+        },
+        "./helpers": {
+            "import": "./dist/helpers/index.mjs",
+            "require": "./dist/helpers/index.js"
+        },
+        "./hooks": {
+            "import": "./dist/hooks/index.mjs",
+            "require": "./dist/hooks/index.js"
         },
         "./types": {
             "import": "./dist/types/index.mjs",
@@ -48,8 +57,17 @@
     "types": "./dist/index.d.ts",
     "typesVersions": {
         "*": {
+            "assets": [
+                "./dist/assets/index.d.ts"
+            ],
             "components": [
                 "./dist/components/index.d.ts"
+            ],
+            "helpers": [
+                "./dist/helpers/index.d.ts"
+            ],
+            "hooks": [
+                "./dist/hooks/index.d.ts"
             ],
             "types": [
                 "./dist/types/index.d.ts"
