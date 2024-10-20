@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import moment from "moment";
 import { useValidation } from "../../helpers";
 import { GreenVSvg, RedXSvg } from "../../assets";
@@ -187,8 +186,8 @@ export const DatePicker = ({
     direction = "rtl",
     fromText = "From date",
     toText = "To date",
+    buttonText = "Search",
 }: DatePickerProps) => {
-    const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -226,7 +225,7 @@ export const DatePicker = ({
                 className={`bg-[#699a2c] text-[#fff] font-[500] w-[75px] h-[27px] ${buttonClassName}`}
                 type="submit"
             >
-                {isLoading ? <Loader className="pt-[2px]" size={20} color="#fff" /> : t("search")}
+                {isLoading ? <Loader className="pt-[2px]" size={20} color="#fff" /> : buttonText}
             </button>
         </form>
     );

@@ -167,6 +167,7 @@ interface DatePickerProps {
     direction?: Direction;
     fromText?: string;
     toText?: string;
+    buttonText?: string;
 }
 
 export type { BaseElementProps, ConfirmFormProps, DatePickerProps, Direction, FilterProps, InputContainerProps, InputElement, ModularFormProps, SelectContainerProps, SelectElement, SummaryProps, TableCellProps, TableHeaderProps, TableProps, TableRowProps };
