@@ -1,7 +1,7 @@
 echo "=> Starting build process..."
 echo "------------------- Building assets... -------------------"
 tsup src/assets/index.ts --format "esm,cjs" --dts --out-dir dist/assets
-echo "Assets have been built successfully!"
+echo "------------------- Assets have been built successfully! -------------------"
 
 echo "------------------- Building components... -------------------"
 tsup src/components/index.ts --format "esm,cjs" --dts --out-dir dist/components

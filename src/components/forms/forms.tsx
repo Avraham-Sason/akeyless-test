@@ -103,8 +103,6 @@ export const ModularForm = ({
 }: ModularFormProps) => {
     const [errorMsg, setErrorMsg] = useState<string>("");
     const [isLoading, setIsLoading] = useState(false);
-    const { t } = useTranslation();
-
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsLoading(true);
@@ -112,7 +110,7 @@ export const ModularForm = ({
             await submitFunction(e);
         } catch (err) {
             if (typeof err === "string") {
-                setErrorMsg(t(err));
+                setErrorMsg(err);
             }
             console.error("Error from submit ModularForm:", err);
         }
@@ -134,7 +132,7 @@ export const ModularForm = ({
             })}
             <div className="flex justify-between w-full">
                 <div title={errorMsg} className="text-[#f22] text-[18px] max-w-[80%] ellipsis">
-                    {t(errorMsg)}
+                    {errorMsg}
                 </div>
                 <button disabled={isLoading} className="bg-[#547f22] px-3 py-1 rounded-lg text-white min-w-20" type="submit">
                     {isLoading ? <Loader size={25} color="#fff" /> : buttonContent}
@@ -187,6 +185,8 @@ export const DatePicker = ({
     defaultFrom,
     defaultTo,
     direction = "rtl",
+    fromText = "From date",
+    toText = "To date",
 }: DatePickerProps) => {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
@@ -201,7 +201,7 @@ export const DatePicker = ({
     return (
         <form style={{ direction }} onSubmit={onSubmit} className={`w-full h-10 flex justify-start gap-3 items-center ${formClassName}`}>
             <label className={`center text-[14px] relative gap-2 ${labelsClassName}`} htmlFor="from">
-                {t("from_date")}
+                {fromText}
                 <input
                     className={`w-[125px] text-[14px] py-[2px] px-1 rounded-[2px] border-black border-[1px] text-end ${inputsClassName}`}
                     type="date"
@@ -211,7 +211,7 @@ export const DatePicker = ({
             </label>
 
             <label className={`center text-[14px] relative gap-2 ${labelsClassName}`} htmlFor="to">
-                {t("to_date")}
+                {toText}
                 <input
                     className={`w-[125px] text-[14px] py-[2px] px-1 rounded-[2px] border-black border-[1px] text-end ${inputsClassName}`}
                     type="date"

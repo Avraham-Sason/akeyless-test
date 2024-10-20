@@ -1242,7 +1242,6 @@ var ModularForm = function(param) {
     }() : _param_submitFunction, _param_elements = param.elements, elements = _param_elements === void 0 ? [] : _param_elements, headerContent = param.headerContent, _param_buttonContent = param.buttonContent, buttonContent = _param_buttonContent === void 0 ? "" : _param_buttonContent, _param_formClassName = param.formClassName, formClassName = _param_formClassName === void 0 ? "" : _param_formClassName, _param_headerClassName = param.headerClassName, headerClassName = _param_headerClassName === void 0 ? "" : _param_headerClassName, _param_direction = param.direction, direction = _param_direction === void 0 ? "rtl" : _param_direction;
     var _ref = _sliced_to_array((0, import_react2.useState)(""), 2), errorMsg = _ref[0], setErrorMsg = _ref[1];
     var _ref1 = _sliced_to_array((0, import_react2.useState)(false), 2), isLoading = _ref1[0], setIsLoading = _ref1[1];
-    var t = (0, import_react_i18next.useTranslation)().t;
     var onSubmit = /*#__PURE__*/ function() {
         var _ref = _async_to_generator(function(e) {
             var err;
@@ -1272,7 +1271,7 @@ var ModularForm = function(param) {
                     case 3:
                         err = _state.sent();
                         if (typeof err === "string") {
-                            setErrorMsg(t(err));
+                            setErrorMsg(err);
                         }
                         console.error("Error from submit ModularForm:", err);
                         return [
@@ -1318,7 +1317,7 @@ var ModularForm = function(param) {
                     /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", {
                         title: errorMsg,
                         className: "text-[#f22] text-[18px] max-w-[80%] ellipsis",
-                        children: t(errorMsg)
+                        children: errorMsg
                     }),
                     /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("button", {
                         disabled: isLoading,
@@ -1463,7 +1462,7 @@ var DatePicker = function(param) {
         return function(form) {
             return _ref.apply(this, arguments);
         };
-    }() : _param_submit, _param_formClassName = param.formClassName, formClassName = _param_formClassName === void 0 ? "" : _param_formClassName, _param_labelsClassName = param.labelsClassName, labelsClassName = _param_labelsClassName === void 0 ? "" : _param_labelsClassName, _param_inputsClassName = param.inputsClassName, inputsClassName = _param_inputsClassName === void 0 ? "" : _param_inputsClassName, _param_buttonClassName = param.buttonClassName, buttonClassName = _param_buttonClassName === void 0 ? "" : _param_buttonClassName, _param_buttonStyle = param.buttonStyle, buttonStyle = _param_buttonStyle === void 0 ? {} : _param_buttonStyle, defaultFrom = param.defaultFrom, defaultTo = param.defaultTo, _param_direction = param.direction, direction = _param_direction === void 0 ? "rtl" : _param_direction;
+    }() : _param_submit, _param_formClassName = param.formClassName, formClassName = _param_formClassName === void 0 ? "" : _param_formClassName, _param_labelsClassName = param.labelsClassName, labelsClassName = _param_labelsClassName === void 0 ? "" : _param_labelsClassName, _param_inputsClassName = param.inputsClassName, inputsClassName = _param_inputsClassName === void 0 ? "" : _param_inputsClassName, _param_buttonClassName = param.buttonClassName, buttonClassName = _param_buttonClassName === void 0 ? "" : _param_buttonClassName, _param_buttonStyle = param.buttonStyle, buttonStyle = _param_buttonStyle === void 0 ? {} : _param_buttonStyle, defaultFrom = param.defaultFrom, defaultTo = param.defaultTo, _param_direction = param.direction, direction = _param_direction === void 0 ? "rtl" : _param_direction, _param_fromText = param.fromText, fromText = _param_fromText === void 0 ? "From date" : _param_fromText, _param_toText = param.toText, toText = _param_toText === void 0 ? "To date" : _param_toText;
     var t = (0, import_react_i18next.useTranslation)().t;
     var _ref = _sliced_to_array((0, import_react2.useState)(false), 2), isLoading = _ref[0], setIsLoading = _ref[1];
     var onSubmit = /*#__PURE__*/ function() {
@@ -1501,7 +1500,7 @@ var DatePicker = function(param) {
                 className: "center text-[14px] relative gap-2 ".concat(labelsClassName),
                 htmlFor: "from",
                 children: [
-                    t("from_date"),
+                    fromText,
                     /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("input", {
                         className: "w-[125px] text-[14px] py-[2px] px-1 rounded-[2px] border-black border-[1px] text-end ".concat(inputsClassName),
                         type: "date",
@@ -1514,7 +1513,7 @@ var DatePicker = function(param) {
                 className: "center text-[14px] relative gap-2 ".concat(labelsClassName),
                 htmlFor: "to",
                 children: [
-                    t("to_date"),
+                    toText,
                     /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("input", {
                         className: "w-[125px] text-[14px] py-[2px] px-1 rounded-[2px] border-black border-[1px] text-end ".concat(inputsClassName),
                         type: "date",

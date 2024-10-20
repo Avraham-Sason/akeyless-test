@@ -169,6 +169,8 @@ interface DatePickerProps {
     defaultFrom?: string;
     defaultTo?: string;
     direction?: Direction;
+    fromText?: string;
+    toText?: string;
 }
 
 declare const Filter: ({ filterableColumn, handleFilterClick, filterPopupsDisplay, index, filterOptions, filters, onFilterChange, filter_label, lang, headers, }: FilterProps) => react_jsx_runtime.JSX.Element;
@@ -191,6 +193,6 @@ declare const InputContainer: ({ name, inputType, labelContent, defaultValue, va
 declare const SelectContainer: ({ name, labelContent, containerClassName, labelClassName, defaultValue, elementClassName, optionClassName, required, options, }: SelectContainerProps) => react_jsx_runtime.JSX.Element;
 declare const ModularForm: ({ submitFunction, elements, headerContent, buttonContent, formClassName, headerClassName, direction, }: ModularFormProps) => react_jsx_runtime.JSX.Element;
 declare const ConfirmForm: ({ onV, onX, headline, direction }: ConfirmFormProps) => react_jsx_runtime.JSX.Element;
-declare const DatePicker: ({ submit, formClassName, labelsClassName, inputsClassName, buttonClassName, buttonStyle, defaultFrom, defaultTo, direction, }: DatePickerProps) => react_jsx_runtime.JSX.Element;
+declare const DatePicker: ({ submit, formClassName, labelsClassName, inputsClassName, buttonClassName, buttonStyle, defaultFrom, defaultTo, direction, fromText, toText, }: DatePickerProps) => react_jsx_runtime.JSX.Element;
 
 export { Button, Checkbox, ConfirmForm, DatePicker, Filter, InputContainer, Loader, ModularForm, SelectContainer, Table, TableCell, TableHeader, TableRow, getFixedNumber };

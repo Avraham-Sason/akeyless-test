@@ -56,4 +56,6 @@ export interface DatePickerProps {
     defaultFrom?: string;
     defaultTo?: string;
     direction?: Direction;
+    fromText?: string;
+    toText?: string;
 }
