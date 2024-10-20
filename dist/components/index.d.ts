@@ -66,6 +66,52 @@ interface TableCellProps {
     value: any;
     cellStyle?: React.CSSProperties;
 }
+interface TableProps {
+    data: Record<string, any>[];
+    headers: string[];
+    keysToRender: string[];
+    searchElement?: ReactNode;
+    containerStyle?: React.CSSProperties;
+    containerClassName?: string;
+    includeSearch?: boolean;
+    searchInputStyle?: React.CSSProperties;
+    searchInputClassName?: string;
+    tableContainerStyle?: React.CSSProperties;
+    tableContainerClass?: string;
+    tableStyle?: React.CSSProperties;
+    rowStyles?: React.CSSProperties;
+    headerStyle?: React.CSSProperties;
+    headerCellStyle?: React.CSSProperties;
+    cellStyle?: React.CSSProperties;
+    filterableColumns?: {
+        header: string;
+        dataKey: string;
+        ui?: (value: any) => ReactNode;
+    }[];
+    sortKeys?: string[];
+    exportToExcelKeys?: string[];
+    excelFileName?: string;
+    dataToAddToExcelTable?: {
+        key: string;
+        value: any;
+        header: string;
+    }[];
+    sumColumns?: {
+        label: string;
+        dataKey: string;
+        ui?: (value: any) => ReactNode;
+    }[];
+    searchPlaceHolder?: string;
+    summaryContainerStyle?: React.CSSProperties;
+    summaryLabelStyle?: React.CSSProperties;
+    summaryRowStyle?: React.CSSProperties;
+    summaryLabel?: string;
+    filter_label?: string;
+    sort_label?: string;
+    export_excel_label?: string;
+    onRowClick?: (data?: any) => void;
+    lang: "en" | "he";
+}
 
 type Direction = "rtl" | "ltr";
 
@@ -131,6 +177,8 @@ declare const TableRow: ({ item, rowStyles, cellStyle, keysToRender, onRowClick 
 declare const TableCell: ({ value, cellStyle }: TableCellProps) => react_jsx_runtime.JSX.Element;
 declare const getFixedNumber: (number?: number, fix?: number) => string;
 
+declare const Table: ({ data, headers, searchElement, keysToRender, headerCellStyle, rowStyles, cellStyle, tableContainerClass, tableContainerStyle, headerStyle, tableStyle, containerStyle, containerClassName, searchInputStyle, searchInputClassName, filterableColumns, sortKeys, exportToExcelKeys, dataToAddToExcelTable, sumColumns, includeSearch, excelFileName, summaryLabel, summaryContainerStyle, summaryLabelStyle, summaryRowStyle, searchPlaceHolder, filter_label, sort_label, export_excel_label, onRowClick, lang, }: TableProps) => react_jsx_runtime.JSX.Element;
+
 interface LoaderProps {
     color?: string;
     size?: number;
@@ -145,4 +193,4 @@ declare const ModularForm: ({ submitFunction, elements, headerContent, buttonCon
 declare const ConfirmForm: ({ onV, onX, headline, direction }: ConfirmFormProps) => react_jsx_runtime.JSX.Element;
 declare const DatePicker: ({ submit, formClassName, labelsClassName, inputsClassName, buttonClassName, buttonStyle, defaultFrom, defaultTo, direction, }: DatePickerProps) => react_jsx_runtime.JSX.Element;
 
-export { Button, Checkbox, ConfirmForm, DatePicker, Filter, InputContainer, Loader, ModularForm, SelectContainer, TableCell, TableHeader, TableRow, getFixedNumber };
+export { Button, Checkbox, ConfirmForm, DatePicker, Filter, InputContainer, Loader, ModularForm, SelectContainer, Table, TableCell, TableHeader, TableRow, getFixedNumber };
