@@ -15,51 +15,56 @@ interface CheckBoxProps {
 }
 declare const Checkbox: ({ id, checked, setChecked, rotate, style }: CheckBoxProps) => react_jsx_runtime.JSX.Element;
 
-interface TableProps {
-    data: Record<string, any>[];
+interface TableHeaderProps {
     headers: string[];
-    keysToRender: string[];
-    searchElement?: ReactNode;
-    containerStyle?: React.CSSProperties;
-    containerClassName?: string;
-    includeSearch?: boolean;
-    searchInputStyle?: React.CSSProperties;
-    searchInputClassName?: string;
-    tableContainerStyle?: React.CSSProperties;
-    tableContainerClass?: string;
-    tableStyle?: React.CSSProperties;
-    rowStyles?: React.CSSProperties;
+    lang: "en" | "he";
     headerStyle?: React.CSSProperties;
     headerCellStyle?: React.CSSProperties;
-    cellStyle?: React.CSSProperties;
+    onSort: (index: number) => void;
+    sortColumn: number | null;
+    sortOrder: "asc" | "desc" | null;
+    onFilterChange: (dataKey: string, value: string) => void;
+    clearFilter: () => void;
+    handleFilterClick: (dataKey: string) => void;
+    filters: Record<string, string[]>;
+    filterOptions: Record<string, any[]>;
     filterableColumns?: {
         header: string;
         dataKey: string;
-        ui?: (value: any) => ReactNode;
+        ui?: (option: any) => ReactNode;
     }[];
-    sortKeys?: string[];
-    exportToExcelKeys?: string[];
-    excelFileName?: string;
-    dataToAddToExcelTable?: {
-        key: string;
-        value: any;
+    filterPopupsDisplay: string;
+    sortDisplay: boolean;
+    filter_label: string;
+    sort_label: string;
+    setFilterPopupsDisplay: React.Dispatch<React.SetStateAction<string>>;
+}
+interface FilterProps {
+    index: number;
+    filter_label: string;
+    filterableColumn?: {
         header: string;
-    }[];
-    sumColumns?: {
-        label: string;
         dataKey: string;
-        ui?: (value: any) => ReactNode;
-    }[];
-    searchPlaceHolder?: string;
-    summaryContainerStyle?: React.CSSProperties;
-    summaryLabelStyle?: React.CSSProperties;
-    summaryRowStyle?: React.CSSProperties;
-    summaryLabel?: string;
-    filter_label?: string;
-    sort_label?: string;
-    export_excel_label?: string;
-    onRowClick?: (data?: any) => void;
+        ui?: (option: any) => ReactNode;
+    };
+    handleFilterClick: (dataKey: string) => void;
+    filterPopupsDisplay: string;
+    filterOptions: Record<string, any[]>;
+    filters: Record<string, any[]>;
+    onFilterChange: (dataKey: string, value: string) => void;
     lang: "en" | "he";
+    headers: string[];
+}
+interface TableRowProps {
+    item: Record<string, any>;
+    rowStyles?: React.CSSProperties;
+    cellStyle?: React.CSSProperties;
+    keysToRender: string[];
+    onRowClick: (data?: any) => void;
+}
+interface TableCellProps {
+    value: any;
+    cellStyle?: React.CSSProperties;
 }
 
 type Direction = "rtl" | "ltr";
@@ -120,21 +125,11 @@ interface DatePickerProps {
     direction?: Direction;
 }
 
-declare const Table: ({ data, headers, searchElement, keysToRender, headerCellStyle, rowStyles, cellStyle, tableContainerClass, tableContainerStyle, headerStyle, tableStyle, containerStyle, containerClassName, searchInputStyle, searchInputClassName, filterableColumns, sortKeys, exportToExcelKeys, dataToAddToExcelTable, sumColumns, includeSearch, excelFileName, summaryLabel, summaryContainerStyle, summaryLabelStyle, summaryRowStyle, searchPlaceHolder, filter_label, sort_label, export_excel_label, onRowClick, lang, }: TableProps) => react_jsx_runtime.JSX.Element;
+declare const Filter: ({ filterableColumn, handleFilterClick, filterPopupsDisplay, index, filterOptions, filters, onFilterChange, filter_label, lang, headers, }: FilterProps) => react_jsx_runtime.JSX.Element;
+declare const TableHeader: ({ headers, headerStyle, headerCellStyle, onSort, sortColumn, sortOrder, onFilterChange, clearFilter, filters, filterOptions, filterableColumns, filterPopupsDisplay, setFilterPopupsDisplay, lang, handleFilterClick, sortDisplay, filter_label, sort_label, }: TableHeaderProps) => react_jsx_runtime.JSX.Element;
+declare const TableRow: ({ item, rowStyles, cellStyle, keysToRender, onRowClick }: TableRowProps) => react_jsx_runtime.JSX.Element;
+declare const TableCell: ({ value, cellStyle }: TableCellProps) => react_jsx_runtime.JSX.Element;
 declare const getFixedNumber: (number?: number, fix?: number) => string;
-
-declare const sortSvg: (upside_down?: boolean) => react_jsx_runtime.JSX.Element;
-declare const emptyFilterSvg: (solid?: boolean) => react_jsx_runtime.JSX.Element;
-declare const slashFilterSvg: (solid?: boolean) => react_jsx_runtime.JSX.Element;
-declare const exportToExcelSvg: () => react_jsx_runtime.JSX.Element;
-
-declare const assets_emptyFilterSvg: typeof emptyFilterSvg;
-declare const assets_exportToExcelSvg: typeof exportToExcelSvg;
-declare const assets_slashFilterSvg: typeof slashFilterSvg;
-declare const assets_sortSvg: typeof sortSvg;
-declare namespace assets {
-  export { assets_emptyFilterSvg as emptyFilterSvg, assets_exportToExcelSvg as exportToExcelSvg, assets_slashFilterSvg as slashFilterSvg, assets_sortSvg as sortSvg };
-}
 
 interface LoaderProps {
     color?: string;
@@ -150,4 +145,4 @@ declare const ModularForm: ({ submitFunction, elements, headerContent, buttonCon
 declare const ConfirmForm: ({ onV, onX, headline, direction }: ConfirmFormProps) => react_jsx_runtime.JSX.Element;
 declare const DatePicker: ({ submit, formClassName, labelsClassName, inputsClassName, buttonClassName, buttonStyle, defaultFrom, defaultTo, direction, }: DatePickerProps) => react_jsx_runtime.JSX.Element;
 
-export { Button, Checkbox, ConfirmForm, DatePicker, InputContainer, Loader, ModularForm, SelectContainer, Table, assets, getFixedNumber };
+export { Button, Checkbox, ConfirmForm, DatePicker, Filter, InputContainer, Loader, ModularForm, SelectContainer, TableCell, TableHeader, TableRow, getFixedNumber };

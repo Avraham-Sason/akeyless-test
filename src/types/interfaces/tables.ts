@@ -21,11 +21,11 @@ export interface TableHeaderProps {
     setFilterPopupsDisplay: React.Dispatch<React.SetStateAction<string>>;
 }
 export interface FilterProps {
+    index: number;
+    filter_label: string;
     filterableColumn?: { header: string; dataKey: string; ui?: (option: any) => ReactNode };
     handleFilterClick: (dataKey: string) => void;
     filterPopupsDisplay: string;
-    filter_label: string;
-    index: number;
     filterOptions: Record<string, any[]>;
     filters: Record<string, any[]>;
     onFilterChange: (dataKey: string, value: string) => void;
@@ -76,4 +76,12 @@ export interface TableProps {
     export_excel_label?: string;
     onRowClick?: (data?: any) => void;
     lang: "en" | "he";
+}
+
+export interface SummaryProps {
+    sumColumns: { label: string; dataKey: string; ui?: (value: string | number) => ReactNode }[];
+    filteredData: Record<string, any>[];
+    summaryLabel?: string;
+    summaryLabelStyle?: React.CSSProperties;
+    summaryRowStyle?: React.CSSProperties;
 }

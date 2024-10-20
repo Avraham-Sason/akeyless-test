@@ -1,4 +1,3 @@
-import "./index.css";
 import * as Assets from "./assets";
 import * as Components from "./components";
 import * as Helpers from "./helpers";

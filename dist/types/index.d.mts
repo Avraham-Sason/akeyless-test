@@ -25,6 +25,8 @@ interface TableHeaderProps {
     setFilterPopupsDisplay: React.Dispatch<React.SetStateAction<string>>;
 }
 interface FilterProps {
+    index: number;
+    filter_label: string;
     filterableColumn?: {
         header: string;
         dataKey: string;
@@ -32,8 +34,6 @@ interface FilterProps {
     };
     handleFilterClick: (dataKey: string) => void;
     filterPopupsDisplay: string;
-    filter_label: string;
-    index: number;
     filterOptions: Record<string, any[]>;
     filters: Record<string, any[]>;
     onFilterChange: (dataKey: string, value: string) => void;
@@ -97,6 +97,17 @@ interface TableProps {
     onRowClick?: (data?: any) => void;
     lang: "en" | "he";
 }
+interface SummaryProps {
+    sumColumns: {
+        label: string;
+        dataKey: string;
+        ui?: (value: string | number) => ReactNode;
+    }[];
+    filteredData: Record<string, any>[];
+    summaryLabel?: string;
+    summaryLabelStyle?: React.CSSProperties;
+    summaryRowStyle?: React.CSSProperties;
+}
 
 type Direction = "rtl" | "ltr";
 
@@ -156,4 +167,4 @@ interface DatePickerProps {
     direction?: Direction;
 }
 
-export type { BaseElementProps, ConfirmFormProps, DatePickerProps, Direction, FilterProps, InputContainerProps, InputElement, ModularFormProps, SelectContainerProps, SelectElement, TableCellProps, TableHeaderProps, TableProps, TableRowProps };
+export type { BaseElementProps, ConfirmFormProps, DatePickerProps, Direction, FilterProps, InputContainerProps, InputElement, ModularFormProps, SelectContainerProps, SelectElement, SummaryProps, TableCellProps, TableHeaderProps, TableProps, TableRowProps };
