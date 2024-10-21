@@ -59,6 +59,7 @@ export const Table = ({
         keysToRender,
         sortKeys,
     });
+    console.log("table rendered");
 
     return (
         <div className={`flex flex-col gap-2  ${containerClassName}`} style={containerStyle}>

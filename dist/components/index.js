@@ -883,6 +883,7 @@ var Table = function(param) {
         keysToRender: keysToRender,
         sortKeys: sortKeys
     }), filteredData = _useFilter.filteredData, filters = _useFilter.filters, filterPopupsDisplay = _useFilter.filterPopupsDisplay, filterOptions = _useFilter.filterOptions, handleFilterChange = _useFilter.handleFilterChange, handleFilterClick = _useFilter.handleFilterClick;
+    console.log("table rendered");
     return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", {
         className: "flex flex-col gap-2  ".concat(containerClassName),
         style: containerStyle,
