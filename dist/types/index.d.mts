@@ -9,7 +9,6 @@ interface TableHeaderProps {
     sortColumn: number | null;
     sortOrder: "asc" | "desc" | null;
     onFilterChange: (dataKey: string, value: string) => void;
-    clearFilter: () => void;
     handleFilterClick: (dataKey: string) => void;
     filters: Record<string, string[]>;
     filterOptions: Record<string, any[]>;
@@ -20,13 +19,12 @@ interface TableHeaderProps {
     }[];
     filterPopupsDisplay: string;
     sortDisplay: boolean;
-    filter_label: string;
+    filterLabel: string;
     sort_label: string;
-    setFilterPopupsDisplay: React.Dispatch<React.SetStateAction<string>>;
 }
 interface FilterProps {
     index: number;
-    filter_label: string;
+    filterLabel: string;
     filterableColumn?: {
         header: string;
         dataKey: string;
@@ -91,7 +89,7 @@ interface TableProps {
     summaryLabelStyle?: React.CSSProperties;
     summaryRowStyle?: React.CSSProperties;
     summaryLabel?: string;
-    filter_label?: string;
+    filterLabel?: string;
     sort_label?: string;
     export_excel_label?: string;
     onRowClick?: (data?: any) => void;

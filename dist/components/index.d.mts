@@ -19,7 +19,6 @@ interface TableHeaderProps {
     sortColumn: number | null;
     sortOrder: "asc" | "desc" | null;
     onFilterChange: (dataKey: string, value: string) => void;
-    clearFilter: () => void;
     handleFilterClick: (dataKey: string) => void;
     filters: Record<string, string[]>;
     filterOptions: Record<string, any[]>;
@@ -30,13 +29,12 @@ interface TableHeaderProps {
     }[];
     filterPopupsDisplay: string;
     sortDisplay: boolean;
-    filter_label: string;
+    filterLabel: string;
     sort_label: string;
-    setFilterPopupsDisplay: React.Dispatch<React.SetStateAction<string>>;
 }
 interface FilterProps {
     index: number;
-    filter_label: string;
+    filterLabel: string;
     filterableColumn?: {
         header: string;
         dataKey: string;
@@ -101,7 +99,7 @@ interface TableProps {
     summaryLabelStyle?: React.CSSProperties;
     summaryRowStyle?: React.CSSProperties;
     summaryLabel?: string;
-    filter_label?: string;
+    filterLabel?: string;
     sort_label?: string;
     export_excel_label?: string;
     onRowClick?: (data?: any) => void;
@@ -169,13 +167,58 @@ interface DatePickerProps {
     buttonText?: string;
 }
 
-declare const Filter: ({ filterableColumn, handleFilterClick, filterPopupsDisplay, index, filterOptions, filters, onFilterChange, filter_label, lang, headers, }: FilterProps) => react_jsx_runtime.JSX.Element;
-declare const TableHeader: ({ headers, headerStyle, headerCellStyle, onSort, sortColumn, sortOrder, onFilterChange, clearFilter, filters, filterOptions, filterableColumns, filterPopupsDisplay, setFilterPopupsDisplay, lang, handleFilterClick, sortDisplay, filter_label, sort_label, }: TableHeaderProps) => react_jsx_runtime.JSX.Element;
+declare const Filter: ({ filterableColumn, handleFilterClick, filterPopupsDisplay, index, filterOptions, filters, onFilterChange, filterLabel, lang, headers, }: FilterProps) => react_jsx_runtime.JSX.Element;
+declare const TableHeader: ({ headers, headerStyle, headerCellStyle, onSort, sortColumn, sortOrder, onFilterChange, filters, filterOptions, filterableColumns, filterPopupsDisplay, lang, handleFilterClick, sortDisplay, filterLabel, sort_label, }: TableHeaderProps) => react_jsx_runtime.JSX.Element;
 declare const TableRow: ({ item, rowStyles, cellStyle, keysToRender, onRowClick }: TableRowProps) => react_jsx_runtime.JSX.Element;
 declare const TableCell: ({ value, cellStyle }: TableCellProps) => react_jsx_runtime.JSX.Element;
 declare const getFixedNumber: (number?: number, fix?: number) => string;
+declare const ExportToExcel: ({ exportToExcelKeys, dataToAddToExcelTable, excelFileName, filteredData, headers, sumColumns, export_excel_label }: {
+    exportToExcelKeys: any;
+    dataToAddToExcelTable: any;
+    excelFileName: any;
+    filteredData: any;
+    headers: any;
+    sumColumns: any;
+    export_excel_label: any;
+}) => react_jsx_runtime.JSX.Element;
 
-declare const Table: ({ data, headers, searchElement, keysToRender, headerCellStyle, rowStyles, cellStyle, tableContainerClass, tableContainerStyle, headerStyle, tableStyle, containerStyle, containerClassName, searchInputStyle, searchInputClassName, filterableColumns, sortKeys, exportToExcelKeys, dataToAddToExcelTable, sumColumns, includeSearch, excelFileName, summaryLabel, summaryContainerStyle, summaryLabelStyle, summaryRowStyle, searchPlaceHolder, filter_label, sort_label, export_excel_label, onRowClick, lang, }: TableProps) => react_jsx_runtime.JSX.Element;
+declare const Table: ({ data, headers, searchElement, keysToRender, lang, onRowClick, containerStyle, containerClassName, tableContainerClass, tableContainerStyle, tableStyle, rowStyles, cellStyle, headerStyle, headerCellStyle, searchInputStyle, searchInputClassName, includeSearch, searchPlaceHolder, sortKeys, sort_label, filterableColumns, filterLabel, exportToExcelKeys, dataToAddToExcelTable, export_excel_label, excelFileName, sumColumns, summaryLabel, summaryContainerStyle, summaryLabelStyle, summaryRowStyle, }: TableProps) => react_jsx_runtime.JSX.Element;
+declare const useSort: () => {
+    sortColumn: number;
+    sortOrder: "asc" | "desc";
+    handleSort: (columnIndex: number) => void;
+};
+declare const useSearch: () => {
+    searchQuery: string;
+    handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
+declare const useFilter: ({ data, filterableColumns, includeSearch, searchQuery, keysToRender, sortColumn, sortOrder, sortKeys }: {
+    data: any;
+    filterableColumns: any;
+    includeSearch: any;
+    searchQuery: any;
+    keysToRender: any;
+    sortColumn: any;
+    sortOrder: any;
+    sortKeys: any;
+}) => {
+    filteredData: Record<string, any>[];
+    filters: Record<string, string[]>;
+    filterPopupsDisplay: string;
+    filterOptions: any;
+    handleFilterChange: (dataKey: string, value: string) => void;
+    handleFilterClick: (dataKey: string) => void;
+};
+declare const useExportToExcel: ({ excelFileName, exportToExcelKeys, dataToAddToExcelTable, filteredData, headers, sumColumns }: {
+    excelFileName: any;
+    exportToExcelKeys: any;
+    dataToAddToExcelTable: any;
+    filteredData: any;
+    headers: any;
+    sumColumns: any;
+}) => {
+    onExportExcelClick: () => Promise<void>;
+};
 
 interface LoaderProps {
     color?: string;
@@ -191,4 +234,4 @@ declare const ModularForm: ({ submitFunction, elements, headerContent, buttonCon
 declare const ConfirmForm: ({ onV, onX, headline, direction }: ConfirmFormProps) => react_jsx_runtime.JSX.Element;
 declare const DatePicker: ({ submit, formClassName, labelsClassName, inputsClassName, buttonClassName, buttonStyle, defaultFrom, defaultTo, direction, fromText, toText, buttonText, }: DatePickerProps) => react_jsx_runtime.JSX.Element;
 
-export { Checkbox, ConfirmForm, DatePicker, Filter, InputContainer, Loader, ModularForm, SelectContainer, Table, TableCell, TableHeader, TableRow, getFixedNumber };
+export { Checkbox, ConfirmForm, DatePicker, ExportToExcel, Filter, InputContainer, Loader, ModularForm, SelectContainer, Table, TableCell, TableHeader, TableRow, getFixedNumber, useExportToExcel, useFilter, useSearch, useSort };

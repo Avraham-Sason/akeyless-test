@@ -1,8 +1,9 @@
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import React, { useState, useEffect } from "react";
-import { emptyFilterSvg, slashFilterSvg, sortSvg } from "../../assets";
+import { emptyFilterSvg, exportToExcelSvg, slashFilterSvg, sortSvg } from "../../assets";
 import { FilterProps, TableCellProps, TableHeaderProps, TableRowProps } from "../../types";
+import { useExportToExcel } from "./Table";
 
 export const Filter = ({
     filterableColumn,
@@ -12,7 +13,7 @@ export const Filter = ({
     filterOptions,
     filters,
     onFilterChange,
-    filter_label,
+    filterLabel,
     lang,
     headers,
 }: FilterProps) => {
@@ -23,7 +24,7 @@ export const Filter = ({
                 <>
                     {/* filter button */}
                     <button
-                        title={filter_label + " " + filterableColumn.header}
+                        title={filterLabel + " " + filterableColumn.header}
                         className="absolute top-1 right-1 text-[12px]"
                         onClick={() => handleFilterClick(filterableColumn.dataKey)}
                     >
@@ -39,7 +40,7 @@ export const Filter = ({
                             className={`absolute z-10 top-1 ${displayRight ? "right-[-165px]" : "left-[-80px]"}
                               w-40 h-32 bg-white p-1 flex flex-col items-center gap-2 shadow`}
                         >
-                            <div className="text-start border-black border-b-[1px] w-[90%]">{filter_label + " " + filterableColumn.header}</div>
+                            <div className="text-start border-black border-b-[1px] w-[90%]">{filterLabel + " " + filterableColumn.header}</div>
                             <div className="overflow-auto h-[80%] flex flex-col gap-1 w-full cursor-pointer ">
                                 {filterOptions[filterableColumn.dataKey]?.map((option, i) => (
                                     <div key={i} className="flex items-center px-2 justify-start hover:bg-[#547f22] hover:text-white">
@@ -71,16 +72,14 @@ export const TableHeader = ({
     sortColumn,
     sortOrder,
     onFilterChange,
-    clearFilter,
     filters,
     filterOptions,
     filterableColumns = [],
     filterPopupsDisplay,
-    setFilterPopupsDisplay,
     lang,
     handleFilterClick,
     sortDisplay,
-    filter_label,
+    filterLabel,
     sort_label,
 }: TableHeaderProps) => {
     return (
@@ -105,7 +104,7 @@ export const TableHeader = ({
                             <Filter
                                 lang={lang}
                                 headers={headers}
-                                filter_label={filter_label}
+                                filterLabel={filterLabel}
                                 filterOptions={filterOptions}
                                 filterPopupsDisplay={filterPopupsDisplay}
                                 filterableColumn={filterableColumn}
@@ -130,7 +129,6 @@ export const TableRow = ({ item, rowStyles, cellStyle, keysToRender = [], onRowC
     </tr>
 );
 
-
 export const TableCell = ({ value, cellStyle }: TableCellProps) => (
     <td
         title={["string", "number", "boolean"].includes(typeof value) ? value : ""}
@@ -146,54 +144,51 @@ export const getFixedNumber = (number = 0, fix = 4) => {
     return String(sum_value);
 };
 
-// export const ExportExcel = ({exportToExcelKeys,dataToAddToExcelTable}) => {
-//     const addPropertiesToExcel = (properties: { key: string; value: any; header: string }[]) => {
-//         let newData = [...filteredData];
-//         let newHeaders = [...headers];
-//         properties.forEach((val) => {
-//             newHeaders.unshift(val.header);
-//             newData = newData.map((v) => ({ ...v, [val.key]: val.value }));
-//         });
-//         return { data: newData, headers: newHeaders };
-//     };
-//     const onExportExcelClick = async (): Promise<void> => {
-//         if (exportToExcelKeys) {
-//             // create worksheet
-//             const workbook = new ExcelJS.Workbook();
-//             const worksheet = workbook.addWorksheet("Sheet1");
-//             const dataToExport = dataToAddToExcelTable ? addPropertiesToExcel(dataToAddToExcelTable) : { data: filteredData, headers };
-//             // add rows
-//             worksheet.addRow(dataToExport.headers);
-//             dataToExport.data.forEach((item: Record<string, any>) => {
-//                 const row = exportToExcelKeys.map((key: string) => item[key]);
-//                 worksheet.addRow(row);
-//             });
-//             // summary
-//             if (sumColumns) {
-//                 sumColumns.forEach((val) => {
-//                     const sumRow = worksheet.addRow([]);
-//                     sumRow.getCell(1).value = val.label;
-//                     const value = filteredData
-//                         .reduce((acc, v) => {
-//                             return acc + Number(v[val.dataKey]) || 0;
-//                         }, 0)
-//                         .toFixed(2);
-//                     sumRow.getCell(2).value = value;
-//                 });
-//             }
-//             // download file
-//             const buffer = await workbook.xlsx.writeBuffer();
-//             const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-//             saveAs(blob, `${excelFileName || "table_data"}.xlsx`);
-//         }
-//     };
-//     return (
-//         <button
-//             onClick={onExportExcelClick}
-//             title={export_excel_label}
-//             className="px-2 py-[2px]  bg-[#547f22] text-white rounded-lg text-[16px]"
-//         >
-//             {exportToExcelSvg()}
-//         </button>
-//     )}
-// }
+export const ExportToExcel = ({ exportToExcelKeys, dataToAddToExcelTable, excelFileName, filteredData, headers, sumColumns, export_excel_label }) => {
+    const addPropertiesToExcel = (properties: { key: string; value: any; header: string }[]) => {
+        let newData = [...filteredData];
+        let newHeaders = [...headers];
+        properties.forEach((val) => {
+            newHeaders.unshift(val.header);
+            newData = newData.map((v) => ({ ...v, [val.key]: val.value }));
+        });
+        return { data: newData, headers: newHeaders };
+    };
+
+    const onExportExcelClick = async (): Promise<void> => {
+        if (exportToExcelKeys) {
+            // create worksheet
+            const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet("Sheet1");
+            const dataToExport = dataToAddToExcelTable ? addPropertiesToExcel(dataToAddToExcelTable) : { data: filteredData, headers };
+            // add rows
+            worksheet.addRow(dataToExport.headers);
+            dataToExport.data.forEach((item: Record<string, any>) => {
+                const row = exportToExcelKeys.map((key: string) => item[key]);
+                worksheet.addRow(row);
+            });
+            // summary
+            if (sumColumns) {
+                sumColumns.forEach((val) => {
+                    const sumRow = worksheet.addRow([]);
+                    sumRow.getCell(1).value = val.label;
+                    const value = filteredData
+                        .reduce((acc, v) => {
+                            return acc + Number(v[val.dataKey]) || 0;
+                        }, 0)
+                        .toFixed(2);
+                    sumRow.getCell(2).value = value;
+                });
+            }
+            // download file
+            const buffer = await workbook.xlsx.writeBuffer();
+            const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+            saveAs(blob, `${excelFileName || "table_data"}.xlsx`);
+        }
+    };
+    return (
+        <button onClick={onExportExcelClick} title={export_excel_label} className="px-2 py-[2px]  bg-[#547f22] text-white rounded-lg text-[16px]">
+            {exportToExcelSvg()}
+        </button>
+    );
+};
