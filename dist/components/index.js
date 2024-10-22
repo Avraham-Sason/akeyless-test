@@ -1010,7 +1010,11 @@ var TableHead = function() {
                             children: sortSvg()
                         }) : /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_jsx_runtime5.Fragment, {
                             children: sortSvg(true)
-                        }))
+                        })),
+                        filterableColumn && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(Filter, {
+                            filterableColumn: filterableColumn,
+                            index: index
+                        })
                     ]
                 }, index);
             })

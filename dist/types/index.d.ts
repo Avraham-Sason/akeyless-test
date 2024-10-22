@@ -38,7 +38,7 @@ interface TableHeaderProps {
 }
 interface FilterProps {
     index: number;
-    filterableColumn?: {
+    filterableColumn: {
         header: string;
         dataKey: string;
         ui?: (option: any) => ReactNode;

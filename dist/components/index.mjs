@@ -877,7 +877,11 @@ var TableHead = function() {
                             children: sortSvg()
                         }) : /* @__PURE__ */ jsx5(Fragment2, {
                             children: sortSvg(true)
-                        }))
+                        })),
+                        filterableColumn && /* @__PURE__ */ jsx5(Filter, {
+                            filterableColumn: filterableColumn,
+                            index: index
+                        })
                     ]
                 }, index);
             })

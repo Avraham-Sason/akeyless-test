@@ -148,8 +148,8 @@ export const useExportToExcel = ({ excelFileName, exportToExcelKeys, dataToAddTo
 export const Filter = ({ filterableColumn, index }: FilterProps) => {
     const { lang, headers, filters, filterOptions, filterPopupsDisplay, handleFilterChange, handleFilterClick, filterLabel } = useTableContext();
     const displayRight = (lang === "he" && index === headers.length - 1) || (lang === "en" && index !== headers.length - 1);
-    console.log("filterableColumn",filterableColumn);
-    
+    console.log("filterableColumn", filterableColumn);
+
     return (
         <>
             {/* filter button */}
@@ -172,7 +172,7 @@ export const Filter = ({ filterableColumn, index }: FilterProps) => {
                 >
                     <div className="text-start border-black border-b-[1px] w-[90%]">{filterLabel + " " + filterableColumn.header}</div>
                     <div className="overflow-auto h-[80%] flex flex-col gap-1 w-full cursor-pointer ">
-                        {filterOptions[filterableColumn.dataKey]?.map((option:string, i:number) => (
+                        {filterOptions[filterableColumn.dataKey]?.map((option: string, i: number) => (
                             <div key={i} className="flex items-center px-2 justify-start hover:bg-[#547f22] hover:text-white">
                                 <input
                                     type="checkbox"
@@ -224,7 +224,7 @@ export const TableHead = () => {
                             {/* sort */}
                             {sortDisplay && sortColumn === index && (sortOrder === "asc" ? <>{sortSvg()}</> : <>{sortSvg(true)}</>)}
                             {/* filter */}
-                            {/* {filterableColumns && <Filter filterableColumn={filterableColumn} index={index} />} */}
+                            {filterableColumn && <Filter filterableColumn={filterableColumn} index={index} />}
                         </th>
                     );
                 })}
