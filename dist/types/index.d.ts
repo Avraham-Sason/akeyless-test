@@ -1,5 +1,19 @@
+import { TObject } from 'akeyless-types-commons';
 import { ReactNode } from 'react';
 
+interface TableProvider {
+    sortColumn: number;
+    sortOrder: "asc" | "desc";
+    handleSort: (columnIndex: number) => void;
+    searchQuery: string;
+    handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    dataToRender: TObject<any>[];
+    filters: TObject<string[]>;
+    filterPopupsDisplay: string;
+    filterOptions: any;
+    handleFilterChange: (dataKey: string, value: string) => void;
+    handleFilterClick: (dataKey: string) => void;
+}
 interface TableHeaderProps {
     headers: string[];
     lang: "en" | "he";
@@ -24,19 +38,11 @@ interface TableHeaderProps {
 }
 interface FilterProps {
     index: number;
-    filterLabel: string;
     filterableColumn?: {
         header: string;
         dataKey: string;
         ui?: (option: any) => ReactNode;
     };
-    handleFilterClick: (dataKey: string) => void;
-    filterPopupsDisplay: string;
-    filterOptions: Record<string, any[]>;
-    filters: Record<string, any[]>;
-    onFilterChange: (dataKey: string, value: string) => void;
-    lang: "en" | "he";
-    headers: string[];
 }
 interface TableRowProps {
     item: Record<string, any>;
@@ -53,7 +59,7 @@ interface TableProps {
     data: Record<string, any>[];
     headers: string[];
     keysToRender: string[];
-    searchElement?: ReactNode;
+    optionalElement?: ReactNode;
     containerStyle?: React.CSSProperties;
     containerClassName?: string;
     includeSearch?: boolean;
@@ -101,7 +107,7 @@ interface SummaryProps {
         dataKey: string;
         ui?: (value: string | number) => ReactNode;
     }[];
-    filteredData: Record<string, any>[];
+    dataToRender: Record<string, any>[];
     summaryLabel?: string;
     summaryLabelStyle?: React.CSSProperties;
     summaryRowStyle?: React.CSSProperties;
@@ -168,4 +174,4 @@ interface DatePickerProps {
     buttonText?: string;
 }
 
-export type { BaseElementProps, ConfirmFormProps, DatePickerProps, Direction, FilterProps, InputContainerProps, InputElement, ModularFormProps, SelectContainerProps, SelectElement, SummaryProps, TableCellProps, TableHeaderProps, TableProps, TableRowProps };
+export type { BaseElementProps, ConfirmFormProps, DatePickerProps, Direction, FilterProps, InputContainerProps, InputElement, ModularFormProps, SelectContainerProps, SelectElement, SummaryProps, TableCellProps, TableHeaderProps, TableProps, TableProvider, TableRowProps };

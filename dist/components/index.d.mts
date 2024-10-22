@@ -1,52 +1,37 @@
 import * as react_jsx_runtime from 'react/jsx-runtime';
-import React$1, { SetStateAction, ReactNode } from 'react';
+import * as React$1 from 'react';
+import React__default, { SetStateAction, ReactNode } from 'react';
+import { TObject } from 'akeyless-types-commons';
 
 interface CheckBoxProps {
     id: string;
     checked: boolean;
-    setChecked: React$1.Dispatch<SetStateAction<boolean>>;
-    style?: React$1.CSSProperties;
+    setChecked: React__default.Dispatch<SetStateAction<boolean>>;
+    style?: React__default.CSSProperties;
     rotate: boolean;
 }
 declare const Checkbox: ({ id, checked, setChecked, rotate, style }: CheckBoxProps) => react_jsx_runtime.JSX.Element;
 
-interface TableHeaderProps {
-    headers: string[];
-    lang: "en" | "he";
-    headerStyle?: React.CSSProperties;
-    headerCellStyle?: React.CSSProperties;
-    onSort: (index: number) => void;
-    sortColumn: number | null;
-    sortOrder: "asc" | "desc" | null;
-    onFilterChange: (dataKey: string, value: string) => void;
-    handleFilterClick: (dataKey: string) => void;
-    filters: Record<string, string[]>;
-    filterOptions: Record<string, any[]>;
-    filterableColumns?: {
-        header: string;
-        dataKey: string;
-        ui?: (option: any) => ReactNode;
-    }[];
+interface TableProvider {
+    sortColumn: number;
+    sortOrder: "asc" | "desc";
+    handleSort: (columnIndex: number) => void;
+    searchQuery: string;
+    handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    dataToRender: TObject<any>[];
+    filters: TObject<string[]>;
     filterPopupsDisplay: string;
-    sortDisplay: boolean;
-    filterLabel: string;
-    sort_label: string;
+    filterOptions: any;
+    handleFilterChange: (dataKey: string, value: string) => void;
+    handleFilterClick: (dataKey: string) => void;
 }
 interface FilterProps {
     index: number;
-    filterLabel: string;
     filterableColumn?: {
         header: string;
         dataKey: string;
         ui?: (option: any) => ReactNode;
     };
-    handleFilterClick: (dataKey: string) => void;
-    filterPopupsDisplay: string;
-    filterOptions: Record<string, any[]>;
-    filters: Record<string, any[]>;
-    onFilterChange: (dataKey: string, value: string) => void;
-    lang: "en" | "he";
-    headers: string[];
 }
 interface TableRowProps {
     item: Record<string, any>;
@@ -63,7 +48,7 @@ interface TableProps {
     data: Record<string, any>[];
     headers: string[];
     keysToRender: string[];
-    searchElement?: ReactNode;
+    optionalElement?: ReactNode;
     containerStyle?: React.CSSProperties;
     containerClassName?: string;
     includeSearch?: boolean;
@@ -167,22 +152,6 @@ interface DatePickerProps {
     buttonText?: string;
 }
 
-declare const Filter: ({ filterableColumn, handleFilterClick, filterPopupsDisplay, index, filterOptions, filters, onFilterChange, filterLabel, lang, headers, }: FilterProps) => react_jsx_runtime.JSX.Element;
-declare const TableHeader: ({ headers, headerStyle, headerCellStyle, onSort, sortColumn, sortOrder, onFilterChange, filters, filterOptions, filterableColumns, filterPopupsDisplay, lang, handleFilterClick, sortDisplay, filterLabel, sort_label, }: TableHeaderProps) => react_jsx_runtime.JSX.Element;
-declare const TableRow: ({ item, rowStyles, cellStyle, keysToRender, onRowClick }: TableRowProps) => react_jsx_runtime.JSX.Element;
-declare const TableCell: ({ value, cellStyle }: TableCellProps) => react_jsx_runtime.JSX.Element;
-declare const getFixedNumber: (number?: number, fix?: number) => string;
-declare const ExportToExcel: ({ exportToExcelKeys, dataToAddToExcelTable, excelFileName, filteredData, headers, sumColumns, export_excel_label }: {
-    exportToExcelKeys: any;
-    dataToAddToExcelTable: any;
-    excelFileName: any;
-    filteredData: any;
-    headers: any;
-    sumColumns: any;
-    export_excel_label: any;
-}) => react_jsx_runtime.JSX.Element;
-
-declare const Table: ({ data, headers, searchElement, keysToRender, lang, onRowClick, containerStyle, containerClassName, tableContainerClass, tableContainerStyle, tableStyle, rowStyles, cellStyle, headerStyle, headerCellStyle, searchInputStyle, searchInputClassName, includeSearch, searchPlaceHolder, sortKeys, sort_label, filterableColumns, filterLabel, exportToExcelKeys, dataToAddToExcelTable, export_excel_label, excelFileName, sumColumns, summaryLabel, summaryContainerStyle, summaryLabelStyle, summaryRowStyle, }: TableProps) => react_jsx_runtime.JSX.Element;
 declare const useSort: () => {
     sortColumn: number;
     sortOrder: "asc" | "desc";
@@ -190,10 +159,12 @@ declare const useSort: () => {
 };
 declare const useSearch: () => {
     searchQuery: string;
-    handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handleSearch: (e: React__default.ChangeEvent<HTMLInputElement>) => void;
 };
-declare const useFilter: ({ data, filterableColumns, includeSearch, searchQuery, keysToRender, sortColumn, sortOrder, sortKeys }: {
+declare const useFilter: ({ data, dataToRender, setDataToRender, filterableColumns, includeSearch, searchQuery, keysToRender, sortColumn, sortOrder, sortKeys, }: {
     data: any;
+    dataToRender: any;
+    setDataToRender: any;
     filterableColumns: any;
     includeSearch: any;
     searchQuery: any;
@@ -202,31 +173,43 @@ declare const useFilter: ({ data, filterableColumns, includeSearch, searchQuery,
     sortOrder: any;
     sortKeys: any;
 }) => {
-    filteredData: Record<string, any>[];
-    filters: Record<string, string[]>;
+    filters: TObject<string[]>;
     filterPopupsDisplay: string;
     filterOptions: any;
     handleFilterChange: (dataKey: string, value: string) => void;
     handleFilterClick: (dataKey: string) => void;
 };
-declare const useExportToExcel: ({ excelFileName, exportToExcelKeys, dataToAddToExcelTable, filteredData, headers, sumColumns }: {
+declare const useExportToExcel: ({ excelFileName, exportToExcelKeys, dataToAddToExcelTable, dataToRender, headers, sumColumns }: {
     excelFileName: any;
     exportToExcelKeys: any;
     dataToAddToExcelTable: any;
-    filteredData: any;
+    dataToRender: any;
     headers: any;
     sumColumns: any;
 }) => {
     onExportExcelClick: () => Promise<void>;
 };
+declare const Filter: ({ filterableColumn, index }: FilterProps) => react_jsx_runtime.JSX.Element;
+declare const TableHead: () => react_jsx_runtime.JSX.Element;
+declare const TableRow: ({ item, rowStyles, cellStyle, keysToRender, onRowClick }: TableRowProps) => react_jsx_runtime.JSX.Element;
+declare const TableCell: ({ value, cellStyle }: TableCellProps) => react_jsx_runtime.JSX.Element;
+declare const getFixedNumber: (number?: number, fix?: number) => string;
+declare const ExportToExcel: React__default.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;
+declare const Search: React__default.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;
+declare const Summary: React__default.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;
+declare const TableBody: React__default.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;
+
+declare const TableContext: React$1.Context<TableProps & TableProvider>;
+declare const useTableContext: () => TableProps & TableProvider;
+declare const Table: (props: TableProps) => react_jsx_runtime.JSX.Element;
 
 interface LoaderProps {
     color?: string;
     size?: number;
-    style?: React$1.CSSProperties;
+    style?: React__default.CSSProperties;
     className?: string;
 }
-declare const Loader: React$1.FC<LoaderProps>;
+declare const Loader: React__default.FC<LoaderProps>;
 
 declare const InputContainer: ({ name, inputType, labelContent, defaultValue, validationName, containerClassName, labelClassName, elementClassName, required, validationType, onKeyDown, }: InputContainerProps) => react_jsx_runtime.JSX.Element;
 declare const SelectContainer: ({ name, labelContent, containerClassName, labelClassName, defaultValue, elementClassName, optionClassName, required, options, }: SelectContainerProps) => react_jsx_runtime.JSX.Element;
@@ -234,4 +217,4 @@ declare const ModularForm: ({ submitFunction, elements, headerContent, buttonCon
 declare const ConfirmForm: ({ onV, onX, headline, direction }: ConfirmFormProps) => react_jsx_runtime.JSX.Element;
 declare const DatePicker: ({ submit, formClassName, labelsClassName, inputsClassName, buttonClassName, buttonStyle, defaultFrom, defaultTo, direction, fromText, toText, buttonText, }: DatePickerProps) => react_jsx_runtime.JSX.Element;
 
-export { Checkbox, ConfirmForm, DatePicker, ExportToExcel, Filter, InputContainer, Loader, ModularForm, SelectContainer, Table, TableCell, TableHeader, TableRow, getFixedNumber, useExportToExcel, useFilter, useSearch, useSort };
+export { Checkbox, ConfirmForm, DatePicker, ExportToExcel, Filter, InputContainer, Loader, ModularForm, Search, SelectContainer, Summary, Table, TableBody, TableCell, TableContext, TableHead, TableRow, getFixedNumber, useExportToExcel, useFilter, useSearch, useSort, useTableContext };

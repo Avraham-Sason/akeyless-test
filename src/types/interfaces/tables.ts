@@ -1,4 +1,19 @@
+import { TObject } from "akeyless-types-commons";
 import { ReactNode } from "react";
+
+export interface TableProvider {
+    sortColumn: number;
+    sortOrder: "asc" | "desc";
+    handleSort: (columnIndex: number) => void;
+    searchQuery: string;
+    handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    dataToRender: TObject<any>[];
+    filters: TObject<string[]>;
+    filterPopupsDisplay: string;
+    filterOptions: any;
+    handleFilterChange: (dataKey: string, value: string) => void;
+    handleFilterClick: (dataKey: string) => void;
+}
 
 export interface TableHeaderProps {
     headers: string[];
@@ -20,15 +35,7 @@ export interface TableHeaderProps {
 }
 export interface FilterProps {
     index: number;
-    filterLabel: string;
     filterableColumn?: { header: string; dataKey: string; ui?: (option: any) => ReactNode };
-    handleFilterClick: (dataKey: string) => void;
-    filterPopupsDisplay: string;
-    filterOptions: Record<string, any[]>;
-    filters: Record<string, any[]>;
-    onFilterChange: (dataKey: string, value: string) => void;
-    lang: "en" | "he";
-    headers: string[];
 }
 export interface TableRowProps {
     item: Record<string, any>;
@@ -45,7 +52,7 @@ export interface TableProps {
     data: Record<string, any>[];
     headers: string[];
     keysToRender: string[];
-    searchElement?: ReactNode;
+    optionalElement?: ReactNode;
     containerStyle?: React.CSSProperties;
     containerClassName?: string;
     includeSearch?: boolean;
@@ -78,7 +85,7 @@ export interface TableProps {
 
 export interface SummaryProps {
     sumColumns: { label: string; dataKey: string; ui?: (value: string | number) => ReactNode }[];
-    filteredData: Record<string, any>[];
+    dataToRender: Record<string, any>[];
     summaryLabel?: string;
     summaryLabelStyle?: React.CSSProperties;
     summaryRowStyle?: React.CSSProperties;
