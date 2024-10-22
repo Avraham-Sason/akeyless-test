@@ -785,6 +785,7 @@ var Filter = function(param) {
     var _filters_filterableColumn_dataKey, _filters_filterableColumn_dataKey1, _filterOptions_filterableColumn_dataKey;
     var _useTableContext = useTableContext(), lang = _useTableContext.lang, headers = _useTableContext.headers, filters = _useTableContext.filters, filterOptions = _useTableContext.filterOptions, filterPopupsDisplay = _useTableContext.filterPopupsDisplay, handleFilterChange = _useTableContext.handleFilterChange, handleFilterClick = _useTableContext.handleFilterClick, filterLabel = _useTableContext.filterLabel;
     var displayRight = lang === "he" && index === headers.length - 1 || lang === "en" && index !== headers.length - 1;
+    console.log("filterableColumn", filterableColumn);
     return /* @__PURE__ */ jsxs5(Fragment2, {
         children: [
             /* @__PURE__ */ jsx5("button", {
@@ -846,7 +847,7 @@ var Filter = function(param) {
     });
 };
 var TableHead = function() {
-    var _useTableContext = useTableContext(), lang = _useTableContext.lang, headers = _useTableContext.headers, headerStyle = _useTableContext.headerStyle, headerCellStyle = _useTableContext.headerCellStyle, sortColumn = _useTableContext.sortColumn, handleSort = _useTableContext.handleSort, sortKeys = _useTableContext.sortKeys, sortOrder = _useTableContext.sortOrder, filters = _useTableContext.filters, filterOptions = _useTableContext.filterOptions, _useTableContext_filterableColumns = _useTableContext.filterableColumns, filterableColumns = _useTableContext_filterableColumns === void 0 ? [] : _useTableContext_filterableColumns, filterPopupsDisplay = _useTableContext.filterPopupsDisplay, handleFilterChange = _useTableContext.handleFilterChange, handleFilterClick = _useTableContext.handleFilterClick, filterLabel = _useTableContext.filterLabel, sort_label = _useTableContext.sort_label;
+    var _useTableContext = useTableContext(), headers = _useTableContext.headers, headerStyle = _useTableContext.headerStyle, headerCellStyle = _useTableContext.headerCellStyle, sortColumn = _useTableContext.sortColumn, handleSort = _useTableContext.handleSort, sortKeys = _useTableContext.sortKeys, sortOrder = _useTableContext.sortOrder, _useTableContext_filterableColumns = _useTableContext.filterableColumns, filterableColumns = _useTableContext_filterableColumns === void 0 ? [] : _useTableContext_filterableColumns, sort_label = _useTableContext.sort_label;
     var sortDisplay = useMemo(function() {
         return Boolean(sortKeys.length);
     }, [
@@ -876,11 +877,7 @@ var TableHead = function() {
                             children: sortSvg()
                         }) : /* @__PURE__ */ jsx5(Fragment2, {
                             children: sortSvg(true)
-                        })),
-                        filterableColumns && /* @__PURE__ */ jsx5(Filter, {
-                            filterableColumn: filterableColumn,
-                            index: index
-                        })
+                        }))
                     ]
                 }, index);
             })
