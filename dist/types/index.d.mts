@@ -100,7 +100,7 @@ interface TableProps {
     export_excel_label?: string;
     onRowClick?: (data?: any) => void;
     lang: "en" | "he";
-    children: ReactNode;
+    children?: ReactNode;
 }
 interface SummaryProps {
     sumColumns: {

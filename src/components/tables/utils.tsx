@@ -3,22 +3,8 @@ import { saveAs } from "file-saver";
 import React, { useState, useEffect, memo, createContext, useContext, useMemo } from "react";
 import { emptyFilterSvg, exportToExcelSvg, slashFilterSvg, sortSvg } from "../../assets";
 import { FilterProps, TableCellProps, TableHeaderProps, TableProps, TableRowProps } from "../../types";
-import { useTableContext } from "./Table";
 import { TObject } from "akeyless-types-commons";
-
-export const useSort = () => {
-    const [sortColumn, setSortColumn] = useState<number | null>(null);
-    const [sortOrder, setSortOrder] = useState<"asc" | "desc" | null>(null);
-    const handleSort = (columnIndex: number) => {
-        let newSortOrder: "asc" | "desc" = "asc";
-        if (sortColumn === columnIndex && sortOrder === "asc") {
-            newSortOrder = "desc";
-        }
-        setSortColumn(columnIndex);
-        setSortOrder(newSortOrder);
-    };
-    return { sortColumn, sortOrder, handleSort };
-};
+import { useTableContext } from "../../hooks";
 
 export const TableHead = () => {
     const {
@@ -85,78 +71,7 @@ export const getFixedNumber = (number = 0, fix = 4) => {
 };
 
 // filter
-export const useFilter = ({
-    data,
-    dataToRender,
-    setDataToRender,
-    filterableColumns,
-    includeSearch,
-    searchQuery,
-    keysToRender,
-    sortColumn,
-    sortOrder,
-    sortKeys,
-}) => {
-    const initFilter = filterableColumns.reduce((acc, col) => ({ ...acc, [col.dataKey]: [] }), {});
-    const [filters, setFilters] = useState<TObject<string[]>>(initFilter);
-    const [filterPopupsDisplay, setFilterPopupsDisplay] = useState<string>("");
-    const filterOptions = filterableColumns.reduce((acc: Record<string, any[]>, col) => {
-        acc[col.dataKey] = Array.from(new Set(data.map((item) => item[col.dataKey])));
-        return acc;
-    }, {});
-    useEffect(() => {
-        let filtered = dataToRender;
-        if (includeSearch) {
-            filtered = data.filter((item) => keysToRender.some((key) => item[key]?.toString().toLowerCase().includes(searchQuery.toLowerCase())));
-        }
-        if (filterableColumns.length > 0) {
-            Object.keys(filters).forEach((key) => {
-                if (filters[key].length > 0) {
-                    filtered = filtered.filter((item) => filters[key].includes(item[key]));
-                }
-            });
-        }
-        if (sortColumn !== null && sortOrder !== null && sortKeys?.length) {
-            filtered = filtered.sort((a, b) => {
-                const aValue = a[sortKeys[sortColumn]];
-                const bValue = b[sortKeys[sortColumn]];
-                if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
-                if (aValue > bValue) return sortOrder === "asc" ? 1 : -1;
-                return 0;
-            });
-        }
-        setDataToRender(filtered);
-    }, [searchQuery, sortColumn, sortOrder, filters, data]);
 
-    const handleFilterChange = (dataKey: string, value: string) => {
-        const newFilters = { ...filters };
-        if (newFilters[dataKey].includes(value)) {
-            newFilters[dataKey] = newFilters[dataKey].filter((item) => item !== value);
-        } else {
-            newFilters[dataKey].push(value);
-        }
-        setFilters(newFilters);
-    };
-    const clearFilter = () => {
-        setFilters(initFilter);
-    };
-    const handleFilterClick = (dataKey: string) => {
-        setFilterPopupsDisplay((prev) => {
-            if (prev === dataKey) {
-                clearFilter();
-                return "";
-            }
-            return dataKey;
-        });
-    };
-    return {
-        filters,
-        filterPopupsDisplay,
-        filterOptions,
-        handleFilterChange,
-        handleFilterClick,
-    };
-};
 export const Filter = memo<FilterProps>(({ filterableColumn, index }) => {
     const { lang, headers, filters, filterOptions, filterPopupsDisplay, handleFilterChange, handleFilterClick, filterLabel } = useTableContext();
     const displayRight = (lang === "he" && index === headers.length - 1) || (lang === "en" && index !== headers.length - 1);
@@ -203,51 +118,6 @@ export const Filter = memo<FilterProps>(({ filterableColumn, index }) => {
         </>
     );
 });
-// export to excel
-export const useExportToExcel = ({ excelFileName, exportToExcelKeys, dataToAddToExcelTable, dataToRender, headers, sumColumns }) => {
-    const addPropertiesToExcel = (properties: { key: string; value: any; header: string }[]) => {
-        let newData = [...dataToRender];
-        let newHeaders = [...headers];
-        properties.forEach((val) => {
-            newHeaders.unshift(val.header);
-            newData = newData.map((v) => ({ ...v, [val.key]: val.value }));
-        });
-        return { data: newData, headers: newHeaders };
-    };
-
-    const onExportExcelClick = async (): Promise<void> => {
-        if (exportToExcelKeys) {
-            // create worksheet
-            const workbook = new ExcelJS.Workbook();
-            const worksheet = workbook.addWorksheet("Sheet1");
-            const dataToExport = dataToAddToExcelTable ? addPropertiesToExcel(dataToAddToExcelTable) : { data: dataToRender, headers };
-            // add rows
-            worksheet.addRow(dataToExport.headers);
-            dataToExport.data.forEach((item: Record<string, any>) => {
-                const row = exportToExcelKeys.map((key: string) => item[key]);
-                worksheet.addRow(row);
-            });
-            // summary
-            if (sumColumns) {
-                sumColumns.forEach((val) => {
-                    const sumRow = worksheet.addRow([]);
-                    sumRow.getCell(1).value = val.label;
-                    const value = dataToRender
-                        .reduce((acc, v) => {
-                            return acc + Number(v[val.dataKey]) || 0;
-                        }, 0)
-                        .toFixed(2);
-                    sumRow.getCell(2).value = value;
-                });
-            }
-            // download file
-            const buffer = await workbook.xlsx.writeBuffer();
-            const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-            saveAs(blob, `${excelFileName || "table_data"}.xlsx`);
-        }
-    };
-    return { onExportExcelClick };
-};
 export const ExportToExcel = memo(() => {
     console.log("ExportToExcel is returning...");
     const { exportToExcelKeys, dataToAddToExcelTable, excelFileName, dataToRender, headers, sumColumns, export_excel_label } = useTableContext();
@@ -299,13 +169,7 @@ export const ExportToExcel = memo(() => {
     );
 });
 // search
-export const useSearch = () => {
-    const [searchQuery, setSearchQuery] = useState<string>("");
-    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchQuery(e.target.value);
-    };
-    return { searchQuery, handleSearch };
-};
+
 export const Search = memo(() => {
     console.log("Search is returning...");
 

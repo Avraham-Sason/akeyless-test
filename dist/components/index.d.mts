@@ -89,7 +89,7 @@ interface TableProps {
     export_excel_label?: string;
     onRowClick?: (data?: any) => void;
     lang: "en" | "he";
-    children: ReactNode;
+    children?: ReactNode;
 }
 
 type Direction = "rtl" | "ltr";
@@ -153,56 +153,17 @@ interface DatePickerProps {
     buttonText?: string;
 }
 
-declare const useSort: () => {
-    sortColumn: number;
-    sortOrder: "asc" | "desc";
-    handleSort: (columnIndex: number) => void;
-};
 declare const TableHead: () => react_jsx_runtime.JSX.Element;
 declare const TableRow: ({ item, rowStyles, cellStyle, keysToRender, onRowClick }: TableRowProps) => react_jsx_runtime.JSX.Element;
 declare const TableCell: ({ value, cellStyle }: TableCellProps) => react_jsx_runtime.JSX.Element;
 declare const getFixedNumber: (number?: number, fix?: number) => string;
-declare const useFilter: ({ data, dataToRender, setDataToRender, filterableColumns, includeSearch, searchQuery, keysToRender, sortColumn, sortOrder, sortKeys, }: {
-    data: any;
-    dataToRender: any;
-    setDataToRender: any;
-    filterableColumns: any;
-    includeSearch: any;
-    searchQuery: any;
-    keysToRender: any;
-    sortColumn: any;
-    sortOrder: any;
-    sortKeys: any;
-}) => {
-    filters: TObject<string[]>;
-    filterPopupsDisplay: string;
-    filterOptions: any;
-    handleFilterChange: (dataKey: string, value: string) => void;
-    handleFilterClick: (dataKey: string) => void;
-};
 declare const Filter: React__default.NamedExoticComponent<FilterProps>;
-declare const useExportToExcel: ({ excelFileName, exportToExcelKeys, dataToAddToExcelTable, dataToRender, headers, sumColumns }: {
-    excelFileName: any;
-    exportToExcelKeys: any;
-    dataToAddToExcelTable: any;
-    dataToRender: any;
-    headers: any;
-    sumColumns: any;
-}) => {
-    onExportExcelClick: () => Promise<void>;
-};
 declare const ExportToExcel: React__default.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;
-declare const useSearch: () => {
-    searchQuery: string;
-    handleSearch: (e: React__default.ChangeEvent<HTMLInputElement>) => void;
-};
 declare const Search: React__default.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;
 declare const Summary: React__default.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;
 declare const TableBody: React__default.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;
 
 declare const TableContext: React$1.Context<TableProps & TableProviderType>;
-declare const useTableContext: () => TableProps & TableProviderType;
-declare const Table2: (props: TableProps) => react_jsx_runtime.JSX.Element;
 declare const TableProvider: (props: TableProps) => react_jsx_runtime.JSX.Element;
 declare const Table: (props: TableProps) => react_jsx_runtime.JSX.Element;
 
@@ -220,4 +181,4 @@ declare const ModularForm: ({ submitFunction, elements, headerContent, buttonCon
 declare const ConfirmForm: ({ onV, onX, headline, direction }: ConfirmFormProps) => react_jsx_runtime.JSX.Element;
 declare const DatePicker: ({ submit, formClassName, labelsClassName, inputsClassName, buttonClassName, buttonStyle, defaultFrom, defaultTo, direction, fromText, toText, buttonText, }: DatePickerProps) => react_jsx_runtime.JSX.Element;
 
-export { Checkbox, ConfirmForm, DatePicker, ExportToExcel, Filter, InputContainer, Loader, ModularForm, Search, SelectContainer, Summary, Table, Table2, TableBody, TableCell, TableContext, TableHead, TableProvider, TableRow, getFixedNumber, useExportToExcel, useFilter, useSearch, useSort, useTableContext };
+export { Checkbox, ConfirmForm, DatePicker, ExportToExcel, Filter, InputContainer, Loader, ModularForm, Search, SelectContainer, Summary, Table, TableBody, TableCell, TableContext, TableHead, TableProvider, TableRow, getFixedNumber };
