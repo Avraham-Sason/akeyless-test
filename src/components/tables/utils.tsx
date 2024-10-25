@@ -19,14 +19,72 @@ export const useSort = () => {
     };
     return { sortColumn, sortOrder, handleSort };
 };
-export const useSearch = () => {
-    const [searchQuery, setSearchQuery] = useState<string>("");
-    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchQuery(e.target.value);
-    };
-    return { searchQuery, handleSearch };
+
+export const TableHead = () => {
+    const {
+        headers,
+        headerStyle,
+        headerCellStyle,
+        sortColumn,
+        handleSort,
+        sortKeys,
+        sortOrder,
+        filterableColumns = [],
+        sort_label,
+    } = useTableContext();
+    const sortDisplay = useMemo<boolean>(() => Boolean(sortKeys.length), [sortKeys]);
+    return (
+        <thead className="bg-gray-50 sticky top-0">
+            <tr style={headerStyle}>
+                {headers.map((header, index) => {
+                    const filterableColumn = filterableColumns.find((col) => col.header === header);
+                    return (
+                        <th
+                            title={sortDisplay ? `${sort_label} ${header}` : header}
+                            style={headerCellStyle}
+                            key={index}
+                            className=" border-black border-[1px] max-w-[130px] px-2 text-center relative"
+                        >
+                            {/* header value */}
+                            <div className={`px-2 ${sortDisplay ? "cursor-pointer" : ""}`} onClick={() => sortDisplay && handleSort(index)}>
+                                {header}
+                            </div>
+                            {/* sort */}
+                            {sortDisplay && sortColumn === index && (sortOrder === "asc" ? <>{sortSvg()}</> : <>{sortSvg(true)}</>)}
+                            {/* filter */}
+                            {filterableColumn && <Filter filterableColumn={filterableColumn} index={index} />}
+                        </th>
+                    );
+                })}
+            </tr>
+        </thead>
+    );
 };
 
+export const TableRow = ({ item, rowStyles, cellStyle, keysToRender = [], onRowClick }: TableRowProps) => (
+    <tr onClick={() => onRowClick(item)} style={rowStyles}>
+        {keysToRender.map((key, index) => (
+            <TableCell cellStyle={cellStyle} key={index} value={item[key]} />
+        ))}
+    </tr>
+);
+
+export const TableCell = ({ value, cellStyle }: TableCellProps) => (
+    <td
+        title={["string", "number", "boolean"].includes(typeof value) ? value : ""}
+        style={cellStyle}
+        className="chivo ellipsis border-black border-[1px] max-w-[90px] px-[4px] text-center"
+    >
+        {value}
+    </td>
+);
+
+export const getFixedNumber = (number = 0, fix = 4) => {
+    const sum_value = number % 1 === 0 ? number : number.toFixed(fix).replace(/\.?0+$/, "");
+    return String(sum_value);
+};
+
+// filter
 export const useFilter = ({
     data,
     dataToRender,
@@ -99,7 +157,53 @@ export const useFilter = ({
         handleFilterClick,
     };
 };
+export const Filter = memo<FilterProps>(({ filterableColumn, index }) => {
+    const { lang, headers, filters, filterOptions, filterPopupsDisplay, handleFilterChange, handleFilterClick, filterLabel } = useTableContext();
+    const displayRight = (lang === "he" && index === headers.length - 1) || (lang === "en" && index !== headers.length - 1);
+    console.log("Filter is returning...");
 
+    return (
+        <>
+            {/* filter button */}
+            <button
+                title={filterLabel + " " + filterableColumn.header}
+                className="absolute top-1 right-1 text-[12px]"
+                onClick={() => handleFilterClick(filterableColumn.dataKey)}
+            >
+                {filterPopupsDisplay === filterableColumn.dataKey ? (
+                    <>{filters[filterableColumn.dataKey]?.length > 0 ? <>{slashFilterSvg(true)}</> : <>{emptyFilterSvg(true)}</>}</>
+                ) : (
+                    <>{filters[filterableColumn.dataKey]?.length > 0 ? <>{slashFilterSvg()}</> : <>{emptyFilterSvg()}</>}</>
+                )}
+            </button>
+            {/* filter popup */}
+            {filterPopupsDisplay === filterableColumn.dataKey && (
+                <div
+                    className={`absolute z-10 top-1 ${displayRight ? "right-[-165px]" : "left-[-80px]"}
+                              w-40 h-32 bg-white p-1 flex flex-col items-center gap-2 shadow`}
+                >
+                    <div className="text-start border-black border-b-[1px] w-[90%]">{filterLabel + " " + filterableColumn.header}</div>
+                    <div className="overflow-auto h-[80%] flex flex-col gap-1 w-full cursor-pointer ">
+                        {filterOptions[filterableColumn.dataKey]?.map((option: string, i: number) => (
+                            <div key={i} className="flex items-center px-2 justify-start hover:bg-[#547f22] hover:text-white">
+                                <input
+                                    type="checkbox"
+                                    className="cursor-pointer"
+                                    checked={filters[filterableColumn.dataKey]?.includes(option)}
+                                    onChange={() => handleFilterChange(filterableColumn.dataKey, option)}
+                                />
+                                <button className="flex-1 text-start px-2" onClick={() => handleFilterChange(filterableColumn.dataKey, option)}>
+                                    {filterableColumn.ui ? filterableColumn.ui(option) : option}
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+        </>
+    );
+});
+// export to excel
 export const useExportToExcel = ({ excelFileName, exportToExcelKeys, dataToAddToExcelTable, dataToRender, headers, sumColumns }) => {
     const addPropertiesToExcel = (properties: { key: string; value: any; header: string }[]) => {
         let newData = [...dataToRender];
@@ -144,119 +248,8 @@ export const useExportToExcel = ({ excelFileName, exportToExcelKeys, dataToAddTo
     };
     return { onExportExcelClick };
 };
-
-export const Filter = ({ filterableColumn, index }: FilterProps) => {
-    const { lang, headers, filters, filterOptions, filterPopupsDisplay, handleFilterChange, handleFilterClick, filterLabel } = useTableContext();
-    const displayRight = (lang === "he" && index === headers.length - 1) || (lang === "en" && index !== headers.length - 1);
-    console.log("filterableColumn", filterableColumn);
-
-    return (
-        <>
-            {/* filter button */}
-            <button
-                title={filterLabel + " " + filterableColumn.header}
-                className="absolute top-1 right-1 text-[12px]"
-                onClick={() => handleFilterClick(filterableColumn.dataKey)}
-            >
-                {filterPopupsDisplay === filterableColumn.dataKey ? (
-                    <>{filters[filterableColumn.dataKey]?.length > 0 ? <>{slashFilterSvg(true)}</> : <>{emptyFilterSvg(true)}</>}</>
-                ) : (
-                    <>{filters[filterableColumn.dataKey]?.length > 0 ? <>{slashFilterSvg()}</> : <>{emptyFilterSvg()}</>}</>
-                )}
-            </button>
-            {/* filter popup */}
-            {filterPopupsDisplay === filterableColumn.dataKey && (
-                <div
-                    className={`absolute z-10 top-1 ${displayRight ? "right-[-165px]" : "left-[-80px]"}
-                              w-40 h-32 bg-white p-1 flex flex-col items-center gap-2 shadow`}
-                >
-                    <div className="text-start border-black border-b-[1px] w-[90%]">{filterLabel + " " + filterableColumn.header}</div>
-                    <div className="overflow-auto h-[80%] flex flex-col gap-1 w-full cursor-pointer ">
-                        {filterOptions[filterableColumn.dataKey]?.map((option: string, i: number) => (
-                            <div key={i} className="flex items-center px-2 justify-start hover:bg-[#547f22] hover:text-white">
-                                <input
-                                    type="checkbox"
-                                    className="cursor-pointer"
-                                    checked={filters[filterableColumn.dataKey]?.includes(option)}
-                                    onChange={() => handleFilterChange(filterableColumn.dataKey, option)}
-                                />
-                                <button className="flex-1 text-start px-2" onClick={() => handleFilterChange(filterableColumn.dataKey, option)}>
-                                    {filterableColumn.ui ? filterableColumn.ui(option) : option}
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
-        </>
-    );
-};
-
-export const TableHead = () => {
-    const {
-        headers,
-        headerStyle,
-        headerCellStyle,
-        sortColumn,
-        handleSort,
-        sortKeys,
-        sortOrder,
-        filterableColumns = [],
-        sort_label,
-    } = useTableContext();
-    const sortDisplay = useMemo<boolean>(() => Boolean(sortKeys.length), [sortKeys]);
-    return (
-        <thead className="bg-gray-50 sticky top-0">
-            <tr style={headerStyle}>
-                {headers.map((header, index) => {
-                    const filterableColumn = filterableColumns.find((col) => col.header === header);
-                    return (
-                        <th
-                            title={sortDisplay ? `${sort_label} ${header}` : header}
-                            style={headerCellStyle}
-                            key={index}
-                            className=" border-black border-[1px] max-w-[130px] px-2 text-center relative"
-                        >
-                            {/* header value */}
-                            <div className={`px-2 ${sortDisplay ? "cursor-pointer" : ""}`} onClick={() => sortDisplay && handleSort(index)}>
-                                {header}
-                            </div>
-                            {/* sort */}
-                            {sortDisplay && sortColumn === index && (sortOrder === "asc" ? <>{sortSvg()}</> : <>{sortSvg(true)}</>)}
-                            {/* filter */}
-                            {filterableColumn && <Filter filterableColumn={filterableColumn} index={index} />}
-                        </th>
-                    );
-                })}
-            </tr>
-        </thead>
-    );
-};
-
-export const TableRow = ({ item, rowStyles, cellStyle, keysToRender = [], onRowClick }: TableRowProps) => (
-    <tr onClick={() => onRowClick(item)} style={rowStyles}>
-        {keysToRender.map((key, index) => (
-            <TableCell cellStyle={cellStyle} key={index} value={item[key]} />
-        ))}
-    </tr>
-);
-
-export const TableCell = ({ value, cellStyle }: TableCellProps) => (
-    <td
-        title={["string", "number", "boolean"].includes(typeof value) ? value : ""}
-        style={cellStyle}
-        className="chivo ellipsis border-black border-[1px] max-w-[90px] px-[4px] text-center"
-    >
-        {value}
-    </td>
-);
-
-export const getFixedNumber = (number = 0, fix = 4) => {
-    const sum_value = number % 1 === 0 ? number : number.toFixed(fix).replace(/\.?0+$/, "");
-    return String(sum_value);
-};
-
 export const ExportToExcel = memo(() => {
+    console.log("ExportToExcel is returning...");
     const { exportToExcelKeys, dataToAddToExcelTable, excelFileName, dataToRender, headers, sumColumns, export_excel_label } = useTableContext();
     const addPropertiesToExcel = (properties: { key: string; value: any; header: string }[]) => {
         let newData = [...dataToRender];
@@ -305,14 +298,18 @@ export const ExportToExcel = memo(() => {
         </button>
     );
 });
-
-export const Search = memo(() => {
+// search
+export const useSearch = () => {
     const [searchQuery, setSearchQuery] = useState<string>("");
-    const { searchPlaceHolder, searchInputClassName, searchInputStyle } = useTableContext();
-
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
     };
+    return { searchQuery, handleSearch };
+};
+export const Search = memo(() => {
+    console.log("Search is returning...");
+
+    const { searchQuery, handleSearch, searchPlaceHolder, searchInputClassName, searchInputStyle } = useTableContext();
     return (
         <input
             className={`w-40 border-black border-[1px] px-2 rounded-md ${searchInputClassName}`}
@@ -324,7 +321,9 @@ export const Search = memo(() => {
         />
     );
 });
+
 export const Summary = memo(() => {
+    console.log("Summary is returning...");
     const { summaryContainerStyle, summaryLabelStyle, summaryLabel, summaryRowStyle, sumColumns, dataToRender } = useTableContext();
 
     return (
@@ -347,6 +346,7 @@ export const Summary = memo(() => {
     );
 });
 export const TableBody = memo(() => {
+    console.log("Summary is returning...");
     const { handleFilterClick, onRowClick, dataToRender, keysToRender, rowStyles, cellStyle } = useTableContext();
     return (
         <tbody onClick={() => handleFilterClick("")}>

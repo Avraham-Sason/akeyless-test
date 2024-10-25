@@ -157,10 +157,10 @@ declare const useSort: () => {
     sortOrder: "asc" | "desc";
     handleSort: (columnIndex: number) => void;
 };
-declare const useSearch: () => {
-    searchQuery: string;
-    handleSearch: (e: React__default.ChangeEvent<HTMLInputElement>) => void;
-};
+declare const TableHead: () => react_jsx_runtime.JSX.Element;
+declare const TableRow: ({ item, rowStyles, cellStyle, keysToRender, onRowClick }: TableRowProps) => react_jsx_runtime.JSX.Element;
+declare const TableCell: ({ value, cellStyle }: TableCellProps) => react_jsx_runtime.JSX.Element;
+declare const getFixedNumber: (number?: number, fix?: number) => string;
 declare const useFilter: ({ data, dataToRender, setDataToRender, filterableColumns, includeSearch, searchQuery, keysToRender, sortColumn, sortOrder, sortKeys, }: {
     data: any;
     dataToRender: any;
@@ -179,6 +179,7 @@ declare const useFilter: ({ data, dataToRender, setDataToRender, filterableColum
     handleFilterChange: (dataKey: string, value: string) => void;
     handleFilterClick: (dataKey: string) => void;
 };
+declare const Filter: React__default.NamedExoticComponent<FilterProps>;
 declare const useExportToExcel: ({ excelFileName, exportToExcelKeys, dataToAddToExcelTable, dataToRender, headers, sumColumns }: {
     excelFileName: any;
     exportToExcelKeys: any;
@@ -189,12 +190,11 @@ declare const useExportToExcel: ({ excelFileName, exportToExcelKeys, dataToAddTo
 }) => {
     onExportExcelClick: () => Promise<void>;
 };
-declare const Filter: ({ filterableColumn, index }: FilterProps) => react_jsx_runtime.JSX.Element;
-declare const TableHead: () => react_jsx_runtime.JSX.Element;
-declare const TableRow: ({ item, rowStyles, cellStyle, keysToRender, onRowClick }: TableRowProps) => react_jsx_runtime.JSX.Element;
-declare const TableCell: ({ value, cellStyle }: TableCellProps) => react_jsx_runtime.JSX.Element;
-declare const getFixedNumber: (number?: number, fix?: number) => string;
 declare const ExportToExcel: React__default.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;
+declare const useSearch: () => {
+    searchQuery: string;
+    handleSearch: (e: React__default.ChangeEvent<HTMLInputElement>) => void;
+};
 declare const Search: React__default.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;
 declare const Summary: React__default.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;
 declare const TableBody: React__default.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;

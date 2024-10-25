@@ -613,15 +613,80 @@ var useSort = function() {
         handleSort: handleSort
     };
 };
-var useSearch = function() {
-    var _useState2 = _sliced_to_array(useState2(""), 2), searchQuery = _useState2[0], setSearchQuery = _useState2[1];
-    var handleSearch = function(e) {
-        setSearchQuery(e.target.value);
-    };
-    return {
-        searchQuery: searchQuery,
-        handleSearch: handleSearch
-    };
+var TableHead = function() {
+    var _useTableContext = useTableContext(), headers = _useTableContext.headers, headerStyle = _useTableContext.headerStyle, headerCellStyle = _useTableContext.headerCellStyle, sortColumn = _useTableContext.sortColumn, handleSort = _useTableContext.handleSort, sortKeys = _useTableContext.sortKeys, sortOrder = _useTableContext.sortOrder, _useTableContext_filterableColumns = _useTableContext.filterableColumns, filterableColumns = _useTableContext_filterableColumns === void 0 ? [] : _useTableContext_filterableColumns, sort_label = _useTableContext.sort_label;
+    var sortDisplay = useMemo(function() {
+        return Boolean(sortKeys.length);
+    }, [
+        sortKeys
+    ]);
+    return /* @__PURE__ */ jsx5("thead", {
+        className: "bg-gray-50 sticky top-0",
+        children: /* @__PURE__ */ jsx5("tr", {
+            style: headerStyle,
+            children: headers.map(function(header, index) {
+                var filterableColumn = filterableColumns.find(function(col) {
+                    return col.header === header;
+                });
+                return /* @__PURE__ */ jsxs5("th", {
+                    title: sortDisplay ? "".concat(sort_label, " ").concat(header) : header,
+                    style: headerCellStyle,
+                    className: " border-black border-[1px] max-w-[130px] px-2 text-center relative",
+                    children: [
+                        /* @__PURE__ */ jsx5("div", {
+                            className: "px-2 ".concat(sortDisplay ? "cursor-pointer" : ""),
+                            onClick: function() {
+                                return sortDisplay && handleSort(index);
+                            },
+                            children: header
+                        }),
+                        sortDisplay && sortColumn === index && (sortOrder === "asc" ? /* @__PURE__ */ jsx5(Fragment2, {
+                            children: sortSvg()
+                        }) : /* @__PURE__ */ jsx5(Fragment2, {
+                            children: sortSvg(true)
+                        })),
+                        filterableColumn && /* @__PURE__ */ jsx5(Filter, {
+                            filterableColumn: filterableColumn,
+                            index: index
+                        })
+                    ]
+                }, index);
+            })
+        })
+    });
+};
+var TableRow2 = function(param) {
+    var item = param.item, rowStyles = param.rowStyles, cellStyle = param.cellStyle, _param_keysToRender = param.keysToRender, keysToRender = _param_keysToRender === void 0 ? [] : _param_keysToRender, onRowClick = param.onRowClick;
+    return /* @__PURE__ */ jsx5("tr", {
+        onClick: function() {
+            return onRowClick(item);
+        },
+        style: rowStyles,
+        children: keysToRender.map(function(key, index) {
+            return /* @__PURE__ */ jsx5(TableCell, {
+                cellStyle: cellStyle,
+                value: item[key]
+            }, index);
+        })
+    });
+};
+var TableCell = function(param) {
+    var value = param.value, cellStyle = param.cellStyle;
+    return /* @__PURE__ */ jsx5("td", {
+        title: [
+            "string",
+            "number",
+            "boolean"
+        ].includes(typeof value === "undefined" ? "undefined" : _type_of(value)) ? value : "",
+        style: cellStyle,
+        className: "chivo ellipsis border-black border-[1px] max-w-[90px] px-[4px] text-center",
+        children: value
+    });
+};
+var getFixedNumber = function() {
+    var number = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : 0, fix = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 4;
+    var sum_value = number % 1 === 0 ? number : number.toFixed(fix).replace(/\.?0+$/, "");
+    return String(sum_value);
 };
 var useFilter = function(param) {
     var data = param.data, dataToRender = param.dataToRender, setDataToRender = param.setDataToRender, filterableColumns = param.filterableColumns, includeSearch = param.includeSearch, searchQuery = param.searchQuery, keysToRender = param.keysToRender, sortColumn = param.sortColumn, sortOrder = param.sortOrder, sortKeys = param.sortKeys;
@@ -703,6 +768,72 @@ var useFilter = function(param) {
         handleFilterClick: handleFilterClick
     };
 };
+var Filter = memo(function(param) {
+    var filterableColumn = param.filterableColumn, index = param.index;
+    var _filters_filterableColumn_dataKey, _filters_filterableColumn_dataKey1, _filterOptions_filterableColumn_dataKey;
+    var _useTableContext = useTableContext(), lang = _useTableContext.lang, headers = _useTableContext.headers, filters = _useTableContext.filters, filterOptions = _useTableContext.filterOptions, filterPopupsDisplay = _useTableContext.filterPopupsDisplay, handleFilterChange = _useTableContext.handleFilterChange, handleFilterClick = _useTableContext.handleFilterClick, filterLabel = _useTableContext.filterLabel;
+    var displayRight = lang === "he" && index === headers.length - 1 || lang === "en" && index !== headers.length - 1;
+    console.log("Filter is returning...");
+    return /* @__PURE__ */ jsxs5(Fragment2, {
+        children: [
+            /* @__PURE__ */ jsx5("button", {
+                title: filterLabel + " " + filterableColumn.header,
+                className: "absolute top-1 right-1 text-[12px]",
+                onClick: function() {
+                    return handleFilterClick(filterableColumn.dataKey);
+                },
+                children: filterPopupsDisplay === filterableColumn.dataKey ? /* @__PURE__ */ jsx5(Fragment2, {
+                    children: ((_filters_filterableColumn_dataKey = filters[filterableColumn.dataKey]) === null || _filters_filterableColumn_dataKey === void 0 ? void 0 : _filters_filterableColumn_dataKey.length) > 0 ? /* @__PURE__ */ jsx5(Fragment2, {
+                        children: slashFilterSvg(true)
+                    }) : /* @__PURE__ */ jsx5(Fragment2, {
+                        children: emptyFilterSvg(true)
+                    })
+                }) : /* @__PURE__ */ jsx5(Fragment2, {
+                    children: ((_filters_filterableColumn_dataKey1 = filters[filterableColumn.dataKey]) === null || _filters_filterableColumn_dataKey1 === void 0 ? void 0 : _filters_filterableColumn_dataKey1.length) > 0 ? /* @__PURE__ */ jsx5(Fragment2, {
+                        children: slashFilterSvg()
+                    }) : /* @__PURE__ */ jsx5(Fragment2, {
+                        children: emptyFilterSvg()
+                    })
+                })
+            }),
+            filterPopupsDisplay === filterableColumn.dataKey && /* @__PURE__ */ jsxs5("div", {
+                className: "absolute z-10 top-1 ".concat(displayRight ? "right-[-165px]" : "left-[-80px]", "\n                              w-40 h-32 bg-white p-1 flex flex-col items-center gap-2 shadow"),
+                children: [
+                    /* @__PURE__ */ jsx5("div", {
+                        className: "text-start border-black border-b-[1px] w-[90%]",
+                        children: filterLabel + " " + filterableColumn.header
+                    }),
+                    /* @__PURE__ */ jsx5("div", {
+                        className: "overflow-auto h-[80%] flex flex-col gap-1 w-full cursor-pointer ",
+                        children: (_filterOptions_filterableColumn_dataKey = filterOptions[filterableColumn.dataKey]) === null || _filterOptions_filterableColumn_dataKey === void 0 ? void 0 : _filterOptions_filterableColumn_dataKey.map(function(option, i) {
+                            var _filters_filterableColumn_dataKey;
+                            return /* @__PURE__ */ jsxs5("div", {
+                                className: "flex items-center px-2 justify-start hover:bg-[#547f22] hover:text-white",
+                                children: [
+                                    /* @__PURE__ */ jsx5("input", {
+                                        type: "checkbox",
+                                        className: "cursor-pointer",
+                                        checked: (_filters_filterableColumn_dataKey = filters[filterableColumn.dataKey]) === null || _filters_filterableColumn_dataKey === void 0 ? void 0 : _filters_filterableColumn_dataKey.includes(option),
+                                        onChange: function() {
+                                            return handleFilterChange(filterableColumn.dataKey, option);
+                                        }
+                                    }),
+                                    /* @__PURE__ */ jsx5("button", {
+                                        className: "flex-1 text-start px-2",
+                                        onClick: function() {
+                                            return handleFilterChange(filterableColumn.dataKey, option);
+                                        },
+                                        children: filterableColumn.ui ? filterableColumn.ui(option) : option
+                                    })
+                                ]
+                            }, i);
+                        })
+                    })
+                ]
+            })
+        ]
+    });
+});
 var useExportToExcel = function(param) {
     var excelFileName = param.excelFileName, exportToExcelKeys = param.exportToExcelKeys, dataToAddToExcelTable = param.dataToAddToExcelTable, dataToRender = param.dataToRender, headers = param.headers, sumColumns = param.sumColumns;
     var addPropertiesToExcel = function(properties) {
@@ -780,148 +911,8 @@ var useExportToExcel = function(param) {
         onExportExcelClick: onExportExcelClick
     };
 };
-var Filter = function(param) {
-    var filterableColumn = param.filterableColumn, index = param.index;
-    var _filters_filterableColumn_dataKey, _filters_filterableColumn_dataKey1, _filterOptions_filterableColumn_dataKey;
-    var _useTableContext = useTableContext(), lang = _useTableContext.lang, headers = _useTableContext.headers, filters = _useTableContext.filters, filterOptions = _useTableContext.filterOptions, filterPopupsDisplay = _useTableContext.filterPopupsDisplay, handleFilterChange = _useTableContext.handleFilterChange, handleFilterClick = _useTableContext.handleFilterClick, filterLabel = _useTableContext.filterLabel;
-    var displayRight = lang === "he" && index === headers.length - 1 || lang === "en" && index !== headers.length - 1;
-    console.log("filterableColumn", filterableColumn);
-    return /* @__PURE__ */ jsxs5(Fragment2, {
-        children: [
-            /* @__PURE__ */ jsx5("button", {
-                title: filterLabel + " " + filterableColumn.header,
-                className: "absolute top-1 right-1 text-[12px]",
-                onClick: function() {
-                    return handleFilterClick(filterableColumn.dataKey);
-                },
-                children: filterPopupsDisplay === filterableColumn.dataKey ? /* @__PURE__ */ jsx5(Fragment2, {
-                    children: ((_filters_filterableColumn_dataKey = filters[filterableColumn.dataKey]) === null || _filters_filterableColumn_dataKey === void 0 ? void 0 : _filters_filterableColumn_dataKey.length) > 0 ? /* @__PURE__ */ jsx5(Fragment2, {
-                        children: slashFilterSvg(true)
-                    }) : /* @__PURE__ */ jsx5(Fragment2, {
-                        children: emptyFilterSvg(true)
-                    })
-                }) : /* @__PURE__ */ jsx5(Fragment2, {
-                    children: ((_filters_filterableColumn_dataKey1 = filters[filterableColumn.dataKey]) === null || _filters_filterableColumn_dataKey1 === void 0 ? void 0 : _filters_filterableColumn_dataKey1.length) > 0 ? /* @__PURE__ */ jsx5(Fragment2, {
-                        children: slashFilterSvg()
-                    }) : /* @__PURE__ */ jsx5(Fragment2, {
-                        children: emptyFilterSvg()
-                    })
-                })
-            }),
-            filterPopupsDisplay === filterableColumn.dataKey && /* @__PURE__ */ jsxs5("div", {
-                className: "absolute z-10 top-1 ".concat(displayRight ? "right-[-165px]" : "left-[-80px]", "\n                              w-40 h-32 bg-white p-1 flex flex-col items-center gap-2 shadow"),
-                children: [
-                    /* @__PURE__ */ jsx5("div", {
-                        className: "text-start border-black border-b-[1px] w-[90%]",
-                        children: filterLabel + " " + filterableColumn.header
-                    }),
-                    /* @__PURE__ */ jsx5("div", {
-                        className: "overflow-auto h-[80%] flex flex-col gap-1 w-full cursor-pointer ",
-                        children: (_filterOptions_filterableColumn_dataKey = filterOptions[filterableColumn.dataKey]) === null || _filterOptions_filterableColumn_dataKey === void 0 ? void 0 : _filterOptions_filterableColumn_dataKey.map(function(option, i) {
-                            var _filters_filterableColumn_dataKey;
-                            return /* @__PURE__ */ jsxs5("div", {
-                                className: "flex items-center px-2 justify-start hover:bg-[#547f22] hover:text-white",
-                                children: [
-                                    /* @__PURE__ */ jsx5("input", {
-                                        type: "checkbox",
-                                        className: "cursor-pointer",
-                                        checked: (_filters_filterableColumn_dataKey = filters[filterableColumn.dataKey]) === null || _filters_filterableColumn_dataKey === void 0 ? void 0 : _filters_filterableColumn_dataKey.includes(option),
-                                        onChange: function() {
-                                            return handleFilterChange(filterableColumn.dataKey, option);
-                                        }
-                                    }),
-                                    /* @__PURE__ */ jsx5("button", {
-                                        className: "flex-1 text-start px-2",
-                                        onClick: function() {
-                                            return handleFilterChange(filterableColumn.dataKey, option);
-                                        },
-                                        children: filterableColumn.ui ? filterableColumn.ui(option) : option
-                                    })
-                                ]
-                            }, i);
-                        })
-                    })
-                ]
-            })
-        ]
-    });
-};
-var TableHead = function() {
-    var _useTableContext = useTableContext(), headers = _useTableContext.headers, headerStyle = _useTableContext.headerStyle, headerCellStyle = _useTableContext.headerCellStyle, sortColumn = _useTableContext.sortColumn, handleSort = _useTableContext.handleSort, sortKeys = _useTableContext.sortKeys, sortOrder = _useTableContext.sortOrder, _useTableContext_filterableColumns = _useTableContext.filterableColumns, filterableColumns = _useTableContext_filterableColumns === void 0 ? [] : _useTableContext_filterableColumns, sort_label = _useTableContext.sort_label;
-    var sortDisplay = useMemo(function() {
-        return Boolean(sortKeys.length);
-    }, [
-        sortKeys
-    ]);
-    return /* @__PURE__ */ jsx5("thead", {
-        className: "bg-gray-50 sticky top-0",
-        children: /* @__PURE__ */ jsx5("tr", {
-            style: headerStyle,
-            children: headers.map(function(header, index) {
-                var filterableColumn = filterableColumns.find(function(col) {
-                    return col.header === header;
-                });
-                return /* @__PURE__ */ jsxs5("th", {
-                    title: sortDisplay ? "".concat(sort_label, " ").concat(header) : header,
-                    style: headerCellStyle,
-                    className: " border-black border-[1px] max-w-[130px] px-2 text-center relative",
-                    children: [
-                        /* @__PURE__ */ jsx5("div", {
-                            className: "px-2 ".concat(sortDisplay ? "cursor-pointer" : ""),
-                            onClick: function() {
-                                return sortDisplay && handleSort(index);
-                            },
-                            children: header
-                        }),
-                        sortDisplay && sortColumn === index && (sortOrder === "asc" ? /* @__PURE__ */ jsx5(Fragment2, {
-                            children: sortSvg()
-                        }) : /* @__PURE__ */ jsx5(Fragment2, {
-                            children: sortSvg(true)
-                        })),
-                        filterableColumn && /* @__PURE__ */ jsx5(Filter, {
-                            filterableColumn: filterableColumn,
-                            index: index
-                        })
-                    ]
-                }, index);
-            })
-        })
-    });
-};
-var TableRow2 = function(param) {
-    var item = param.item, rowStyles = param.rowStyles, cellStyle = param.cellStyle, _param_keysToRender = param.keysToRender, keysToRender = _param_keysToRender === void 0 ? [] : _param_keysToRender, onRowClick = param.onRowClick;
-    return /* @__PURE__ */ jsx5("tr", {
-        onClick: function() {
-            return onRowClick(item);
-        },
-        style: rowStyles,
-        children: keysToRender.map(function(key, index) {
-            return /* @__PURE__ */ jsx5(TableCell, {
-                cellStyle: cellStyle,
-                value: item[key]
-            }, index);
-        })
-    });
-};
-var TableCell = function(param) {
-    var value = param.value, cellStyle = param.cellStyle;
-    return /* @__PURE__ */ jsx5("td", {
-        title: [
-            "string",
-            "number",
-            "boolean"
-        ].includes(typeof value === "undefined" ? "undefined" : _type_of(value)) ? value : "",
-        style: cellStyle,
-        className: "chivo ellipsis border-black border-[1px] max-w-[90px] px-[4px] text-center",
-        children: value
-    });
-};
-var getFixedNumber = function() {
-    var number = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : 0, fix = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 4;
-    var sum_value = number % 1 === 0 ? number : number.toFixed(fix).replace(/\.?0+$/, "");
-    return String(sum_value);
-};
 var ExportToExcel = memo(function() {
+    console.log("ExportToExcel is returning...");
     var _useTableContext = useTableContext(), exportToExcelKeys = _useTableContext.exportToExcelKeys, dataToAddToExcelTable = _useTableContext.dataToAddToExcelTable, excelFileName = _useTableContext.excelFileName, dataToRender = _useTableContext.dataToRender, headers = _useTableContext.headers, sumColumns = _useTableContext.sumColumns, export_excel_label = _useTableContext.export_excel_label;
     var addPropertiesToExcel = function(properties) {
         var newData = _to_consumable_array(dataToRender);
@@ -1001,12 +992,19 @@ var ExportToExcel = memo(function() {
         children: exportToExcelSvg()
     });
 });
-var Search = memo(function() {
+var useSearch = function() {
     var _useState2 = _sliced_to_array(useState2(""), 2), searchQuery = _useState2[0], setSearchQuery = _useState2[1];
-    var _useTableContext = useTableContext(), searchPlaceHolder = _useTableContext.searchPlaceHolder, searchInputClassName = _useTableContext.searchInputClassName, searchInputStyle = _useTableContext.searchInputStyle;
     var handleSearch = function(e) {
         setSearchQuery(e.target.value);
     };
+    return {
+        searchQuery: searchQuery,
+        handleSearch: handleSearch
+    };
+};
+var Search = memo(function() {
+    console.log("Search is returning...");
+    var _useTableContext = useTableContext(), searchQuery = _useTableContext.searchQuery, handleSearch = _useTableContext.handleSearch, searchPlaceHolder = _useTableContext.searchPlaceHolder, searchInputClassName = _useTableContext.searchInputClassName, searchInputStyle = _useTableContext.searchInputStyle;
     return /* @__PURE__ */ jsx5("input", {
         className: "w-40 border-black border-[1px] px-2 rounded-md ".concat(searchInputClassName),
         type: "text",
@@ -1017,6 +1015,7 @@ var Search = memo(function() {
     });
 });
 var Summary = memo(function() {
+    console.log("Summary is returning...");
     var _useTableContext = useTableContext(), summaryContainerStyle = _useTableContext.summaryContainerStyle, summaryLabelStyle = _useTableContext.summaryLabelStyle, summaryLabel = _useTableContext.summaryLabel, summaryRowStyle = _useTableContext.summaryRowStyle, sumColumns = _useTableContext.sumColumns, dataToRender = _useTableContext.dataToRender;
     return /* @__PURE__ */ jsxs5("div", {
         style: summaryContainerStyle,
@@ -1054,6 +1053,7 @@ var Summary = memo(function() {
     });
 });
 var TableBody = memo(function() {
+    console.log("Summary is returning...");
     var _useTableContext = useTableContext(), handleFilterClick = _useTableContext.handleFilterClick, onRowClick = _useTableContext.onRowClick, dataToRender = _useTableContext.dataToRender, keysToRender = _useTableContext.keysToRender, rowStyles = _useTableContext.rowStyles, cellStyle = _useTableContext.cellStyle;
     return /* @__PURE__ */ jsx5("tbody", {
         onClick: function() {
