@@ -1,7 +1,7 @@
 import { TObject } from "akeyless-types-commons";
 import { ReactNode } from "react";
 
-export interface TableProvider {
+export interface TableProviderType {
     sortColumn: number;
     sortOrder: "asc" | "desc";
     handleSort: (columnIndex: number) => void;
@@ -81,6 +81,7 @@ export interface TableProps {
     export_excel_label?: string;
     onRowClick?: (data?: any) => void;
     lang: "en" | "he";
+    children: ReactNode;
 }
 
 export interface SummaryProps {

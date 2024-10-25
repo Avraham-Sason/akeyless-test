@@ -334,6 +334,9 @@ __export(components_exports, {
     Table: function() {
         return Table;
     },
+    Table2: function() {
+        return Table2;
+    },
     TableBody: function() {
         return TableBody;
     },
@@ -345,6 +348,9 @@ __export(components_exports, {
     },
     TableHead: function() {
         return TableHead;
+    },
+    TableProvider: function() {
+        return TableProvider;
     },
     TableRow: function() {
         return TableRow2;
@@ -657,7 +663,7 @@ var useTableContext = function() {
     }
     return context;
 };
-var Table = function(props) {
+var Table2 = function(props) {
     var // basic props
     data = props.data, headers = props.headers, optionalElement = props.optionalElement, _props_keysToRender = props.keysToRender, keysToRender = _props_keysToRender === void 0 ? [] : _props_keysToRender, _props_lang = props.lang, lang = _props_lang === void 0 ? "en" : _props_lang, _props_onRowClick = props.onRowClick, onRowClick = _props_onRowClick === void 0 ? function(data2) {} : _props_onRowClick, _props_containerStyle = props.// container styles props
     containerStyle, containerStyle = _props_containerStyle === void 0 ? {} : _props_containerStyle, _props_containerClassName = props.containerClassName, containerClassName = _props_containerClassName === void 0 ? "" : _props_containerClassName, _props_tableContainerClass = props.tableContainerClass, tableContainerClass = _props_tableContainerClass === void 0 ? "" : _props_tableContainerClass, _props_tableContainerStyle = props.tableContainerStyle, tableContainerStyle = _props_tableContainerStyle === void 0 ? {} : _props_tableContainerStyle, _props_tableStyle = props.tableStyle, tableStyle = _props_tableStyle === void 0 ? {} : _props_tableStyle, _props_rowStyles = props.rowStyles, rowStyles = _props_rowStyles === void 0 ? {} : _props_rowStyles, _props_cellStyle = props.cellStyle, cellStyle = _props_cellStyle === void 0 ? {} : _props_cellStyle, _props_headerStyle = props.// header styles
@@ -726,6 +732,90 @@ var Table = function(props) {
             ]
         })
     });
+};
+var TableProvider = function(props) {
+    var // basic props
+    data = props.data, headers = props.headers, optionalElement = props.optionalElement, _props_keysToRender = props.keysToRender, keysToRender = _props_keysToRender === void 0 ? [] : _props_keysToRender, _props_lang = props.lang, lang = _props_lang === void 0 ? "en" : _props_lang, _props_onRowClick = props.onRowClick, onRowClick = _props_onRowClick === void 0 ? function(data2) {} : _props_onRowClick, _props_containerStyle = props.// container styles props
+    containerStyle, containerStyle = _props_containerStyle === void 0 ? {} : _props_containerStyle, _props_containerClassName = props.containerClassName, containerClassName = _props_containerClassName === void 0 ? "" : _props_containerClassName, _props_tableContainerClass = props.tableContainerClass, tableContainerClass = _props_tableContainerClass === void 0 ? "" : _props_tableContainerClass, _props_tableContainerStyle = props.tableContainerStyle, tableContainerStyle = _props_tableContainerStyle === void 0 ? {} : _props_tableContainerStyle, _props_tableStyle = props.tableStyle, tableStyle = _props_tableStyle === void 0 ? {} : _props_tableStyle, _props_rowStyles = props.rowStyles, rowStyles = _props_rowStyles === void 0 ? {} : _props_rowStyles, _props_cellStyle = props.cellStyle, cellStyle = _props_cellStyle === void 0 ? {} : _props_cellStyle, _props_headerStyle = props.// header styles
+    headerStyle, headerStyle = _props_headerStyle === void 0 ? {} : _props_headerStyle, headerCellStyle = props.headerCellStyle, _props_searchInputStyle = props.searchInputStyle, searchInputStyle = _props_searchInputStyle === void 0 ? {} : _props_searchInputStyle, _props_searchInputClassName = props.searchInputClassName, searchInputClassName = _props_searchInputClassName === void 0 ? "" : _props_searchInputClassName, // search
+    includeSearch = props.includeSearch, _props_searchPlaceHolder = props.searchPlaceHolder, searchPlaceHolder = _props_searchPlaceHolder === void 0 ? "Search in table ..." : _props_searchPlaceHolder, // sort
+    sortKeys = props.sortKeys, _props_sort_label = props.sort_label, sort_label = _props_sort_label === void 0 ? "Sort by" : _props_sort_label, _props_filterableColumns = props.// filter
+    filterableColumns, filterableColumns = _props_filterableColumns === void 0 ? [] : _props_filterableColumns, _props_filterLabel = props.filterLabel, filterLabel = _props_filterLabel === void 0 ? "Filter by" : _props_filterLabel, // export to excel
+    exportToExcelKeys = props.exportToExcelKeys, dataToAddToExcelTable = props.dataToAddToExcelTable, _props_export_excel_label = props.export_excel_label, export_excel_label = _props_export_excel_label === void 0 ? "Export to excel" : _props_export_excel_label, excelFileName = props.excelFileName, // summary
+    sumColumns = props.sumColumns, _props_summaryLabel = props.summaryLabel, summaryLabel = _props_summaryLabel === void 0 ? "" : _props_summaryLabel, _props_summaryContainerStyle = props.summaryContainerStyle, summaryContainerStyle = _props_summaryContainerStyle === void 0 ? {} : _props_summaryContainerStyle, _props_summaryLabelStyle = props.summaryLabelStyle, summaryLabelStyle = _props_summaryLabelStyle === void 0 ? {} : _props_summaryLabelStyle, _props_summaryRowStyle = props.summaryRowStyle, summaryRowStyle = _props_summaryRowStyle === void 0 ? {} : _props_summaryRowStyle;
+    var _ref = _sliced_to_array((0, import_react.useState)(data), 2), dataToRender = _ref[0], setDataToRender = _ref[1];
+    var _useSort = useSort(), sortColumn = _useSort.sortColumn, sortOrder = _useSort.sortOrder, handleSort = _useSort.handleSort;
+    var _useSearch = useSearch(), searchQuery = _useSearch.searchQuery, handleSearch = _useSearch.handleSearch;
+    var _useFilter = useFilter({
+        data: data,
+        dataToRender: dataToRender,
+        setDataToRender: setDataToRender,
+        filterableColumns: filterableColumns,
+        includeSearch: includeSearch,
+        searchQuery: searchQuery,
+        sortColumn: sortColumn,
+        sortOrder: sortOrder,
+        keysToRender: keysToRender,
+        sortKeys: sortKeys
+    }), filters = _useFilter.filters, filterPopupsDisplay = _useFilter.filterPopupsDisplay, filterOptions = _useFilter.filterOptions, handleFilterChange = _useFilter.handleFilterChange, handleFilterClick = _useFilter.handleFilterClick;
+    console.log("table rendered");
+    var providerValues = _object_spread_props(_object_spread({}, props), {
+        sortColumn: sortColumn,
+        sortOrder: sortOrder,
+        handleSort: handleSort,
+        searchQuery: searchQuery,
+        handleSearch: handleSearch,
+        dataToRender: dataToRender,
+        filters: filters,
+        filterPopupsDisplay: filterPopupsDisplay,
+        filterOptions: filterOptions,
+        handleFilterChange: handleFilterChange,
+        handleFilterClick: handleFilterClick
+    });
+    return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(TableContext.Provider, {
+        value: providerValues,
+        children: props.children
+    });
+};
+var Table = function(props) {
+    var // basic props
+    data = props.data, headers = props.headers, optionalElement = props.optionalElement, _props_keysToRender = props.keysToRender, keysToRender = _props_keysToRender === void 0 ? [] : _props_keysToRender, _props_lang = props.lang, lang = _props_lang === void 0 ? "en" : _props_lang, _props_onRowClick = props.onRowClick, onRowClick = _props_onRowClick === void 0 ? function(data2) {} : _props_onRowClick, _props_containerStyle = props.// container styles props
+    containerStyle, containerStyle = _props_containerStyle === void 0 ? {} : _props_containerStyle, _props_containerClassName = props.containerClassName, containerClassName = _props_containerClassName === void 0 ? "" : _props_containerClassName, _props_tableContainerClass = props.tableContainerClass, tableContainerClass = _props_tableContainerClass === void 0 ? "" : _props_tableContainerClass, _props_tableContainerStyle = props.tableContainerStyle, tableContainerStyle = _props_tableContainerStyle === void 0 ? {} : _props_tableContainerStyle, _props_tableStyle = props.tableStyle, tableStyle = _props_tableStyle === void 0 ? {} : _props_tableStyle, _props_rowStyles = props.rowStyles, rowStyles = _props_rowStyles === void 0 ? {} : _props_rowStyles, _props_cellStyle = props.cellStyle, cellStyle = _props_cellStyle === void 0 ? {} : _props_cellStyle, _props_headerStyle = props.// header styles
+    headerStyle, headerStyle = _props_headerStyle === void 0 ? {} : _props_headerStyle, headerCellStyle = props.headerCellStyle, _props_searchInputStyle = props.searchInputStyle, searchInputStyle = _props_searchInputStyle === void 0 ? {} : _props_searchInputStyle, _props_searchInputClassName = props.searchInputClassName, searchInputClassName = _props_searchInputClassName === void 0 ? "" : _props_searchInputClassName, // search
+    includeSearch = props.includeSearch, _props_searchPlaceHolder = props.searchPlaceHolder, searchPlaceHolder = _props_searchPlaceHolder === void 0 ? "Search in table ..." : _props_searchPlaceHolder, // sort
+    sortKeys = props.sortKeys, _props_sort_label = props.sort_label, sort_label = _props_sort_label === void 0 ? "Sort by" : _props_sort_label, _props_filterableColumns = props.// filter
+    filterableColumns, filterableColumns = _props_filterableColumns === void 0 ? [] : _props_filterableColumns, _props_filterLabel = props.filterLabel, filterLabel = _props_filterLabel === void 0 ? "Filter by" : _props_filterLabel, // export to excel
+    exportToExcelKeys = props.exportToExcelKeys, dataToAddToExcelTable = props.dataToAddToExcelTable, _props_export_excel_label = props.export_excel_label, export_excel_label = _props_export_excel_label === void 0 ? "Export to excel" : _props_export_excel_label, excelFileName = props.excelFileName, // summary
+    sumColumns = props.sumColumns, _props_summaryLabel = props.summaryLabel, summaryLabel = _props_summaryLabel === void 0 ? "" : _props_summaryLabel, _props_summaryContainerStyle = props.summaryContainerStyle, summaryContainerStyle = _props_summaryContainerStyle === void 0 ? {} : _props_summaryContainerStyle, _props_summaryLabelStyle = props.summaryLabelStyle, summaryLabelStyle = _props_summaryLabelStyle === void 0 ? {} : _props_summaryLabelStyle, _props_summaryRowStyle = props.summaryRowStyle, summaryRowStyle = _props_summaryRowStyle === void 0 ? {} : _props_summaryRowStyle;
+    return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(TableProvider, _object_spread_props(_object_spread({}, props), {
+        children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", {
+            className: "flex flex-col gap-2  ".concat(containerClassName),
+            style: containerStyle,
+            children: [
+                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", {
+                    className: "flex justify-start gap-2 ",
+                    children: [
+                        includeSearch && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(Search, {}),
+                        exportToExcelKeys && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(ExportToExcel, {}),
+                        optionalElement && optionalElement
+                    ]
+                }),
+                /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", {
+                    style: tableContainerStyle,
+                    className: "animate-slide-in-up overflow-y-auto  ".concat(tableContainerClass),
+                    children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("table", {
+                        style: tableStyle,
+                        className: "min-w-full text-sm font-light relative",
+                        children: [
+                            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(TableHead, {}),
+                            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(TableBody, {})
+                        ]
+                    })
+                }),
+                sumColumns && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(Summary, {})
+            ]
+        })
+    }));
 };
 // src/components/tables/utils.tsx
 var import_jsx_runtime5 = require("react/jsx-runtime");
@@ -1186,7 +1276,7 @@ var Summary = (0, import_react2.memo)(function() {
     });
 });
 var TableBody = (0, import_react2.memo)(function() {
-    console.log("Summary is returning...");
+    console.log("TableBody is returning...");
     var _useTableContext = useTableContext(), handleFilterClick = _useTableContext.handleFilterClick, onRowClick = _useTableContext.onRowClick, dataToRender = _useTableContext.dataToRender, keysToRender = _useTableContext.keysToRender, rowStyles = _useTableContext.rowStyles, cellStyle = _useTableContext.cellStyle;
     return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("tbody", {
         onClick: function() {
@@ -1708,10 +1798,12 @@ var DatePicker = function(param) {
     SelectContainer: SelectContainer,
     Summary: Summary,
     Table: Table,
+    Table2: Table2,
     TableBody: TableBody,
     TableCell: TableCell,
     TableContext: TableContext,
     TableHead: TableHead,
+    TableProvider: TableProvider,
     TableRow: TableRow,
     getFixedNumber: getFixedNumber,
     useExportToExcel: useExportToExcel,

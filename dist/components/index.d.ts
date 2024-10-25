@@ -12,7 +12,7 @@ interface CheckBoxProps {
 }
 declare const Checkbox: ({ id, checked, setChecked, rotate, style }: CheckBoxProps) => react_jsx_runtime.JSX.Element;
 
-interface TableProvider {
+interface TableProviderType {
     sortColumn: number;
     sortOrder: "asc" | "desc";
     handleSort: (columnIndex: number) => void;
@@ -89,6 +89,7 @@ interface TableProps {
     export_excel_label?: string;
     onRowClick?: (data?: any) => void;
     lang: "en" | "he";
+    children: ReactNode;
 }
 
 type Direction = "rtl" | "ltr";
@@ -199,8 +200,10 @@ declare const Search: React__default.MemoExoticComponent<() => react_jsx_runtime
 declare const Summary: React__default.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;
 declare const TableBody: React__default.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;
 
-declare const TableContext: React$1.Context<TableProps & TableProvider>;
-declare const useTableContext: () => TableProps & TableProvider;
+declare const TableContext: React$1.Context<TableProps & TableProviderType>;
+declare const useTableContext: () => TableProps & TableProviderType;
+declare const Table2: (props: TableProps) => react_jsx_runtime.JSX.Element;
+declare const TableProvider: (props: TableProps) => react_jsx_runtime.JSX.Element;
 declare const Table: (props: TableProps) => react_jsx_runtime.JSX.Element;
 
 interface LoaderProps {
@@ -217,4 +220,4 @@ declare const ModularForm: ({ submitFunction, elements, headerContent, buttonCon
 declare const ConfirmForm: ({ onV, onX, headline, direction }: ConfirmFormProps) => react_jsx_runtime.JSX.Element;
 declare const DatePicker: ({ submit, formClassName, labelsClassName, inputsClassName, buttonClassName, buttonStyle, defaultFrom, defaultTo, direction, fromText, toText, buttonText, }: DatePickerProps) => react_jsx_runtime.JSX.Element;
 
-export { Checkbox, ConfirmForm, DatePicker, ExportToExcel, Filter, InputContainer, Loader, ModularForm, Search, SelectContainer, Summary, Table, TableBody, TableCell, TableContext, TableHead, TableRow, getFixedNumber, useExportToExcel, useFilter, useSearch, useSort, useTableContext };
+export { Checkbox, ConfirmForm, DatePicker, ExportToExcel, Filter, InputContainer, Loader, ModularForm, Search, SelectContainer, Summary, Table, Table2, TableBody, TableCell, TableContext, TableHead, TableProvider, TableRow, getFixedNumber, useExportToExcel, useFilter, useSearch, useSort, useTableContext };

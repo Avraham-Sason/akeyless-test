@@ -1,7 +1,7 @@
 import { TObject } from 'akeyless-types-commons';
 import { ReactNode } from 'react';
 
-interface TableProvider {
+interface TableProviderType {
     sortColumn: number;
     sortOrder: "asc" | "desc";
     handleSort: (columnIndex: number) => void;
@@ -100,6 +100,7 @@ interface TableProps {
     export_excel_label?: string;
     onRowClick?: (data?: any) => void;
     lang: "en" | "he";
+    children: ReactNode;
 }
 interface SummaryProps {
     sumColumns: {
@@ -174,4 +175,4 @@ interface DatePickerProps {
     buttonText?: string;
 }
 
-export type { BaseElementProps, ConfirmFormProps, DatePickerProps, Direction, FilterProps, InputContainerProps, InputElement, ModularFormProps, SelectContainerProps, SelectElement, SummaryProps, TableCellProps, TableHeaderProps, TableProps, TableProvider, TableRowProps };
+export type { BaseElementProps, ConfirmFormProps, DatePickerProps, Direction, FilterProps, InputContainerProps, InputElement, ModularFormProps, SelectContainerProps, SelectElement, SummaryProps, TableCellProps, TableHeaderProps, TableProps, TableProviderType, TableRowProps };

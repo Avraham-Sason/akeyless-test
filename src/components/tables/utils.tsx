@@ -346,7 +346,7 @@ export const Summary = memo(() => {
     );
 });
 export const TableBody = memo(() => {
-    console.log("Summary is returning...");
+    console.log("TableBody is returning...");
     const { handleFilterClick, onRowClick, dataToRender, keysToRender, rowStyles, cellStyle } = useTableContext();
     return (
         <tbody onClick={() => handleFilterClick("")}>
