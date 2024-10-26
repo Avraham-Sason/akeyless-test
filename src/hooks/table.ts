@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { TableContext } from "../components";
 import { TObject } from "akeyless-types-commons";
+import { UseFilterProps } from "../types";
 
 export const useTableContext = () => {
     const context = useContext(TableContext);
@@ -21,7 +22,7 @@ export const useFilter = ({
     sortColumn,
     sortOrder,
     sortKeys,
-}) => {
+}: UseFilterProps) => {
     const initFilter = filterableColumns.reduce((acc, col) => ({ ...acc, [col.dataKey]: [] }), {});
     const [filters, setFilters] = useState<TObject<string[]>>(initFilter);
     const [filterPopupsDisplay, setFilterPopupsDisplay] = useState<string>("");

@@ -631,6 +631,11 @@ var useSearch = function() {
 };
 // src/components/tables/utils.tsx
 import { Fragment as Fragment2, jsx as jsx4, jsxs as jsxs4 } from "react/jsx-runtime";
+var getFixedNumber = function() {
+    var number = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : 0, fix = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 4;
+    var sum_value = number % 1 === 0 ? number : number.toFixed(fix).replace(/\.?0+$/, "");
+    return String(sum_value);
+};
 var TableHead = function() {
     var _useTableContext = useTableContext(), headers = _useTableContext.headers, headerStyle = _useTableContext.headerStyle, headerCellStyle = _useTableContext.headerCellStyle, sortColumn = _useTableContext.sortColumn, handleSort = _useTableContext.handleSort, sortKeys = _useTableContext.sortKeys, sortOrder = _useTableContext.sortOrder, _useTableContext_filterableColumns = _useTableContext.filterableColumns, filterableColumns = _useTableContext_filterableColumns === void 0 ? [] : _useTableContext_filterableColumns, sort_label = _useTableContext.sort_label;
     var sortDisplay = useMemo(function() {
@@ -674,7 +679,8 @@ var TableHead = function() {
     });
 };
 var TableRow = function(param) {
-    var item = param.item, rowStyles = param.rowStyles, cellStyle = param.cellStyle, _param_keysToRender = param.keysToRender, keysToRender = _param_keysToRender === void 0 ? [] : _param_keysToRender, onRowClick = param.onRowClick;
+    var item = param.item;
+    var _useTableContext = useTableContext(), rowStyles = _useTableContext.rowStyles, cellStyle = _useTableContext.cellStyle, keysToRender = _useTableContext.keysToRender, onRowClick = _useTableContext.onRowClick;
     return /* @__PURE__ */ jsx4("tr", {
         onClick: function() {
             return onRowClick(item);
@@ -682,14 +688,14 @@ var TableRow = function(param) {
         style: rowStyles,
         children: keysToRender.map(function(key, index) {
             return /* @__PURE__ */ jsx4(TableCell, {
-                cellStyle: cellStyle,
                 value: item[key]
             }, index);
         })
     });
 };
 var TableCell = function(param) {
-    var value = param.value, cellStyle = param.cellStyle;
+    var value = param.value;
+    var cellStyle = useTableContext().cellStyle;
     return /* @__PURE__ */ jsx4("td", {
         title: [
             "string",
@@ -700,11 +706,6 @@ var TableCell = function(param) {
         className: "chivo ellipsis border-black border-[1px] max-w-[90px] px-[4px] text-center",
         children: value
     });
-};
-var getFixedNumber = function() {
-    var number = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : 0, fix = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 4;
-    var sum_value = number % 1 === 0 ? number : number.toFixed(fix).replace(/\.?0+$/, "");
-    return String(sum_value);
 };
 var Filter = memo(function(param) {
     var filterableColumn = param.filterableColumn, index = param.index;
@@ -912,19 +913,15 @@ var TableBody = memo(function() {
         },
         children: dataToRender.map(function(item, index) {
             return /* @__PURE__ */ jsx4(TableRow, {
-                onRowClick: onRowClick,
-                keysToRender: keysToRender,
-                rowStyles: rowStyles,
-                cellStyle: cellStyle,
                 item: item
             }, index);
         })
     });
 });
 // src/components/tables/Table.tsx
-import { createContext as createContext2, useState as useState3 } from "react";
+import { createContext, useState as useState2 } from "react";
 import { jsx as jsx5, jsxs as jsxs5 } from "react/jsx-runtime";
-var TableContext = createContext2(null);
+var TableContext = createContext(null);
 var TableProvider = function(props) {
     var // basic props
     data = props.data, headers = props.headers, optionalElement = props.optionalElement, _props_keysToRender = props.keysToRender, keysToRender = _props_keysToRender === void 0 ? [] : _props_keysToRender, _props_lang = props.lang, lang = _props_lang === void 0 ? "en" : _props_lang, _props_onRowClick = props.onRowClick, onRowClick = _props_onRowClick === void 0 ? function(data2) {} : _props_onRowClick, _props_containerStyle = props.// container styles props
@@ -935,7 +932,7 @@ var TableProvider = function(props) {
     filterableColumns, filterableColumns = _props_filterableColumns === void 0 ? [] : _props_filterableColumns, _props_filterLabel = props.filterLabel, filterLabel = _props_filterLabel === void 0 ? "Filter by" : _props_filterLabel, // export to excel
     exportToExcelKeys = props.exportToExcelKeys, dataToAddToExcelTable = props.dataToAddToExcelTable, _props_export_excel_label = props.export_excel_label, export_excel_label = _props_export_excel_label === void 0 ? "Export to excel" : _props_export_excel_label, excelFileName = props.excelFileName, // summary
     sumColumns = props.sumColumns, _props_summaryLabel = props.summaryLabel, summaryLabel = _props_summaryLabel === void 0 ? "" : _props_summaryLabel, _props_summaryContainerStyle = props.summaryContainerStyle, summaryContainerStyle = _props_summaryContainerStyle === void 0 ? {} : _props_summaryContainerStyle, _props_summaryLabelStyle = props.summaryLabelStyle, summaryLabelStyle = _props_summaryLabelStyle === void 0 ? {} : _props_summaryLabelStyle, _props_summaryRowStyle = props.summaryRowStyle, summaryRowStyle = _props_summaryRowStyle === void 0 ? {} : _props_summaryRowStyle;
-    var _useState3 = _sliced_to_array(useState3(data), 2), dataToRender = _useState3[0], setDataToRender = _useState3[1];
+    var _useState2 = _sliced_to_array(useState2(data), 2), dataToRender = _useState2[0], setDataToRender = _useState2[1];
     var _useSort = useSort(), sortColumn = _useSort.sortColumn, sortOrder = _useSort.sortOrder, handleSort = _useSort.handleSort;
     var _useSearch = useSearch(), searchQuery = _useSearch.searchQuery, handleSearch = _useSearch.handleSearch;
     var _useFilter = useFilter({
@@ -966,39 +963,39 @@ var TableProvider = function(props) {
     });
     return /* @__PURE__ */ jsx5(TableContext.Provider, {
         value: providerValues,
-        children: props.children
+        children: /* @__PURE__ */ jsx5("div", {
+            className: "flex flex-col gap-2  ".concat(containerClassName),
+            style: containerStyle,
+            children: props.children
+        })
     });
 };
 var Table = function(props) {
     var _props_containerStyle = props.containerStyle, containerStyle = _props_containerStyle === void 0 ? {} : _props_containerStyle, optionalElement = props.optionalElement, _props_containerClassName = props.containerClassName, containerClassName = _props_containerClassName === void 0 ? "" : _props_containerClassName, _props_tableContainerClass = props.tableContainerClass, tableContainerClass = _props_tableContainerClass === void 0 ? "" : _props_tableContainerClass, _props_tableContainerStyle = props.tableContainerStyle, tableContainerStyle = _props_tableContainerStyle === void 0 ? {} : _props_tableContainerStyle, _props_tableStyle = props.tableStyle, tableStyle = _props_tableStyle === void 0 ? {} : _props_tableStyle, includeSearch = props.includeSearch, exportToExcelKeys = props.exportToExcelKeys, sumColumns = props.sumColumns;
-    return /* @__PURE__ */ jsx5(TableProvider, _object_spread_props(_object_spread({}, props), {
-        children: /* @__PURE__ */ jsxs5("div", {
-            className: "flex flex-col gap-2  ".concat(containerClassName),
-            style: containerStyle,
-            children: [
-                /* @__PURE__ */ jsxs5("div", {
-                    className: "flex justify-start gap-2 ",
+    return /* @__PURE__ */ jsxs5(TableProvider, _object_spread_props(_object_spread({}, props), {
+        children: [
+            /* @__PURE__ */ jsxs5("div", {
+                className: "flex justify-start gap-2 ",
+                children: [
+                    includeSearch && /* @__PURE__ */ jsx5(Search, {}),
+                    exportToExcelKeys && /* @__PURE__ */ jsx5(ExportToExcel, {}),
+                    optionalElement && optionalElement
+                ]
+            }),
+            /* @__PURE__ */ jsx5("div", {
+                style: tableContainerStyle,
+                className: "animate-slide-in-up overflow-y-auto  ".concat(tableContainerClass),
+                children: /* @__PURE__ */ jsxs5("table", {
+                    style: tableStyle,
+                    className: "min-w-full text-sm font-light relative",
                     children: [
-                        includeSearch && /* @__PURE__ */ jsx5(Search, {}),
-                        exportToExcelKeys && /* @__PURE__ */ jsx5(ExportToExcel, {}),
-                        optionalElement && optionalElement
+                        /* @__PURE__ */ jsx5(TableHead, {}),
+                        /* @__PURE__ */ jsx5(TableBody, {})
                     ]
-                }),
-                /* @__PURE__ */ jsx5("div", {
-                    style: tableContainerStyle,
-                    className: "animate-slide-in-up overflow-y-auto  ".concat(tableContainerClass),
-                    children: /* @__PURE__ */ jsxs5("table", {
-                        style: tableStyle,
-                        className: "min-w-full text-sm font-light relative",
-                        children: [
-                            /* @__PURE__ */ jsx5(TableHead, {}),
-                            /* @__PURE__ */ jsx5(TableBody, {})
-                        ]
-                    })
-                }),
-                sumColumns && /* @__PURE__ */ jsx5(Summary, {})
-            ]
-        })
+                })
+            }),
+            sumColumns && /* @__PURE__ */ jsx5(Summary, {})
+        ]
     }));
 };
 // src/components/loaders.tsx
@@ -1017,7 +1014,7 @@ var Loader = function(param) {
     });
 };
 // src/components/forms/forms.tsx
-import { useState as useState4 } from "react";
+import { useState as useState3 } from "react";
 import moment from "moment";
 // src/helpers/forms.ts
 var handleInvalid = function(e, requireError) {
@@ -1127,8 +1124,8 @@ var InputContainer = function(param) {
 var SelectContainer = function(param) {
     var _param_name = param.name, name = _param_name === void 0 ? "" : _param_name, _param_labelContent = param.labelContent, labelContent = _param_labelContent === void 0 ? "" : _param_labelContent, _param_containerClassName = param.containerClassName, containerClassName = _param_containerClassName === void 0 ? "" : _param_containerClassName, _param_labelClassName = param.labelClassName, labelClassName = _param_labelClassName === void 0 ? "" : _param_labelClassName, _param_defaultValue = param.defaultValue, defaultValue = _param_defaultValue === void 0 ? "" : _param_defaultValue, _param_elementClassName = param.elementClassName, elementClassName = _param_elementClassName === void 0 ? "" : _param_elementClassName, _param_optionClassName = param.optionClassName, optionClassName = _param_optionClassName === void 0 ? "" : _param_optionClassName, _param_required = param.required, required = _param_required === void 0 ? false : _param_required, _param_options = param.options, options = _param_options === void 0 ? [] : _param_options;
     var _options_, _options_find;
-    var _useState4 = _sliced_to_array(useState4(false), 2), isOpen = _useState4[0], setIsOpen = _useState4[1];
-    var _useState41 = _sliced_to_array(useState4(defaultValue || ((_options_ = options[0]) === null || _options_ === void 0 ? void 0 : _options_.value) || ""), 2), selectedValue = _useState41[0], setSelectedValue = _useState41[1];
+    var _useState3 = _sliced_to_array(useState3(false), 2), isOpen = _useState3[0], setIsOpen = _useState3[1];
+    var _useState31 = _sliced_to_array(useState3(defaultValue || ((_options_ = options[0]) === null || _options_ === void 0 ? void 0 : _options_.value) || ""), 2), selectedValue = _useState31[0], setSelectedValue = _useState31[1];
     var handleOptionClick = function(value) {
         setSelectedValue(value);
         setIsOpen(false);
@@ -1197,8 +1194,8 @@ var ModularForm = function(param) {
             return _ref.apply(this, arguments);
         };
     }() : _param_submitFunction, _param_elements = param.elements, elements = _param_elements === void 0 ? [] : _param_elements, headerContent = param.headerContent, _param_buttonContent = param.buttonContent, buttonContent = _param_buttonContent === void 0 ? "" : _param_buttonContent, _param_formClassName = param.formClassName, formClassName = _param_formClassName === void 0 ? "" : _param_formClassName, _param_headerClassName = param.headerClassName, headerClassName = _param_headerClassName === void 0 ? "" : _param_headerClassName, _param_direction = param.direction, direction = _param_direction === void 0 ? "rtl" : _param_direction;
-    var _useState4 = _sliced_to_array(useState4(""), 2), errorMsg = _useState4[0], setErrorMsg = _useState4[1];
-    var _useState41 = _sliced_to_array(useState4(false), 2), isLoading = _useState41[0], setIsLoading = _useState41[1];
+    var _useState3 = _sliced_to_array(useState3(""), 2), errorMsg = _useState3[0], setErrorMsg = _useState3[1];
+    var _useState31 = _sliced_to_array(useState3(false), 2), isLoading = _useState31[0], setIsLoading = _useState31[1];
     var onSubmit = /*#__PURE__*/ function() {
         var _ref = _async_to_generator(function(e) {
             var err;
@@ -1420,7 +1417,7 @@ var DatePicker = function(param) {
             return _ref.apply(this, arguments);
         };
     }() : _param_submit, _param_formClassName = param.formClassName, formClassName = _param_formClassName === void 0 ? "" : _param_formClassName, _param_labelsClassName = param.labelsClassName, labelsClassName = _param_labelsClassName === void 0 ? "" : _param_labelsClassName, _param_inputsClassName = param.inputsClassName, inputsClassName = _param_inputsClassName === void 0 ? "" : _param_inputsClassName, _param_buttonClassName = param.buttonClassName, buttonClassName = _param_buttonClassName === void 0 ? "" : _param_buttonClassName, _param_buttonStyle = param.buttonStyle, buttonStyle = _param_buttonStyle === void 0 ? {} : _param_buttonStyle, defaultFrom = param.defaultFrom, defaultTo = param.defaultTo, _param_direction = param.direction, direction = _param_direction === void 0 ? "rtl" : _param_direction, _param_fromText = param.fromText, fromText = _param_fromText === void 0 ? "From date" : _param_fromText, _param_toText = param.toText, toText = _param_toText === void 0 ? "To date" : _param_toText, _param_buttonText = param.buttonText, buttonText = _param_buttonText === void 0 ? "Search" : _param_buttonText;
-    var _useState4 = _sliced_to_array(useState4(false), 2), isLoading = _useState4[0], setIsLoading = _useState4[1];
+    var _useState3 = _sliced_to_array(useState3(false), 2), isLoading = _useState3[0], setIsLoading = _useState3[1];
     var onSubmit = /*#__PURE__*/ function() {
         var _ref = _async_to_generator(function(e) {
             return _ts_generator(this, function(_state) {

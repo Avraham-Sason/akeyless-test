@@ -1,10 +1,15 @@
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
-import React, { useState, useEffect, memo, createContext, useContext, useMemo } from "react";
+import React, { memo, useMemo } from "react";
 import { emptyFilterSvg, exportToExcelSvg, slashFilterSvg, sortSvg } from "../../assets";
-import { FilterProps, TableCellProps, TableHeaderProps, TableProps, TableRowProps } from "../../types";
-import { TObject } from "akeyless-types-commons";
+import { FilterProps } from "../../types";
 import { useTableContext } from "../../hooks";
+import { TObject } from "akeyless-types-commons";
+
+export const getFixedNumber = (number = 0, fix = 4) => {
+    const sum_value = number % 1 === 0 ? number : number.toFixed(fix).replace(/\.?0+$/, "");
+    return String(sum_value);
+};
 
 export const TableHead = () => {
     const {
@@ -47,30 +52,30 @@ export const TableHead = () => {
     );
 };
 
-export const TableRow = ({ item, rowStyles, cellStyle, keysToRender = [], onRowClick }: TableRowProps) => (
-    <tr onClick={() => onRowClick(item)} style={rowStyles}>
-        {keysToRender.map((key, index) => (
-            <TableCell cellStyle={cellStyle} key={index} value={item[key]} />
-        ))}
-    </tr>
-);
+export const TableRow = ({ item }: { item: TObject<any> }) => {
+    const { rowStyles, cellStyle, keysToRender, onRowClick } = useTableContext();
 
-export const TableCell = ({ value, cellStyle }: TableCellProps) => (
-    <td
-        title={["string", "number", "boolean"].includes(typeof value) ? value : ""}
-        style={cellStyle}
-        className="chivo ellipsis border-black border-[1px] max-w-[90px] px-[4px] text-center"
-    >
-        {value}
-    </td>
-);
-
-export const getFixedNumber = (number = 0, fix = 4) => {
-    const sum_value = number % 1 === 0 ? number : number.toFixed(fix).replace(/\.?0+$/, "");
-    return String(sum_value);
+    return (
+        <tr onClick={() => onRowClick(item)} style={rowStyles}>
+            {keysToRender.map((key, index) => (
+                <TableCell key={index} value={item[key]} />
+            ))}
+        </tr>
+    );
 };
 
-// filter
+export const TableCell = ({ value }: { value: any }) => {
+    const { cellStyle } = useTableContext();
+    return (
+        <td
+            title={["string", "number", "boolean"].includes(typeof value) ? value : ""}
+            style={cellStyle}
+            className="chivo ellipsis border-black border-[1px] max-w-[90px] px-[4px] text-center"
+        >
+            {value}
+        </td>
+    );
+};
 
 export const Filter = memo<FilterProps>(({ filterableColumn, index }) => {
     const { lang, headers, filters, filterOptions, filterPopupsDisplay, handleFilterChange, handleFilterClick, filterLabel } = useTableContext();
@@ -118,6 +123,7 @@ export const Filter = memo<FilterProps>(({ filterableColumn, index }) => {
         </>
     );
 });
+
 export const ExportToExcel = memo(() => {
     console.log("ExportToExcel is returning...");
     const { exportToExcelKeys, dataToAddToExcelTable, excelFileName, dataToRender, headers, sumColumns, export_excel_label } = useTableContext();
@@ -168,7 +174,6 @@ export const ExportToExcel = memo(() => {
         </button>
     );
 });
-// search
 
 export const Search = memo(() => {
     console.log("Search is returning...");
@@ -215,7 +220,7 @@ export const TableBody = memo(() => {
     return (
         <tbody onClick={() => handleFilterClick("")}>
             {dataToRender.map((item, index) => (
-                <TableRow onRowClick={onRowClick} keysToRender={keysToRender} rowStyles={rowStyles} cellStyle={cellStyle} key={index} item={item} />
+                <TableRow key={index} item={item} />
             ))}
         </tbody>
     );

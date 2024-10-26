@@ -481,8 +481,14 @@ var exportToExcelSvg = function() {
 };
 // src/components/tables/utils.tsx
 var import_jsx_runtime4 = require("react/jsx-runtime");
+var getFixedNumber = function() {
+    var number = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : 0, fix = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 4;
+    var sum_value = number % 1 === 0 ? number : number.toFixed(fix).replace(/\.?0+$/, "");
+    return String(sum_value);
+};
 var TableRow = function(param) {
-    var item = param.item, rowStyles = param.rowStyles, cellStyle = param.cellStyle, _param_keysToRender = param.keysToRender, keysToRender = _param_keysToRender === void 0 ? [] : _param_keysToRender, onRowClick = param.onRowClick;
+    var item = param.item;
+    var _useTableContext = useTableContext(), rowStyles = _useTableContext.rowStyles, cellStyle = _useTableContext.cellStyle, keysToRender = _useTableContext.keysToRender, onRowClick = _useTableContext.onRowClick;
     return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("tr", {
         onClick: function() {
             return onRowClick(item);
@@ -490,14 +496,14 @@ var TableRow = function(param) {
         style: rowStyles,
         children: keysToRender.map(function(key, index) {
             return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(TableCell, {
-                cellStyle: cellStyle,
                 value: item[key]
             }, index);
         })
     });
 };
 var TableCell = function(param) {
-    var value = param.value, cellStyle = param.cellStyle;
+    var value = param.value;
+    var cellStyle = useTableContext().cellStyle;
     return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("td", {
         title: [
             "string",
@@ -508,11 +514,6 @@ var TableCell = function(param) {
         className: "chivo ellipsis border-black border-[1px] max-w-[90px] px-[4px] text-center",
         children: value
     });
-};
-var getFixedNumber = function() {
-    var number = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : 0, fix = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 4;
-    var sum_value = number % 1 === 0 ? number : number.toFixed(fix).replace(/\.?0+$/, "");
-    return String(sum_value);
 };
 var Filter = (0, import_react.memo)(function(param) {
     var filterableColumn = param.filterableColumn, index = param.index;
@@ -720,10 +721,6 @@ var TableBody = (0, import_react.memo)(function() {
         },
         children: dataToRender.map(function(item, index) {
             return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(TableRow, {
-                onRowClick: onRowClick,
-                keysToRender: keysToRender,
-                rowStyles: rowStyles,
-                cellStyle: cellStyle,
                 item: item
             }, index);
         })

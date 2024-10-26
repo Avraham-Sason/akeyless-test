@@ -239,7 +239,7 @@ function _ts_generator(thisArg, body) {
 }
 var useSomeHook = function() {};
 // src/hooks/table.ts
-import { useContext as useContext3, useEffect as useEffect3, useState as useState4 } from "react";
+import { useContext as useContext2, useEffect as useEffect2, useState as useState3 } from "react";
 // src/components/Checkboxes.tsx
 import { jsx, jsxs } from "react/jsx-runtime";
 // src/components/tables/utils.tsx
@@ -402,8 +402,14 @@ var exportToExcelSvg = function() {
 };
 // src/components/tables/utils.tsx
 import { Fragment as Fragment2, jsx as jsx4, jsxs as jsxs4 } from "react/jsx-runtime";
+var getFixedNumber = function() {
+    var number = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : 0, fix = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 4;
+    var sum_value = number % 1 === 0 ? number : number.toFixed(fix).replace(/\.?0+$/, "");
+    return String(sum_value);
+};
 var TableRow = function(param) {
-    var item = param.item, rowStyles = param.rowStyles, cellStyle = param.cellStyle, _param_keysToRender = param.keysToRender, keysToRender = _param_keysToRender === void 0 ? [] : _param_keysToRender, onRowClick = param.onRowClick;
+    var item = param.item;
+    var _useTableContext = useTableContext(), rowStyles = _useTableContext.rowStyles, cellStyle = _useTableContext.cellStyle, keysToRender = _useTableContext.keysToRender, onRowClick = _useTableContext.onRowClick;
     return /* @__PURE__ */ jsx4("tr", {
         onClick: function() {
             return onRowClick(item);
@@ -411,14 +417,14 @@ var TableRow = function(param) {
         style: rowStyles,
         children: keysToRender.map(function(key, index) {
             return /* @__PURE__ */ jsx4(TableCell, {
-                cellStyle: cellStyle,
                 value: item[key]
             }, index);
         })
     });
 };
 var TableCell = function(param) {
-    var value = param.value, cellStyle = param.cellStyle;
+    var value = param.value;
+    var cellStyle = useTableContext().cellStyle;
     return /* @__PURE__ */ jsx4("td", {
         title: [
             "string",
@@ -429,11 +435,6 @@ var TableCell = function(param) {
         className: "chivo ellipsis border-black border-[1px] max-w-[90px] px-[4px] text-center",
         children: value
     });
-};
-var getFixedNumber = function() {
-    var number = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : 0, fix = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 4;
-    var sum_value = number % 1 === 0 ? number : number.toFixed(fix).replace(/\.?0+$/, "");
-    return String(sum_value);
 };
 var Filter = memo(function(param) {
     var filterableColumn = param.filterableColumn, index = param.index;
@@ -641,29 +642,25 @@ var TableBody = memo(function() {
         },
         children: dataToRender.map(function(item, index) {
             return /* @__PURE__ */ jsx4(TableRow, {
-                onRowClick: onRowClick,
-                keysToRender: keysToRender,
-                rowStyles: rowStyles,
-                cellStyle: cellStyle,
                 item: item
             }, index);
         })
     });
 });
 // src/components/tables/Table.tsx
-import { createContext as createContext2, useState as useState2 } from "react";
+import { createContext, useState } from "react";
 import { jsx as jsx5, jsxs as jsxs5 } from "react/jsx-runtime";
-var TableContext = createContext2(null);
+var TableContext = createContext(null);
 // src/components/loaders.tsx
 import { ClipLoader } from "react-spinners";
 import { jsx as jsx6 } from "react/jsx-runtime";
 // src/components/forms/forms.tsx
-import { useState as useState3 } from "react";
+import { useState as useState2 } from "react";
 import moment from "moment";
 import { jsx as jsx7, jsxs as jsxs6 } from "react/jsx-runtime";
 // src/hooks/table.ts
 var useTableContext = function() {
-    var context = useContext3(TableContext);
+    var context = useContext2(TableContext);
     if (!context) {
         throw new Error("useTableContext must be used within a Table component");
     }
@@ -674,15 +671,15 @@ var useFilter = function(param) {
     var initFilter = filterableColumns.reduce(function(acc, col) {
         return _object_spread_props(_object_spread({}, acc), _define_property({}, col.dataKey, []));
     }, {});
-    var _useState4 = _sliced_to_array(useState4(initFilter), 2), filters = _useState4[0], setFilters = _useState4[1];
-    var _useState41 = _sliced_to_array(useState4(""), 2), filterPopupsDisplay = _useState41[0], setFilterPopupsDisplay = _useState41[1];
+    var _useState3 = _sliced_to_array(useState3(initFilter), 2), filters = _useState3[0], setFilters = _useState3[1];
+    var _useState31 = _sliced_to_array(useState3(""), 2), filterPopupsDisplay = _useState31[0], setFilterPopupsDisplay = _useState31[1];
     var filterOptions = filterableColumns.reduce(function(acc, col) {
         acc[col.dataKey] = Array.from(new Set(data.map(function(item) {
             return item[col.dataKey];
         })));
         return acc;
     }, {});
-    useEffect3(function() {
+    useEffect2(function() {
         var filtered = dataToRender;
         if (includeSearch) {
             filtered = data.filter(function(item) {
@@ -750,8 +747,8 @@ var useFilter = function(param) {
     };
 };
 var useSort = function() {
-    var _useState4 = _sliced_to_array(useState4(null), 2), sortColumn = _useState4[0], setSortColumn = _useState4[1];
-    var _useState41 = _sliced_to_array(useState4(null), 2), sortOrder = _useState41[0], setSortOrder = _useState41[1];
+    var _useState3 = _sliced_to_array(useState3(null), 2), sortColumn = _useState3[0], setSortColumn = _useState3[1];
+    var _useState31 = _sliced_to_array(useState3(null), 2), sortOrder = _useState31[0], setSortOrder = _useState31[1];
     var handleSort = function(columnIndex) {
         var newSortOrder = "asc";
         if (sortColumn === columnIndex && sortOrder === "asc") {
@@ -767,7 +764,7 @@ var useSort = function() {
     };
 };
 var useSearch = function() {
-    var _useState4 = _sliced_to_array(useState4(""), 2), searchQuery = _useState4[0], setSearchQuery = _useState4[1];
+    var _useState3 = _sliced_to_array(useState3(""), 2), searchQuery = _useState3[0], setSearchQuery = _useState3[1];
     var handleSearch = function(e) {
         setSearchQuery(e.target.value);
     };

@@ -752,6 +752,11 @@ var useSearch = function() {
 };
 // src/components/tables/utils.tsx
 var import_jsx_runtime4 = require("react/jsx-runtime");
+var getFixedNumber = function() {
+    var number = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : 0, fix = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 4;
+    var sum_value = number % 1 === 0 ? number : number.toFixed(fix).replace(/\.?0+$/, "");
+    return String(sum_value);
+};
 var TableHead = function() {
     var _useTableContext = useTableContext(), headers = _useTableContext.headers, headerStyle = _useTableContext.headerStyle, headerCellStyle = _useTableContext.headerCellStyle, sortColumn = _useTableContext.sortColumn, handleSort = _useTableContext.handleSort, sortKeys = _useTableContext.sortKeys, sortOrder = _useTableContext.sortOrder, _useTableContext_filterableColumns = _useTableContext.filterableColumns, filterableColumns = _useTableContext_filterableColumns === void 0 ? [] : _useTableContext_filterableColumns, sort_label = _useTableContext.sort_label;
     var sortDisplay = (0, import_react2.useMemo)(function() {
@@ -795,7 +800,8 @@ var TableHead = function() {
     });
 };
 var TableRow = function(param) {
-    var item = param.item, rowStyles = param.rowStyles, cellStyle = param.cellStyle, _param_keysToRender = param.keysToRender, keysToRender = _param_keysToRender === void 0 ? [] : _param_keysToRender, onRowClick = param.onRowClick;
+    var item = param.item;
+    var _useTableContext = useTableContext(), rowStyles = _useTableContext.rowStyles, cellStyle = _useTableContext.cellStyle, keysToRender = _useTableContext.keysToRender, onRowClick = _useTableContext.onRowClick;
     return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("tr", {
         onClick: function() {
             return onRowClick(item);
@@ -803,14 +809,14 @@ var TableRow = function(param) {
         style: rowStyles,
         children: keysToRender.map(function(key, index) {
             return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(TableCell, {
-                cellStyle: cellStyle,
                 value: item[key]
             }, index);
         })
     });
 };
 var TableCell = function(param) {
-    var value = param.value, cellStyle = param.cellStyle;
+    var value = param.value;
+    var cellStyle = useTableContext().cellStyle;
     return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("td", {
         title: [
             "string",
@@ -821,11 +827,6 @@ var TableCell = function(param) {
         className: "chivo ellipsis border-black border-[1px] max-w-[90px] px-[4px] text-center",
         children: value
     });
-};
-var getFixedNumber = function() {
-    var number = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : 0, fix = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 4;
-    var sum_value = number % 1 === 0 ? number : number.toFixed(fix).replace(/\.?0+$/, "");
-    return String(sum_value);
 };
 var Filter = (0, import_react2.memo)(function(param) {
     var filterableColumn = param.filterableColumn, index = param.index;
@@ -1033,10 +1034,6 @@ var TableBody = (0, import_react2.memo)(function() {
         },
         children: dataToRender.map(function(item, index) {
             return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(TableRow, {
-                onRowClick: onRowClick,
-                keysToRender: keysToRender,
-                rowStyles: rowStyles,
-                cellStyle: cellStyle,
                 item: item
             }, index);
         })
@@ -1087,39 +1084,39 @@ var TableProvider = function(props) {
     });
     return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(TableContext.Provider, {
         value: providerValues,
-        children: props.children
+        children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", {
+            className: "flex flex-col gap-2  ".concat(containerClassName),
+            style: containerStyle,
+            children: props.children
+        })
     });
 };
 var Table = function(props) {
     var _props_containerStyle = props.containerStyle, containerStyle = _props_containerStyle === void 0 ? {} : _props_containerStyle, optionalElement = props.optionalElement, _props_containerClassName = props.containerClassName, containerClassName = _props_containerClassName === void 0 ? "" : _props_containerClassName, _props_tableContainerClass = props.tableContainerClass, tableContainerClass = _props_tableContainerClass === void 0 ? "" : _props_tableContainerClass, _props_tableContainerStyle = props.tableContainerStyle, tableContainerStyle = _props_tableContainerStyle === void 0 ? {} : _props_tableContainerStyle, _props_tableStyle = props.tableStyle, tableStyle = _props_tableStyle === void 0 ? {} : _props_tableStyle, includeSearch = props.includeSearch, exportToExcelKeys = props.exportToExcelKeys, sumColumns = props.sumColumns;
-    return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(TableProvider, _object_spread_props(_object_spread({}, props), {
-        children: /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", {
-            className: "flex flex-col gap-2  ".concat(containerClassName),
-            style: containerStyle,
-            children: [
-                /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", {
-                    className: "flex justify-start gap-2 ",
+    return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(TableProvider, _object_spread_props(_object_spread({}, props), {
+        children: [
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", {
+                className: "flex justify-start gap-2 ",
+                children: [
+                    includeSearch && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(Search, {}),
+                    exportToExcelKeys && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(ExportToExcel, {}),
+                    optionalElement && optionalElement
+                ]
+            }),
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", {
+                style: tableContainerStyle,
+                className: "animate-slide-in-up overflow-y-auto  ".concat(tableContainerClass),
+                children: /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("table", {
+                    style: tableStyle,
+                    className: "min-w-full text-sm font-light relative",
                     children: [
-                        includeSearch && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(Search, {}),
-                        exportToExcelKeys && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(ExportToExcel, {}),
-                        optionalElement && optionalElement
+                        /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(TableHead, {}),
+                        /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(TableBody, {})
                     ]
-                }),
-                /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", {
-                    style: tableContainerStyle,
-                    className: "animate-slide-in-up overflow-y-auto  ".concat(tableContainerClass),
-                    children: /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("table", {
-                        style: tableStyle,
-                        className: "min-w-full text-sm font-light relative",
-                        children: [
-                            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(TableHead, {}),
-                            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(TableBody, {})
-                        ]
-                    })
-                }),
-                sumColumns && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(Summary, {})
-            ]
-        })
+                })
+            }),
+            sumColumns && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(Summary, {})
+        ]
     }));
 };
 // src/components/loaders.tsx

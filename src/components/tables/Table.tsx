@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { ExportToExcel, Search, Summary, TableHead, TableRow, TableBody } from "./utils";
 import { TableProps, TableProviderType } from "../../types";
 import { TObject } from "akeyless-types-commons";
@@ -6,7 +6,7 @@ import { useFilter, useSort, useSearch } from "../../hooks";
 
 export const TableContext = createContext<(TableProps & TableProviderType) | null>(null);
 
-export const TableProvider = (props: TableProps) => {
+export const TableProvider = (props: TableProps & { children: React.ReactNode }) => {
     const {
         // basic props
         data,
@@ -81,8 +81,15 @@ export const TableProvider = (props: TableProps) => {
         handleFilterChange,
         handleFilterClick,
     };
-    return <TableContext.Provider value={providerValues}>{props.children}</TableContext.Provider>;
+    return (
+        <TableContext.Provider value={providerValues}>
+            <div className={`flex flex-col gap-2  ${containerClassName}`} style={containerStyle}>
+                {props.children}
+            </div>
+        </TableContext.Provider>
+    );
 };
+
 export const Table = (props: TableProps) => {
     const {
         containerStyle = {},
@@ -97,28 +104,24 @@ export const Table = (props: TableProps) => {
     } = props;
     return (
         <TableProvider {...props}>
-            {
-                <div className={`flex flex-col gap-2  ${containerClassName}`} style={containerStyle}>
-                    {/* container header */}
-                    <div className="flex justify-start gap-2 ">
-                        {/* search */}
-                        {includeSearch && <Search />}
-                        {/* export to excel */}
-                        {exportToExcelKeys && <ExportToExcel />}
-                        {/* optional element */}
-                        {optionalElement && optionalElement}
-                    </div>
-                    {/* table */}
-                    <div style={tableContainerStyle} className={`animate-slide-in-up overflow-y-auto  ${tableContainerClass}`}>
-                        <table style={tableStyle} className="min-w-full text-sm font-light relative">
-                            <TableHead />
-                            <TableBody />
-                        </table>
-                    </div>
-                    {/* summary */}
-                    {sumColumns && <Summary />}
-                </div>
-            }
+            {/* container header */}
+            <div className="flex justify-start gap-2 ">
+                {/* search */}
+                {includeSearch && <Search />}
+                {/* export to excel */}
+                {exportToExcelKeys && <ExportToExcel />}
+                {/* optional element */}
+                {optionalElement && optionalElement}
+            </div>
+            {/* table */}
+            <div style={tableContainerStyle} className={`animate-slide-in-up overflow-y-auto  ${tableContainerClass}`}>
+                <table style={tableStyle} className="min-w-full text-sm font-light relative">
+                    <TableHead />
+                    <TableBody />
+                </table>
+            </div>
+            {/* summary */}
+            {sumColumns && <Summary />}
         </TableProvider>
     );
 };

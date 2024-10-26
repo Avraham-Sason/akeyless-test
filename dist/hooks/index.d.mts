@@ -1,8 +1,13 @@
 import { TObject } from 'akeyless-types-commons';
-import { ReactNode } from 'react';
+import { Dispatch, SetStateAction, ReactNode } from 'react';
 
 declare const useSomeHook: () => void;
 
+interface FilterableColumn {
+    header: string;
+    dataKey: string;
+    ui?: (value: any) => ReactNode;
+}
 interface TableProviderType {
     sortColumn: number;
     sortOrder: "asc" | "desc";
@@ -15,6 +20,18 @@ interface TableProviderType {
     filterOptions: any;
     handleFilterChange: (dataKey: string, value: string) => void;
     handleFilterClick: (dataKey: string) => void;
+}
+interface UseFilterProps {
+    data: Record<string, any>[];
+    dataToRender: Record<string, any>[];
+    setDataToRender: Dispatch<SetStateAction<Record<string, any>[]>>;
+    filterableColumns: FilterableColumn[];
+    includeSearch?: boolean;
+    searchQuery: string;
+    keysToRender: string[];
+    sortColumn: number | null;
+    sortOrder: "asc" | "desc" | null;
+    sortKeys: string[];
 }
 interface TableProps {
     data: Record<string, any>[];
@@ -61,25 +78,13 @@ interface TableProps {
     export_excel_label?: string;
     onRowClick?: (data?: any) => void;
     lang: "en" | "he";
-    children?: ReactNode;
 }
 
 declare const useTableContext: () => TableProps & TableProviderType;
-declare const useFilter: ({ data, dataToRender, setDataToRender, filterableColumns, includeSearch, searchQuery, keysToRender, sortColumn, sortOrder, sortKeys, }: {
-    data: any;
-    dataToRender: any;
-    setDataToRender: any;
-    filterableColumns: any;
-    includeSearch: any;
-    searchQuery: any;
-    keysToRender: any;
-    sortColumn: any;
-    sortOrder: any;
-    sortKeys: any;
-}) => {
+declare const useFilter: ({ data, dataToRender, setDataToRender, filterableColumns, includeSearch, searchQuery, keysToRender, sortColumn, sortOrder, sortKeys, }: UseFilterProps) => {
     filters: TObject<string[]>;
     filterPopupsDisplay: string;
-    filterOptions: any;
+    filterOptions: Record<string, any[]>;
     handleFilterChange: (dataKey: string, value: string) => void;
     handleFilterClick: (dataKey: string) => void;
 };

@@ -1,6 +1,11 @@
 import { TObject } from 'akeyless-types-commons';
-import { ReactNode } from 'react';
+import { Dispatch, SetStateAction, ReactNode } from 'react';
 
+interface FilterableColumn {
+    header: string;
+    dataKey: string;
+    ui?: (value: any) => ReactNode;
+}
 interface TableProviderType {
     sortColumn: number;
     sortOrder: "asc" | "desc";
@@ -14,46 +19,17 @@ interface TableProviderType {
     handleFilterChange: (dataKey: string, value: string) => void;
     handleFilterClick: (dataKey: string) => void;
 }
-interface TableHeaderProps {
-    headers: string[];
-    lang: "en" | "he";
-    headerStyle?: React.CSSProperties;
-    headerCellStyle?: React.CSSProperties;
-    onSort: (index: number) => void;
+interface UseFilterProps {
+    data: Record<string, any>[];
+    dataToRender: Record<string, any>[];
+    setDataToRender: Dispatch<SetStateAction<Record<string, any>[]>>;
+    filterableColumns: FilterableColumn[];
+    includeSearch?: boolean;
+    searchQuery: string;
+    keysToRender: string[];
     sortColumn: number | null;
     sortOrder: "asc" | "desc" | null;
-    onFilterChange: (dataKey: string, value: string) => void;
-    handleFilterClick: (dataKey: string) => void;
-    filters: Record<string, string[]>;
-    filterOptions: Record<string, any[]>;
-    filterableColumns?: {
-        header: string;
-        dataKey: string;
-        ui?: (option: any) => ReactNode;
-    }[];
-    filterPopupsDisplay: string;
-    sortDisplay: boolean;
-    filterLabel: string;
-    sort_label: string;
-}
-interface FilterProps {
-    index: number;
-    filterableColumn: {
-        header: string;
-        dataKey: string;
-        ui?: (option: any) => ReactNode;
-    };
-}
-interface TableRowProps {
-    item: Record<string, any>;
-    rowStyles?: React.CSSProperties;
-    cellStyle?: React.CSSProperties;
-    keysToRender: string[];
-    onRowClick: (data?: any) => void;
-}
-interface TableCellProps {
-    value: any;
-    cellStyle?: React.CSSProperties;
+    sortKeys: string[];
 }
 interface TableProps {
     data: Record<string, any>[];
@@ -100,18 +76,10 @@ interface TableProps {
     export_excel_label?: string;
     onRowClick?: (data?: any) => void;
     lang: "en" | "he";
-    children?: ReactNode;
 }
-interface SummaryProps {
-    sumColumns: {
-        label: string;
-        dataKey: string;
-        ui?: (value: string | number) => ReactNode;
-    }[];
-    dataToRender: Record<string, any>[];
-    summaryLabel?: string;
-    summaryLabelStyle?: React.CSSProperties;
-    summaryRowStyle?: React.CSSProperties;
+interface FilterProps {
+    index: number;
+    filterableColumn: FilterableColumn;
 }
 
 type Direction = "rtl" | "ltr";
@@ -175,4 +143,4 @@ interface DatePickerProps {
     buttonText?: string;
 }
 
-export type { BaseElementProps, ConfirmFormProps, DatePickerProps, Direction, FilterProps, InputContainerProps, InputElement, ModularFormProps, SelectContainerProps, SelectElement, SummaryProps, TableCellProps, TableHeaderProps, TableProps, TableProviderType, TableRowProps };
+export type { BaseElementProps, ConfirmFormProps, DatePickerProps, Direction, FilterProps, InputContainerProps, InputElement, ModularFormProps, SelectContainerProps, SelectElement, TableProps, TableProviderType, UseFilterProps };

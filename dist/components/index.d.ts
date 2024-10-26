@@ -1,17 +1,21 @@
 import * as react_jsx_runtime from 'react/jsx-runtime';
-import * as React$1 from 'react';
-import React__default, { SetStateAction, ReactNode } from 'react';
+import React$1, { SetStateAction, ReactNode } from 'react';
 import { TObject } from 'akeyless-types-commons';
 
 interface CheckBoxProps {
     id: string;
     checked: boolean;
-    setChecked: React__default.Dispatch<SetStateAction<boolean>>;
-    style?: React__default.CSSProperties;
+    setChecked: React$1.Dispatch<SetStateAction<boolean>>;
+    style?: React$1.CSSProperties;
     rotate: boolean;
 }
 declare const Checkbox: ({ id, checked, setChecked, rotate, style }: CheckBoxProps) => react_jsx_runtime.JSX.Element;
 
+interface FilterableColumn {
+    header: string;
+    dataKey: string;
+    ui?: (value: any) => ReactNode;
+}
 interface TableProviderType {
     sortColumn: number;
     sortOrder: "asc" | "desc";
@@ -24,25 +28,6 @@ interface TableProviderType {
     filterOptions: any;
     handleFilterChange: (dataKey: string, value: string) => void;
     handleFilterClick: (dataKey: string) => void;
-}
-interface FilterProps {
-    index: number;
-    filterableColumn: {
-        header: string;
-        dataKey: string;
-        ui?: (option: any) => ReactNode;
-    };
-}
-interface TableRowProps {
-    item: Record<string, any>;
-    rowStyles?: React.CSSProperties;
-    cellStyle?: React.CSSProperties;
-    keysToRender: string[];
-    onRowClick: (data?: any) => void;
-}
-interface TableCellProps {
-    value: any;
-    cellStyle?: React.CSSProperties;
 }
 interface TableProps {
     data: Record<string, any>[];
@@ -89,7 +74,10 @@ interface TableProps {
     export_excel_label?: string;
     onRowClick?: (data?: any) => void;
     lang: "en" | "he";
-    children?: ReactNode;
+}
+interface FilterProps {
+    index: number;
+    filterableColumn: FilterableColumn;
 }
 
 type Direction = "rtl" | "ltr";
@@ -153,27 +141,33 @@ interface DatePickerProps {
     buttonText?: string;
 }
 
-declare const TableHead: () => react_jsx_runtime.JSX.Element;
-declare const TableRow: ({ item, rowStyles, cellStyle, keysToRender, onRowClick }: TableRowProps) => react_jsx_runtime.JSX.Element;
-declare const TableCell: ({ value, cellStyle }: TableCellProps) => react_jsx_runtime.JSX.Element;
 declare const getFixedNumber: (number?: number, fix?: number) => string;
-declare const Filter: React__default.NamedExoticComponent<FilterProps>;
-declare const ExportToExcel: React__default.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;
-declare const Search: React__default.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;
-declare const Summary: React__default.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;
-declare const TableBody: React__default.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;
+declare const TableHead: () => react_jsx_runtime.JSX.Element;
+declare const TableRow: ({ item }: {
+    item: TObject<any>;
+}) => react_jsx_runtime.JSX.Element;
+declare const TableCell: ({ value }: {
+    value: any;
+}) => react_jsx_runtime.JSX.Element;
+declare const Filter: React$1.NamedExoticComponent<FilterProps>;
+declare const ExportToExcel: React$1.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;
+declare const Search: React$1.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;
+declare const Summary: React$1.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;
+declare const TableBody: React$1.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;
 
 declare const TableContext: React$1.Context<TableProps & TableProviderType>;
-declare const TableProvider: (props: TableProps) => react_jsx_runtime.JSX.Element;
+declare const TableProvider: (props: TableProps & {
+    children: React$1.ReactNode;
+}) => react_jsx_runtime.JSX.Element;
 declare const Table: (props: TableProps) => react_jsx_runtime.JSX.Element;
 
 interface LoaderProps {
     color?: string;
     size?: number;
-    style?: React__default.CSSProperties;
+    style?: React$1.CSSProperties;
     className?: string;
 }
-declare const Loader: React__default.FC<LoaderProps>;
+declare const Loader: React$1.FC<LoaderProps>;
 
 declare const InputContainer: ({ name, inputType, labelContent, defaultValue, validationName, containerClassName, labelClassName, elementClassName, required, validationType, onKeyDown, }: InputContainerProps) => react_jsx_runtime.JSX.Element;
 declare const SelectContainer: ({ name, labelContent, containerClassName, labelClassName, defaultValue, elementClassName, optionClassName, required, options, }: SelectContainerProps) => react_jsx_runtime.JSX.Element;
