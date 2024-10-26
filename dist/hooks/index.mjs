@@ -724,13 +724,6 @@ import { jsx as jsx6 } from "react/jsx-runtime";
 // src/components/forms/forms.tsx
 import { useState as useState2 } from "react";
 import moment from "moment";
-// src/helpers/store.ts
-var setState = function(updater, set, stateName) {
-    return set(function(state) {
-        return _define_property({}, stateName, typeof updater === "function" ? updater(state[stateName]) : updater);
-    });
-};
-// src/components/forms/forms.tsx
 import { jsx as jsx7, jsxs as jsxs6 } from "react/jsx-runtime";
 // src/hooks/table.ts
 import { create } from "zustand";
@@ -850,32 +843,7 @@ var useSearch = function() {
 };
 var useCreateTableStore = function() {
     return create(function(set) {
-        return {
-            type: "office",
-            setType: function(updater) {
-                return setState(updater, set, "type");
-            },
-            site: null,
-            setSite: function(updater) {
-                return setState(updater, set, "site");
-            },
-            hierarchy: null,
-            setHierarchy: function(updater) {
-                return setState(updater, set, "hierarchy");
-            },
-            globalHierarchy: null,
-            setGlobalHierarchy: function(updater) {
-                return setState(updater, set, "globalHierarchy");
-            },
-            sitesData: [],
-            setSitesData: function(updater) {
-                return setState(updater, set, "sitesData");
-            },
-            pathToExpended: [],
-            setPathToExpended: function(updater) {
-                return setState(updater, set, "pathToExpended");
-            }
-        };
+        return {};
     });
 };
 export { useCreateTableStore, useFilter, useSearch, useSomeHook, useSort, useTableContext };

@@ -107,18 +107,5 @@ export const useSearch = () => {
 };
 
 export const useCreateTableStore = () => {
-    return create<any>((set) => ({
-        type: "office",
-        setType: (updater) => setState(updater, set, "type"),
-        site: null,
-        setSite: (updater) => setState(updater, set, "site"),
-        hierarchy: null,
-        setHierarchy: (updater) => setState(updater, set, "hierarchy"),
-        globalHierarchy: null,
-        setGlobalHierarchy: (updater) => setState(updater, set, "globalHierarchy"),
-        sitesData: [],
-        setSitesData: (updater) => setState(updater, set, "sitesData"),
-        pathToExpended: [],
-        setPathToExpended: (updater) => setState(updater, set, "pathToExpended"),
-    }));
+    return create<any>((set) => ({}));
 };

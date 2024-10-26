@@ -516,85 +516,6 @@ var exportToExcelSvg = function() {
 // src/hooks/table.ts
 import { useContext, useEffect, useState } from "react";
 import { create } from "zustand";
-// src/helpers/forms.ts
-var handleInvalid = function(e, requireError) {
-    e.target.setCustomValidity(requireError || "This filed is required !");
-};
-var handleChange = function(e) {
-    e.target.setCustomValidity("");
-    var validation = e.target.getAttribute("data-validation");
-    if (validation === "text") {
-        var cleanedValue = e.target.value.replace(/[^a-zA-Zא-ת\- ]/g, "");
-        e.target.value = cleanedValue;
-    } else if (validation === "numbers") {
-        var cleanedValue1 = e.target.value.replace(/[^0-9\- +]/g, "");
-        e.target.value = cleanedValue1;
-    } else if (validation === "numbersOnly") {
-        var cleanedValue2 = e.target.value.replace(/[^0-9]/g, "");
-        e.target.value = cleanedValue2;
-    } else if (validation === "price") {
-        var cleanedValue3 = e.target.value.replace(/[^0-9\.]/g, "");
-        e.target.value = cleanedValue3;
-    } else if (validation === "textNumbers") {
-        var cleanedValue4 = e.target.value.replace(/[^a-zA-Zא-ת0-9\- +]/g, "");
-        e.target.value = cleanedValue4;
-    } else if (validation === "email") {
-        var cleanedValue5 = e.target.value.replace(/[^a-zA-Zא-ת0-9.@\- ]/g, "");
-        e.target.value = cleanedValue5;
-    } else if (validation === "color") {
-        var cleanedValue6 = e.target.value.replace(/[^#0-9A-Fa-f]/g, "");
-        e.target.value = cleanedValue6;
-    } else if (validation === "address") {
-        var cleanedValue7 = e.target.value.replace(/[^a-zA-Zא-ת0-9\-., ]/g, "");
-        e.target.value = cleanedValue7;
-    } else if (validation === "cars") {
-        var cleanedValue8 = e.target.value.replace(/[^a-zA-Zא-ת0-9,_]/g, "");
-        e.target.value = cleanedValue8;
-    } else if (validation === "charts") {
-        var cleanedValue9 = e.target.value.replace(/[^a-zA-Zא-ת0-9\-.,_@! ]/g, "");
-        e.target.value = cleanedValue9;
-    } else {
-        e.target.value = e.target.value;
-    }
-};
-var handlePaste = function(e) {
-    var validation = e.currentTarget.getAttribute("data-validation");
-    var pasteData = e.clipboardData.getData("text");
-    if (validation === "text") {
-        pasteData = pasteData.replace(/[^a-zA-Zא-ת\- ]/g, "");
-    } else if (validation === "numbers") {
-        pasteData = pasteData.replace(/[^0-9\- +]/g, "");
-    } else if (validation === "numbersOnly") {
-        pasteData = pasteData.replace(/[^0-9]/g, "");
-    } else if (validation === "price") {
-        pasteData = pasteData.replace(/[^0-9\.]/g, "");
-    } else if (validation === "textNumbers") {
-        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9\- +]/g, "");
-    } else if (validation === "email") {
-        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9.@\- ]/g, "");
-    } else if (validation === "color") {
-        pasteData = pasteData.replace(/[^#0-9A-Fa-f]/g, "");
-    } else if (validation === "address") {
-        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9\-., ]/g, "");
-    } else if (validation === "cars") {
-        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9,_]/g, "");
-    } else if (validation === "charts") {
-        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9\-.,_@! ]/g, "");
-    }
-    e.preventDefault();
-    document.execCommand("insertText", false, pasteData);
-};
-var useValidation = function(validationType, requireError) {
-    return {
-        onChange: handleChange,
-        onPaste: handlePaste,
-        onInvalid: function(e) {
-            return handleInvalid(e, requireError);
-        },
-        "data-validation": validationType
-    };
-};
-// src/hooks/table.ts
 var useTableContext = function() {
     var context = useContext(TableContext);
     if (!context) {
@@ -1098,6 +1019,85 @@ var Loader = function(param) {
 // src/components/forms/forms.tsx
 import { useState as useState3 } from "react";
 import moment from "moment";
+// src/helpers/forms.ts
+var handleInvalid = function(e, requireError) {
+    e.target.setCustomValidity(requireError || "This filed is required !");
+};
+var handleChange = function(e) {
+    e.target.setCustomValidity("");
+    var validation = e.target.getAttribute("data-validation");
+    if (validation === "text") {
+        var cleanedValue = e.target.value.replace(/[^a-zA-Zא-ת\- ]/g, "");
+        e.target.value = cleanedValue;
+    } else if (validation === "numbers") {
+        var cleanedValue1 = e.target.value.replace(/[^0-9\- +]/g, "");
+        e.target.value = cleanedValue1;
+    } else if (validation === "numbersOnly") {
+        var cleanedValue2 = e.target.value.replace(/[^0-9]/g, "");
+        e.target.value = cleanedValue2;
+    } else if (validation === "price") {
+        var cleanedValue3 = e.target.value.replace(/[^0-9\.]/g, "");
+        e.target.value = cleanedValue3;
+    } else if (validation === "textNumbers") {
+        var cleanedValue4 = e.target.value.replace(/[^a-zA-Zא-ת0-9\- +]/g, "");
+        e.target.value = cleanedValue4;
+    } else if (validation === "email") {
+        var cleanedValue5 = e.target.value.replace(/[^a-zA-Zא-ת0-9.@\- ]/g, "");
+        e.target.value = cleanedValue5;
+    } else if (validation === "color") {
+        var cleanedValue6 = e.target.value.replace(/[^#0-9A-Fa-f]/g, "");
+        e.target.value = cleanedValue6;
+    } else if (validation === "address") {
+        var cleanedValue7 = e.target.value.replace(/[^a-zA-Zא-ת0-9\-., ]/g, "");
+        e.target.value = cleanedValue7;
+    } else if (validation === "cars") {
+        var cleanedValue8 = e.target.value.replace(/[^a-zA-Zא-ת0-9,_]/g, "");
+        e.target.value = cleanedValue8;
+    } else if (validation === "charts") {
+        var cleanedValue9 = e.target.value.replace(/[^a-zA-Zא-ת0-9\-.,_@! ]/g, "");
+        e.target.value = cleanedValue9;
+    } else {
+        e.target.value = e.target.value;
+    }
+};
+var handlePaste = function(e) {
+    var validation = e.currentTarget.getAttribute("data-validation");
+    var pasteData = e.clipboardData.getData("text");
+    if (validation === "text") {
+        pasteData = pasteData.replace(/[^a-zA-Zא-ת\- ]/g, "");
+    } else if (validation === "numbers") {
+        pasteData = pasteData.replace(/[^0-9\- +]/g, "");
+    } else if (validation === "numbersOnly") {
+        pasteData = pasteData.replace(/[^0-9]/g, "");
+    } else if (validation === "price") {
+        pasteData = pasteData.replace(/[^0-9\.]/g, "");
+    } else if (validation === "textNumbers") {
+        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9\- +]/g, "");
+    } else if (validation === "email") {
+        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9.@\- ]/g, "");
+    } else if (validation === "color") {
+        pasteData = pasteData.replace(/[^#0-9A-Fa-f]/g, "");
+    } else if (validation === "address") {
+        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9\-., ]/g, "");
+    } else if (validation === "cars") {
+        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9,_]/g, "");
+    } else if (validation === "charts") {
+        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9\-.,_@! ]/g, "");
+    }
+    e.preventDefault();
+    document.execCommand("insertText", false, pasteData);
+};
+var useValidation = function(validationType, requireError) {
+    return {
+        onChange: handleChange,
+        onPaste: handlePaste,
+        onInvalid: function(e) {
+            return handleInvalid(e, requireError);
+        },
+        "data-validation": validationType
+    };
+};
+// src/components/forms/forms.tsx
 import { jsx as jsx7, jsxs as jsxs6 } from "react/jsx-runtime";
 var InputContainer = function(param) {
     var _param_name = param.name, name = _param_name === void 0 ? "" : _param_name, _param_inputType = param.inputType, inputType = _param_inputType === void 0 ? "text" : _param_inputType, _param_labelContent = param.labelContent, labelContent = _param_labelContent === void 0 ? "" : _param_labelContent, _param_defaultValue = param.defaultValue, defaultValue = _param_defaultValue === void 0 ? "" : _param_defaultValue, _param_validationName = param.validationName, validationName = _param_validationName === void 0 ? "textNumbers" : _param_validationName, _param_containerClassName = param.containerClassName, containerClassName = _param_containerClassName === void 0 ? "" : _param_containerClassName, _param_labelClassName = param.labelClassName, labelClassName = _param_labelClassName === void 0 ? "" : _param_labelClassName, _param_elementClassName = param.elementClassName, elementClassName = _param_elementClassName === void 0 ? "" : _param_elementClassName, _param_required = param.required, required = _param_required === void 0 ? false : _param_required, validationType = param.validationType, onKeyDown = param.onKeyDown;

@@ -806,13 +806,6 @@ var import_jsx_runtime6 = require("react/jsx-runtime");
 // src/components/forms/forms.tsx
 var import_react3 = require("react");
 var import_moment = __toESM(require("moment"));
-// src/helpers/store.ts
-var setState = function(updater, set, stateName) {
-    return set(function(state) {
-        return _define_property({}, stateName, typeof updater === "function" ? updater(state[stateName]) : updater);
-    });
-};
-// src/components/forms/forms.tsx
 var import_jsx_runtime7 = require("react/jsx-runtime");
 // src/hooks/table.ts
 var import_zustand = require("zustand");
@@ -932,32 +925,7 @@ var useSearch = function() {
 };
 var useCreateTableStore = function() {
     return (0, import_zustand.create)(function(set) {
-        return {
-            type: "office",
-            setType: function(updater) {
-                return setState(updater, set, "type");
-            },
-            site: null,
-            setSite: function(updater) {
-                return setState(updater, set, "site");
-            },
-            hierarchy: null,
-            setHierarchy: function(updater) {
-                return setState(updater, set, "hierarchy");
-            },
-            globalHierarchy: null,
-            setGlobalHierarchy: function(updater) {
-                return setState(updater, set, "globalHierarchy");
-            },
-            sitesData: [],
-            setSitesData: function(updater) {
-                return setState(updater, set, "sitesData");
-            },
-            pathToExpended: [],
-            setPathToExpended: function(updater) {
-                return setState(updater, set, "pathToExpended");
-            }
-        };
+        return {};
     });
 };
 // Annotate the CommonJS export names for ESM import in node:
