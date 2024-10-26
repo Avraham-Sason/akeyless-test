@@ -150,10 +150,10 @@ declare const TableCell: ({ value }: {
     value: any;
 }) => react_jsx_runtime.JSX.Element;
 declare const Filter: React$1.NamedExoticComponent<FilterProps>;
-declare const ExportToExcel: React$1.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;
-declare const Search: React$1.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;
-declare const Summary: React$1.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;
-declare const TableBody: React$1.MemoExoticComponent<() => react_jsx_runtime.JSX.Element>;
+declare const ExportToExcel: React$1.MemoExoticComponent<(props: any) => react_jsx_runtime.JSX.Element>;
+declare const Search: React$1.MemoExoticComponent<(props: any) => react_jsx_runtime.JSX.Element>;
+declare const Summary: React$1.MemoExoticComponent<(props: any) => react_jsx_runtime.JSX.Element>;
+declare const TableBody: React$1.MemoExoticComponent<(props: any) => react_jsx_runtime.JSX.Element>;
 
 declare const TableContext: React$1.Context<TableProps & TableProviderType>;
 declare const TableProvider: (props: TableProps & {

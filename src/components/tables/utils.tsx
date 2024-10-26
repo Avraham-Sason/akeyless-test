@@ -124,7 +124,7 @@ export const Filter = memo<FilterProps>(({ filterableColumn, index }) => {
     );
 });
 
-export const ExportToExcel = memo(() => {
+export const ExportToExcel = memo((props:any) => {
     console.log("ExportToExcel is returning...");
     const { exportToExcelKeys, dataToAddToExcelTable, excelFileName, dataToRender, headers, sumColumns, export_excel_label } = useTableContext();
     const addPropertiesToExcel = (properties: { key: string; value: any; header: string }[]) => {
@@ -175,7 +175,7 @@ export const ExportToExcel = memo(() => {
     );
 });
 
-export const Search = memo(() => {
+export const Search = memo((props:any) => {
     console.log("Search is returning...");
 
     const { searchQuery, handleSearch, searchPlaceHolder, searchInputClassName, searchInputStyle } = useTableContext();
@@ -191,7 +191,7 @@ export const Search = memo(() => {
     );
 });
 
-export const Summary = memo(() => {
+export const Summary = memo((props:any) => {
     console.log("Summary is returning...");
     const { summaryContainerStyle, summaryLabelStyle, summaryLabel, summaryRowStyle, sumColumns, dataToRender } = useTableContext();
 
@@ -214,7 +214,7 @@ export const Summary = memo(() => {
         </div>
     );
 });
-export const TableBody = memo(() => {
+export const TableBody = memo((props:any) => {
     console.log("TableBody is returning...");
     const { handleFilterClick, onRowClick, dataToRender, keysToRender, rowStyles, cellStyle } = useTableContext();
     return (

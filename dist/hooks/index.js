@@ -581,7 +581,7 @@ var Filter = (0, import_react.memo)(function(param) {
         ]
     });
 });
-var ExportToExcel = (0, import_react.memo)(function() {
+var ExportToExcel = (0, import_react.memo)(function(props) {
     console.log("ExportToExcel is returning...");
     var _useTableContext = useTableContext(), exportToExcelKeys = _useTableContext.exportToExcelKeys, dataToAddToExcelTable = _useTableContext.dataToAddToExcelTable, excelFileName = _useTableContext.excelFileName, dataToRender = _useTableContext.dataToRender, headers = _useTableContext.headers, sumColumns = _useTableContext.sumColumns, export_excel_label = _useTableContext.export_excel_label;
     var addPropertiesToExcel = function(properties) {
@@ -662,7 +662,7 @@ var ExportToExcel = (0, import_react.memo)(function() {
         children: exportToExcelSvg()
     });
 });
-var Search = (0, import_react.memo)(function() {
+var Search = (0, import_react.memo)(function(props) {
     console.log("Search is returning...");
     var _useTableContext = useTableContext(), searchQuery = _useTableContext.searchQuery, handleSearch = _useTableContext.handleSearch, searchPlaceHolder = _useTableContext.searchPlaceHolder, searchInputClassName = _useTableContext.searchInputClassName, searchInputStyle = _useTableContext.searchInputStyle;
     return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("input", {
@@ -674,7 +674,7 @@ var Search = (0, import_react.memo)(function() {
         style: searchInputStyle
     });
 });
-var Summary = (0, import_react.memo)(function() {
+var Summary = (0, import_react.memo)(function(props) {
     console.log("Summary is returning...");
     var _useTableContext = useTableContext(), summaryContainerStyle = _useTableContext.summaryContainerStyle, summaryLabelStyle = _useTableContext.summaryLabelStyle, summaryLabel = _useTableContext.summaryLabel, summaryRowStyle = _useTableContext.summaryRowStyle, sumColumns = _useTableContext.sumColumns, dataToRender = _useTableContext.dataToRender;
     return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", {
@@ -712,7 +712,7 @@ var Summary = (0, import_react.memo)(function() {
         ]
     });
 });
-var TableBody = (0, import_react.memo)(function() {
+var TableBody = (0, import_react.memo)(function(props) {
     console.log("TableBody is returning...");
     var _useTableContext = useTableContext(), handleFilterClick = _useTableContext.handleFilterClick, onRowClick = _useTableContext.onRowClick, dataToRender = _useTableContext.dataToRender, keysToRender = _useTableContext.keysToRender, rowStyles = _useTableContext.rowStyles, cellStyle = _useTableContext.cellStyle;
     return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("tbody", {

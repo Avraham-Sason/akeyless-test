@@ -107,9 +107,9 @@ export const Table = (props: TableProps) => {
             {/* container header */}
             <div className="flex justify-start gap-2 ">
                 {/* search */}
-                {includeSearch && <Search />}
+                {includeSearch && <Search render={false} />}
                 {/* export to excel */}
-                {exportToExcelKeys && <ExportToExcel />}
+                {exportToExcelKeys && <ExportToExcel render={false} />}
                 {/* optional element */}
                 {optionalElement && optionalElement}
             </div>
@@ -117,11 +117,11 @@ export const Table = (props: TableProps) => {
             <div style={tableContainerStyle} className={`animate-slide-in-up overflow-y-auto  ${tableContainerClass}`}>
                 <table style={tableStyle} className="min-w-full text-sm font-light relative">
                     <TableHead />
-                    <TableBody />
+                    <TableBody render={false}/>
                 </table>
             </div>
             {/* summary */}
-            {sumColumns && <Summary />}
+            {sumColumns && <Summary render={false} />}
         </TableProvider>
     );
 };
