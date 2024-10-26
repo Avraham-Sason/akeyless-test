@@ -10,4 +10,10 @@ declare const useValidation: (validationType: string, requireError?: string) => 
     "data-validation": string;
 };
 
-export { handleChange, handleInvalid, handlePaste, useValidation };
+declare const setState: <T>(updater: T | ((state: T) => T), set: (fn: (state: any) => any) => void, stateName: string) => void;
+declare const createSelectors: <T extends object>(store: any) => { [K in keyof T]: () => T[K]; };
+declare const useStoreValues: <T extends object>(store: {
+    use: { [K in keyof T]: () => T[K]; };
+}, keys: Array<keyof T>) => Partial<T>;
+
+export { createSelectors, handleChange, handleInvalid, handlePaste, setState, useStoreValues, useValidation };

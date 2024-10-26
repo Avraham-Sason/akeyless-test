@@ -1,3 +1,4 @@
+import * as zustand from 'zustand';
 import { TObject } from 'akeyless-types-commons';
 import { Dispatch, SetStateAction, ReactNode } from 'react';
 
@@ -97,5 +98,6 @@ declare const useSearch: () => {
     searchQuery: string;
     handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
+declare const useCreateTableStore: () => zustand.UseBoundStore<zustand.StoreApi<any>>;
 
-export { useFilter, useSearch, useSomeHook, useSort, useTableContext };
+export { useCreateTableStore, useFilter, useSearch, useSomeHook, useSort, useTableContext };

@@ -515,6 +515,86 @@ var exportToExcelSvg = function() {
 };
 // src/hooks/table.ts
 import { useContext, useEffect, useState } from "react";
+import { create } from "zustand";
+// src/helpers/forms.ts
+var handleInvalid = function(e, requireError) {
+    e.target.setCustomValidity(requireError || "This filed is required !");
+};
+var handleChange = function(e) {
+    e.target.setCustomValidity("");
+    var validation = e.target.getAttribute("data-validation");
+    if (validation === "text") {
+        var cleanedValue = e.target.value.replace(/[^a-zA-Zא-ת\- ]/g, "");
+        e.target.value = cleanedValue;
+    } else if (validation === "numbers") {
+        var cleanedValue1 = e.target.value.replace(/[^0-9\- +]/g, "");
+        e.target.value = cleanedValue1;
+    } else if (validation === "numbersOnly") {
+        var cleanedValue2 = e.target.value.replace(/[^0-9]/g, "");
+        e.target.value = cleanedValue2;
+    } else if (validation === "price") {
+        var cleanedValue3 = e.target.value.replace(/[^0-9\.]/g, "");
+        e.target.value = cleanedValue3;
+    } else if (validation === "textNumbers") {
+        var cleanedValue4 = e.target.value.replace(/[^a-zA-Zא-ת0-9\- +]/g, "");
+        e.target.value = cleanedValue4;
+    } else if (validation === "email") {
+        var cleanedValue5 = e.target.value.replace(/[^a-zA-Zא-ת0-9.@\- ]/g, "");
+        e.target.value = cleanedValue5;
+    } else if (validation === "color") {
+        var cleanedValue6 = e.target.value.replace(/[^#0-9A-Fa-f]/g, "");
+        e.target.value = cleanedValue6;
+    } else if (validation === "address") {
+        var cleanedValue7 = e.target.value.replace(/[^a-zA-Zא-ת0-9\-., ]/g, "");
+        e.target.value = cleanedValue7;
+    } else if (validation === "cars") {
+        var cleanedValue8 = e.target.value.replace(/[^a-zA-Zא-ת0-9,_]/g, "");
+        e.target.value = cleanedValue8;
+    } else if (validation === "charts") {
+        var cleanedValue9 = e.target.value.replace(/[^a-zA-Zא-ת0-9\-.,_@! ]/g, "");
+        e.target.value = cleanedValue9;
+    } else {
+        e.target.value = e.target.value;
+    }
+};
+var handlePaste = function(e) {
+    var validation = e.currentTarget.getAttribute("data-validation");
+    var pasteData = e.clipboardData.getData("text");
+    if (validation === "text") {
+        pasteData = pasteData.replace(/[^a-zA-Zא-ת\- ]/g, "");
+    } else if (validation === "numbers") {
+        pasteData = pasteData.replace(/[^0-9\- +]/g, "");
+    } else if (validation === "numbersOnly") {
+        pasteData = pasteData.replace(/[^0-9]/g, "");
+    } else if (validation === "price") {
+        pasteData = pasteData.replace(/[^0-9\.]/g, "");
+    } else if (validation === "textNumbers") {
+        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9\- +]/g, "");
+    } else if (validation === "email") {
+        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9.@\- ]/g, "");
+    } else if (validation === "color") {
+        pasteData = pasteData.replace(/[^#0-9A-Fa-f]/g, "");
+    } else if (validation === "address") {
+        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9\-., ]/g, "");
+    } else if (validation === "cars") {
+        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9,_]/g, "");
+    } else if (validation === "charts") {
+        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9\-.,_@! ]/g, "");
+    }
+    e.preventDefault();
+    document.execCommand("insertText", false, pasteData);
+};
+var useValidation = function(validationType, requireError) {
+    return {
+        onChange: handleChange,
+        onPaste: handlePaste,
+        onInvalid: function(e) {
+            return handleInvalid(e, requireError);
+        },
+        "data-validation": validationType
+    };
+};
+// src/hooks/table.ts
 var useTableContext = function() {
     var context = useContext(TableContext);
     if (!context) {
@@ -636,7 +716,36 @@ var getFixedNumber = function() {
     var sum_value = number % 1 === 0 ? number : number.toFixed(fix).replace(/\.?0+$/, "");
     return String(sum_value);
 };
-var TableHead = function() {
+var TableRow = function(param) {
+    var item = param.item;
+    var _useTableContext = useTableContext(), rowStyles = _useTableContext.rowStyles, cellStyle = _useTableContext.cellStyle, keysToRender = _useTableContext.keysToRender, onRowClick = _useTableContext.onRowClick;
+    return /* @__PURE__ */ jsx4("tr", {
+        onClick: function() {
+            return onRowClick(item);
+        },
+        style: rowStyles,
+        children: keysToRender.map(function(key, index) {
+            return /* @__PURE__ */ jsx4(TableCell, {
+                value: item[key]
+            }, index);
+        })
+    });
+};
+var TableCell = function(param) {
+    var value = param.value;
+    var cellStyle = useTableContext().cellStyle;
+    return /* @__PURE__ */ jsx4("td", {
+        title: [
+            "string",
+            "number",
+            "boolean"
+        ].includes(typeof value === "undefined" ? "undefined" : _type_of(value)) ? value : "",
+        style: cellStyle,
+        className: "chivo ellipsis border-black border-[1px] max-w-[90px] px-[4px] text-center",
+        children: value
+    });
+};
+var TableHead = memo(function(props) {
     var _useTableContext = useTableContext(), headers = _useTableContext.headers, headerStyle = _useTableContext.headerStyle, headerCellStyle = _useTableContext.headerCellStyle, sortColumn = _useTableContext.sortColumn, handleSort = _useTableContext.handleSort, sortKeys = _useTableContext.sortKeys, sortOrder = _useTableContext.sortOrder, _useTableContext_filterableColumns = _useTableContext.filterableColumns, filterableColumns = _useTableContext_filterableColumns === void 0 ? [] : _useTableContext_filterableColumns, sort_label = _useTableContext.sort_label;
     var sortDisplay = useMemo(function() {
         return Boolean(sortKeys.length);
@@ -677,42 +786,25 @@ var TableHead = function() {
             })
         })
     });
-};
-var TableRow = function(param) {
-    var item = param.item;
-    var _useTableContext = useTableContext(), rowStyles = _useTableContext.rowStyles, cellStyle = _useTableContext.cellStyle, keysToRender = _useTableContext.keysToRender, onRowClick = _useTableContext.onRowClick;
-    return /* @__PURE__ */ jsx4("tr", {
+});
+var TableBody = memo(function(props) {
+    var _useTableContext = useTableContext(), handleFilterClick = _useTableContext.handleFilterClick, onRowClick = _useTableContext.onRowClick, dataToRender = _useTableContext.dataToRender, keysToRender = _useTableContext.keysToRender, rowStyles = _useTableContext.rowStyles, cellStyle = _useTableContext.cellStyle;
+    return /* @__PURE__ */ jsx4("tbody", {
         onClick: function() {
-            return onRowClick(item);
+            return handleFilterClick("");
         },
-        style: rowStyles,
-        children: keysToRender.map(function(key, index) {
-            return /* @__PURE__ */ jsx4(TableCell, {
-                value: item[key]
+        children: dataToRender.map(function(item, index) {
+            return /* @__PURE__ */ jsx4(TableRow, {
+                item: item
             }, index);
         })
     });
-};
-var TableCell = function(param) {
-    var value = param.value;
-    var cellStyle = useTableContext().cellStyle;
-    return /* @__PURE__ */ jsx4("td", {
-        title: [
-            "string",
-            "number",
-            "boolean"
-        ].includes(typeof value === "undefined" ? "undefined" : _type_of(value)) ? value : "",
-        style: cellStyle,
-        className: "chivo ellipsis border-black border-[1px] max-w-[90px] px-[4px] text-center",
-        children: value
-    });
-};
+});
 var Filter = memo(function(param) {
     var filterableColumn = param.filterableColumn, index = param.index;
     var _filters_filterableColumn_dataKey, _filters_filterableColumn_dataKey1, _filterOptions_filterableColumn_dataKey;
     var _useTableContext = useTableContext(), lang = _useTableContext.lang, headers = _useTableContext.headers, filters = _useTableContext.filters, filterOptions = _useTableContext.filterOptions, filterPopupsDisplay = _useTableContext.filterPopupsDisplay, handleFilterChange = _useTableContext.handleFilterChange, handleFilterClick = _useTableContext.handleFilterClick, filterLabel = _useTableContext.filterLabel;
     var displayRight = lang === "he" && index === headers.length - 1 || lang === "en" && index !== headers.length - 1;
-    console.log("Filter is returning...");
     return /* @__PURE__ */ jsxs4(Fragment2, {
         children: [
             /* @__PURE__ */ jsx4("button", {
@@ -774,7 +866,6 @@ var Filter = memo(function(param) {
     });
 });
 var ExportToExcel = memo(function(props) {
-    console.log("ExportToExcel is returning...");
     var _useTableContext = useTableContext(), exportToExcelKeys = _useTableContext.exportToExcelKeys, dataToAddToExcelTable = _useTableContext.dataToAddToExcelTable, excelFileName = _useTableContext.excelFileName, dataToRender = _useTableContext.dataToRender, headers = _useTableContext.headers, sumColumns = _useTableContext.sumColumns, export_excel_label = _useTableContext.export_excel_label;
     var addPropertiesToExcel = function(properties) {
         var newData = _to_consumable_array(dataToRender);
@@ -855,7 +946,6 @@ var ExportToExcel = memo(function(props) {
     });
 });
 var Search = memo(function(props) {
-    console.log("Search is returning...");
     var _useTableContext = useTableContext(), searchQuery = _useTableContext.searchQuery, handleSearch = _useTableContext.handleSearch, searchPlaceHolder = _useTableContext.searchPlaceHolder, searchInputClassName = _useTableContext.searchInputClassName, searchInputStyle = _useTableContext.searchInputStyle;
     return /* @__PURE__ */ jsx4("input", {
         className: "w-40 border-black border-[1px] px-2 rounded-md ".concat(searchInputClassName),
@@ -867,7 +957,6 @@ var Search = memo(function(props) {
     });
 });
 var Summary = memo(function(props) {
-    console.log("Summary is returning...");
     var _useTableContext = useTableContext(), summaryContainerStyle = _useTableContext.summaryContainerStyle, summaryLabelStyle = _useTableContext.summaryLabelStyle, summaryLabel = _useTableContext.summaryLabel, summaryRowStyle = _useTableContext.summaryRowStyle, sumColumns = _useTableContext.sumColumns, dataToRender = _useTableContext.dataToRender;
     return /* @__PURE__ */ jsxs4("div", {
         style: summaryContainerStyle,
@@ -904,20 +993,6 @@ var Summary = memo(function(props) {
         ]
     });
 });
-var TableBody = memo(function(props) {
-    console.log("TableBody is returning...");
-    var _useTableContext = useTableContext(), handleFilterClick = _useTableContext.handleFilterClick, onRowClick = _useTableContext.onRowClick, dataToRender = _useTableContext.dataToRender, keysToRender = _useTableContext.keysToRender, rowStyles = _useTableContext.rowStyles, cellStyle = _useTableContext.cellStyle;
-    return /* @__PURE__ */ jsx4("tbody", {
-        onClick: function() {
-            return handleFilterClick("");
-        },
-        children: dataToRender.map(function(item, index) {
-            return /* @__PURE__ */ jsx4(TableRow, {
-                item: item
-            }, index);
-        })
-    });
-});
 // src/components/tables/Table.tsx
 import { createContext, useState as useState2 } from "react";
 import { jsx as jsx5, jsxs as jsxs5 } from "react/jsx-runtime";
@@ -947,7 +1022,6 @@ var TableProvider = function(props) {
         keysToRender: keysToRender,
         sortKeys: sortKeys
     }), filters = _useFilter.filters, filterPopupsDisplay = _useFilter.filterPopupsDisplay, filterOptions = _useFilter.filterOptions, handleFilterChange = _useFilter.handleFilterChange, handleFilterClick = _useFilter.handleFilterClick;
-    console.log("table rendered");
     var providerValues = _object_spread_props(_object_spread({}, props), {
         sortColumn: sortColumn,
         sortOrder: sortOrder,
@@ -1024,85 +1098,6 @@ var Loader = function(param) {
 // src/components/forms/forms.tsx
 import { useState as useState3 } from "react";
 import moment from "moment";
-// src/helpers/forms.ts
-var handleInvalid = function(e, requireError) {
-    e.target.setCustomValidity(requireError || "This filed is required !");
-};
-var handleChange = function(e) {
-    e.target.setCustomValidity("");
-    var validation = e.target.getAttribute("data-validation");
-    if (validation === "text") {
-        var cleanedValue = e.target.value.replace(/[^a-zA-Zא-ת\- ]/g, "");
-        e.target.value = cleanedValue;
-    } else if (validation === "numbers") {
-        var cleanedValue1 = e.target.value.replace(/[^0-9\- +]/g, "");
-        e.target.value = cleanedValue1;
-    } else if (validation === "numbersOnly") {
-        var cleanedValue2 = e.target.value.replace(/[^0-9]/g, "");
-        e.target.value = cleanedValue2;
-    } else if (validation === "price") {
-        var cleanedValue3 = e.target.value.replace(/[^0-9\.]/g, "");
-        e.target.value = cleanedValue3;
-    } else if (validation === "textNumbers") {
-        var cleanedValue4 = e.target.value.replace(/[^a-zA-Zא-ת0-9\- +]/g, "");
-        e.target.value = cleanedValue4;
-    } else if (validation === "email") {
-        var cleanedValue5 = e.target.value.replace(/[^a-zA-Zא-ת0-9.@\- ]/g, "");
-        e.target.value = cleanedValue5;
-    } else if (validation === "color") {
-        var cleanedValue6 = e.target.value.replace(/[^#0-9A-Fa-f]/g, "");
-        e.target.value = cleanedValue6;
-    } else if (validation === "address") {
-        var cleanedValue7 = e.target.value.replace(/[^a-zA-Zא-ת0-9\-., ]/g, "");
-        e.target.value = cleanedValue7;
-    } else if (validation === "cars") {
-        var cleanedValue8 = e.target.value.replace(/[^a-zA-Zא-ת0-9,_]/g, "");
-        e.target.value = cleanedValue8;
-    } else if (validation === "charts") {
-        var cleanedValue9 = e.target.value.replace(/[^a-zA-Zא-ת0-9\-.,_@! ]/g, "");
-        e.target.value = cleanedValue9;
-    } else {
-        e.target.value = e.target.value;
-    }
-};
-var handlePaste = function(e) {
-    var validation = e.currentTarget.getAttribute("data-validation");
-    var pasteData = e.clipboardData.getData("text");
-    if (validation === "text") {
-        pasteData = pasteData.replace(/[^a-zA-Zא-ת\- ]/g, "");
-    } else if (validation === "numbers") {
-        pasteData = pasteData.replace(/[^0-9\- +]/g, "");
-    } else if (validation === "numbersOnly") {
-        pasteData = pasteData.replace(/[^0-9]/g, "");
-    } else if (validation === "price") {
-        pasteData = pasteData.replace(/[^0-9\.]/g, "");
-    } else if (validation === "textNumbers") {
-        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9\- +]/g, "");
-    } else if (validation === "email") {
-        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9.@\- ]/g, "");
-    } else if (validation === "color") {
-        pasteData = pasteData.replace(/[^#0-9A-Fa-f]/g, "");
-    } else if (validation === "address") {
-        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9\-., ]/g, "");
-    } else if (validation === "cars") {
-        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9,_]/g, "");
-    } else if (validation === "charts") {
-        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9\-.,_@! ]/g, "");
-    }
-    e.preventDefault();
-    document.execCommand("insertText", false, pasteData);
-};
-var useValidation = function(validationType, requireError) {
-    return {
-        onChange: handleChange,
-        onPaste: handlePaste,
-        onInvalid: function(e) {
-            return handleInvalid(e, requireError);
-        },
-        "data-validation": validationType
-    };
-};
-// src/components/forms/forms.tsx
 import { jsx as jsx7, jsxs as jsxs6 } from "react/jsx-runtime";
 var InputContainer = function(param) {
     var _param_name = param.name, name = _param_name === void 0 ? "" : _param_name, _param_inputType = param.inputType, inputType = _param_inputType === void 0 ? "text" : _param_inputType, _param_labelContent = param.labelContent, labelContent = _param_labelContent === void 0 ? "" : _param_labelContent, _param_defaultValue = param.defaultValue, defaultValue = _param_defaultValue === void 0 ? "" : _param_defaultValue, _param_validationName = param.validationName, validationName = _param_validationName === void 0 ? "textNumbers" : _param_validationName, _param_containerClassName = param.containerClassName, containerClassName = _param_containerClassName === void 0 ? "" : _param_containerClassName, _param_labelClassName = param.labelClassName, labelClassName = _param_labelClassName === void 0 ? "" : _param_labelClassName, _param_elementClassName = param.elementClassName, elementClassName = _param_elementClassName === void 0 ? "" : _param_elementClassName, _param_required = param.required, required = _param_required === void 0 ? false : _param_required, validationType = param.validationType, onKeyDown = param.onKeyDown;

@@ -298,6 +298,9 @@ var __toCommonJS = function(mod) {
 // src/hooks/index.ts
 var hooks_exports = {};
 __export(hooks_exports, {
+    useCreateTableStore: function() {
+        return useCreateTableStore;
+    },
     useFilter: function() {
         return useFilter;
     },
@@ -329,6 +332,36 @@ var import_react = require("react");
 var import_jsx_runtime2 = require("react/jsx-runtime");
 // src/assets/table.tsx
 var import_jsx_runtime3 = require("react/jsx-runtime");
+var sortSvg = function(upside_down) {
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("svg", {
+        style: upside_down ? {
+            transform: "rotate(180deg)"
+        } : {},
+        className: "absolute top-[3px] left-1",
+        version: "1.0",
+        xmlns: "http://www.w3.org/2000/svg",
+        width: "13",
+        height: "13",
+        viewBox: "0 0 1536.000000 1536.000000",
+        preserveAspectRatio: "xMidYMid meet",
+        children: [
+            " ",
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("g", {
+                transform: "translate(0.000000,1536.000000) scale(0.100000,-0.100000)",
+                fill: "#000000",
+                stroke: "none",
+                children: [
+                    " ",
+                    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", {
+                        d: "M6465 15350 c3 -5 -27 -25 -68 -44 -40 -19 -103 -57 -140 -86 -37 -28 -584 -569 -1215 -1203 -631 -633 -1699 -1705 -2374 -2382 -674 -676 -1237 -1243 -1249 -1260 -13 -16 -37 -46 -53 -65 -36 -41 -108 -185 -126 -250 -32 -119 -30 -352 3 -465 35 -120 102 -231 197 -325 132 -133 288 -208 479 -231 214 -26 418 31 596 166 39 29 703 685 1477 1458 774 772 1432 1421 1461 1441 105 73 239 71 347 -3 52 -36 70 -57 107 -131 17 -33 18 -252 24 -4710 6 -4979 3 -4715 49 -4855 118 -363 507 -605 876 -545 77 13 201 53 245 79 19 12 45 26 59 31 41 18 157 119 206 179 43 53 113 173 127 217 3 11 16 51 29 89 l22 70 6 4690 c5 4887 4 4736 43 4784 6 7 16 23 22 34 20 42 116 103 188 120 42 10 75 13 85 8 10 -5 34 -11 55 -15 20 -4 59 -21 85 -38 26 -17 686 -671 1467 -1453 781 -782 1443 -1439 1470 -1459 68 -49 178 -106 245 -128 30 -10 100 -24 155 -32 87 -12 114 -12 200 1 128 18 187 39 360 131 37 19 178 162 211 212 36 56 94 176 94 194 0 7 7 31 16 52 23 55 23 352 0 406 -9 21 -16 46 -16 56 0 30 -83 185 -130 242 -80 98 -4793 4810 -4865 4865 -66 50 -182 111 -250 132 -16 5 -29 15 -27 21 1 9 -62 12 -249 12 -157 0 -248 -4 -244 -10z"
+                    }),
+                    " "
+                ]
+            }),
+            " "
+        ]
+    });
+};
 var emptyFilterSvg = function(solid) {
     return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_jsx_runtime3.Fragment, {
         children: solid ? /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("svg", {
@@ -515,12 +548,66 @@ var TableCell = function(param) {
         children: value
     });
 };
+var TableHead = (0, import_react.memo)(function(props) {
+    var _useTableContext = useTableContext(), headers = _useTableContext.headers, headerStyle = _useTableContext.headerStyle, headerCellStyle = _useTableContext.headerCellStyle, sortColumn = _useTableContext.sortColumn, handleSort = _useTableContext.handleSort, sortKeys = _useTableContext.sortKeys, sortOrder = _useTableContext.sortOrder, _useTableContext_filterableColumns = _useTableContext.filterableColumns, filterableColumns = _useTableContext_filterableColumns === void 0 ? [] : _useTableContext_filterableColumns, sort_label = _useTableContext.sort_label;
+    var sortDisplay = (0, import_react.useMemo)(function() {
+        return Boolean(sortKeys.length);
+    }, [
+        sortKeys
+    ]);
+    return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("thead", {
+        className: "bg-gray-50 sticky top-0",
+        children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("tr", {
+            style: headerStyle,
+            children: headers.map(function(header, index) {
+                var filterableColumn = filterableColumns.find(function(col) {
+                    return col.header === header;
+                });
+                return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("th", {
+                    title: sortDisplay ? "".concat(sort_label, " ").concat(header) : header,
+                    style: headerCellStyle,
+                    className: " border-black border-[1px] max-w-[130px] px-2 text-center relative",
+                    children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", {
+                            className: "px-2 ".concat(sortDisplay ? "cursor-pointer" : ""),
+                            onClick: function() {
+                                return sortDisplay && handleSort(index);
+                            },
+                            children: header
+                        }),
+                        sortDisplay && sortColumn === index && (sortOrder === "asc" ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_jsx_runtime4.Fragment, {
+                            children: sortSvg()
+                        }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_jsx_runtime4.Fragment, {
+                            children: sortSvg(true)
+                        })),
+                        filterableColumn && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(Filter, {
+                            filterableColumn: filterableColumn,
+                            index: index
+                        })
+                    ]
+                }, index);
+            })
+        })
+    });
+});
+var TableBody = (0, import_react.memo)(function(props) {
+    var _useTableContext = useTableContext(), handleFilterClick = _useTableContext.handleFilterClick, onRowClick = _useTableContext.onRowClick, dataToRender = _useTableContext.dataToRender, keysToRender = _useTableContext.keysToRender, rowStyles = _useTableContext.rowStyles, cellStyle = _useTableContext.cellStyle;
+    return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("tbody", {
+        onClick: function() {
+            return handleFilterClick("");
+        },
+        children: dataToRender.map(function(item, index) {
+            return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(TableRow, {
+                item: item
+            }, index);
+        })
+    });
+});
 var Filter = (0, import_react.memo)(function(param) {
     var filterableColumn = param.filterableColumn, index = param.index;
     var _filters_filterableColumn_dataKey, _filters_filterableColumn_dataKey1, _filterOptions_filterableColumn_dataKey;
     var _useTableContext = useTableContext(), lang = _useTableContext.lang, headers = _useTableContext.headers, filters = _useTableContext.filters, filterOptions = _useTableContext.filterOptions, filterPopupsDisplay = _useTableContext.filterPopupsDisplay, handleFilterChange = _useTableContext.handleFilterChange, handleFilterClick = _useTableContext.handleFilterClick, filterLabel = _useTableContext.filterLabel;
     var displayRight = lang === "he" && index === headers.length - 1 || lang === "en" && index !== headers.length - 1;
-    console.log("Filter is returning...");
     return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_jsx_runtime4.Fragment, {
         children: [
             /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", {
@@ -582,7 +669,6 @@ var Filter = (0, import_react.memo)(function(param) {
     });
 });
 var ExportToExcel = (0, import_react.memo)(function(props) {
-    console.log("ExportToExcel is returning...");
     var _useTableContext = useTableContext(), exportToExcelKeys = _useTableContext.exportToExcelKeys, dataToAddToExcelTable = _useTableContext.dataToAddToExcelTable, excelFileName = _useTableContext.excelFileName, dataToRender = _useTableContext.dataToRender, headers = _useTableContext.headers, sumColumns = _useTableContext.sumColumns, export_excel_label = _useTableContext.export_excel_label;
     var addPropertiesToExcel = function(properties) {
         var newData = _to_consumable_array(dataToRender);
@@ -663,7 +749,6 @@ var ExportToExcel = (0, import_react.memo)(function(props) {
     });
 });
 var Search = (0, import_react.memo)(function(props) {
-    console.log("Search is returning...");
     var _useTableContext = useTableContext(), searchQuery = _useTableContext.searchQuery, handleSearch = _useTableContext.handleSearch, searchPlaceHolder = _useTableContext.searchPlaceHolder, searchInputClassName = _useTableContext.searchInputClassName, searchInputStyle = _useTableContext.searchInputStyle;
     return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("input", {
         className: "w-40 border-black border-[1px] px-2 rounded-md ".concat(searchInputClassName),
@@ -675,7 +760,6 @@ var Search = (0, import_react.memo)(function(props) {
     });
 });
 var Summary = (0, import_react.memo)(function(props) {
-    console.log("Summary is returning...");
     var _useTableContext = useTableContext(), summaryContainerStyle = _useTableContext.summaryContainerStyle, summaryLabelStyle = _useTableContext.summaryLabelStyle, summaryLabel = _useTableContext.summaryLabel, summaryRowStyle = _useTableContext.summaryRowStyle, sumColumns = _useTableContext.sumColumns, dataToRender = _useTableContext.dataToRender;
     return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", {
         style: summaryContainerStyle,
@@ -712,20 +796,6 @@ var Summary = (0, import_react.memo)(function(props) {
         ]
     });
 });
-var TableBody = (0, import_react.memo)(function(props) {
-    console.log("TableBody is returning...");
-    var _useTableContext = useTableContext(), handleFilterClick = _useTableContext.handleFilterClick, onRowClick = _useTableContext.onRowClick, dataToRender = _useTableContext.dataToRender, keysToRender = _useTableContext.keysToRender, rowStyles = _useTableContext.rowStyles, cellStyle = _useTableContext.cellStyle;
-    return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("tbody", {
-        onClick: function() {
-            return handleFilterClick("");
-        },
-        children: dataToRender.map(function(item, index) {
-            return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(TableRow, {
-                item: item
-            }, index);
-        })
-    });
-});
 // src/components/tables/Table.tsx
 var import_react2 = require("react");
 var import_jsx_runtime5 = require("react/jsx-runtime");
@@ -736,8 +806,16 @@ var import_jsx_runtime6 = require("react/jsx-runtime");
 // src/components/forms/forms.tsx
 var import_react3 = require("react");
 var import_moment = __toESM(require("moment"));
+// src/helpers/store.ts
+var setState = function(updater, set, stateName) {
+    return set(function(state) {
+        return _define_property({}, stateName, typeof updater === "function" ? updater(state[stateName]) : updater);
+    });
+};
+// src/components/forms/forms.tsx
 var import_jsx_runtime7 = require("react/jsx-runtime");
 // src/hooks/table.ts
+var import_zustand = require("zustand");
 var useTableContext = function() {
     var context = (0, import_react4.useContext)(TableContext);
     if (!context) {
@@ -852,8 +930,39 @@ var useSearch = function() {
         handleSearch: handleSearch
     };
 };
+var useCreateTableStore = function() {
+    return (0, import_zustand.create)(function(set) {
+        return {
+            type: "office",
+            setType: function(updater) {
+                return setState(updater, set, "type");
+            },
+            site: null,
+            setSite: function(updater) {
+                return setState(updater, set, "site");
+            },
+            hierarchy: null,
+            setHierarchy: function(updater) {
+                return setState(updater, set, "hierarchy");
+            },
+            globalHierarchy: null,
+            setGlobalHierarchy: function(updater) {
+                return setState(updater, set, "globalHierarchy");
+            },
+            sitesData: [],
+            setSitesData: function(updater) {
+                return setState(updater, set, "sitesData");
+            },
+            pathToExpended: [],
+            setPathToExpended: function(updater) {
+                return setState(updater, set, "pathToExpended");
+            }
+        };
+    });
+};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+    useCreateTableStore: useCreateTableStore,
     useFilter: useFilter,
     useSearch: useSearch,
     useSomeHook: useSomeHook,

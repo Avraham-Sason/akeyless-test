@@ -11,7 +11,32 @@ export const getFixedNumber = (number = 0, fix = 4) => {
     return String(sum_value);
 };
 
-export const TableHead = () => {
+export const TableRow = ({ item }: { item: TObject<any> }) => {
+    const { rowStyles, cellStyle, keysToRender, onRowClick } = useTableContext();
+
+    return (
+        <tr onClick={() => onRowClick(item)} style={rowStyles}>
+            {keysToRender.map((key, index) => (
+                <TableCell key={index} value={item[key]} />
+            ))}
+        </tr>
+    );
+};
+
+export const TableCell = ({ value }: { value: any }) => {
+    const { cellStyle } = useTableContext();
+    return (
+        <td
+            title={["string", "number", "boolean"].includes(typeof value) ? value : ""}
+            style={cellStyle}
+            className="chivo ellipsis border-black border-[1px] max-w-[90px] px-[4px] text-center"
+        >
+            {value}
+        </td>
+    );
+};
+
+export const TableHead = memo((props: any) => {
     const {
         headers,
         headerStyle,
@@ -50,37 +75,22 @@ export const TableHead = () => {
             </tr>
         </thead>
     );
-};
+});
 
-export const TableRow = ({ item }: { item: TObject<any> }) => {
-    const { rowStyles, cellStyle, keysToRender, onRowClick } = useTableContext();
-
+export const TableBody = memo((props: any) => {
+    const { handleFilterClick, onRowClick, dataToRender, keysToRender, rowStyles, cellStyle } = useTableContext();
     return (
-        <tr onClick={() => onRowClick(item)} style={rowStyles}>
-            {keysToRender.map((key, index) => (
-                <TableCell key={index} value={item[key]} />
+        <tbody onClick={() => handleFilterClick("")}>
+            {dataToRender.map((item, index) => (
+                <TableRow key={index} item={item} />
             ))}
-        </tr>
+        </tbody>
     );
-};
-
-export const TableCell = ({ value }: { value: any }) => {
-    const { cellStyle } = useTableContext();
-    return (
-        <td
-            title={["string", "number", "boolean"].includes(typeof value) ? value : ""}
-            style={cellStyle}
-            className="chivo ellipsis border-black border-[1px] max-w-[90px] px-[4px] text-center"
-        >
-            {value}
-        </td>
-    );
-};
+});
 
 export const Filter = memo<FilterProps>(({ filterableColumn, index }) => {
     const { lang, headers, filters, filterOptions, filterPopupsDisplay, handleFilterChange, handleFilterClick, filterLabel } = useTableContext();
     const displayRight = (lang === "he" && index === headers.length - 1) || (lang === "en" && index !== headers.length - 1);
-    console.log("Filter is returning...");
 
     return (
         <>
@@ -124,8 +134,7 @@ export const Filter = memo<FilterProps>(({ filterableColumn, index }) => {
     );
 });
 
-export const ExportToExcel = memo((props:any) => {
-    console.log("ExportToExcel is returning...");
+export const ExportToExcel = memo((props: any) => {
     const { exportToExcelKeys, dataToAddToExcelTable, excelFileName, dataToRender, headers, sumColumns, export_excel_label } = useTableContext();
     const addPropertiesToExcel = (properties: { key: string; value: any; header: string }[]) => {
         let newData = [...dataToRender];
@@ -175,9 +184,7 @@ export const ExportToExcel = memo((props:any) => {
     );
 });
 
-export const Search = memo((props:any) => {
-    console.log("Search is returning...");
-
+export const Search = memo((props: any) => {
     const { searchQuery, handleSearch, searchPlaceHolder, searchInputClassName, searchInputStyle } = useTableContext();
     return (
         <input
@@ -191,8 +198,7 @@ export const Search = memo((props:any) => {
     );
 });
 
-export const Summary = memo((props:any) => {
-    console.log("Summary is returning...");
+export const Summary = memo((props: any) => {
     const { summaryContainerStyle, summaryLabelStyle, summaryLabel, summaryRowStyle, sumColumns, dataToRender } = useTableContext();
 
     return (
@@ -214,14 +220,4 @@ export const Summary = memo((props:any) => {
         </div>
     );
 });
-export const TableBody = memo((props:any) => {
-    console.log("TableBody is returning...");
-    const { handleFilterClick, onRowClick, dataToRender, keysToRender, rowStyles, cellStyle } = useTableContext();
-    return (
-        <tbody onClick={() => handleFilterClick("")}>
-            {dataToRender.map((item, index) => (
-                <TableRow key={index} item={item} />
-            ))}
-        </tbody>
-    );
-});
+

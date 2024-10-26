@@ -1,4 +1,17 @@
 "use strict";
+function _define_property(obj, key, value) {
+    if (key in obj) {
+        Object.defineProperty(obj, key, {
+            value: value,
+            enumerable: true,
+            configurable: true,
+            writable: true
+        });
+    } else {
+        obj[key] = value;
+    }
+    return obj;
+}
 function _type_of(obj) {
     "@swc/helpers - typeof";
     return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj;
@@ -52,6 +65,9 @@ var __toCommonJS = function(mod) {
 // src/helpers/index.ts
 var helpers_exports = {};
 __export(helpers_exports, {
+    createSelectors: function() {
+        return createSelectors;
+    },
     handleChange: function() {
         return handleChange;
     },
@@ -60,6 +76,12 @@ __export(helpers_exports, {
     },
     handlePaste: function() {
         return handlePaste;
+    },
+    setState: function() {
+        return setState;
+    },
+    useStoreValues: function() {
+        return useStoreValues;
     },
     useValidation: function() {
         return useValidation;
@@ -144,10 +166,55 @@ var useValidation = function(validationType, requireError) {
         "data-validation": validationType
     };
 };
+// src/helpers/store.ts
+var setState = function(updater, set, stateName) {
+    return set(function(state) {
+        return _define_property({}, stateName, typeof updater === "function" ? updater(state[stateName]) : updater);
+    });
+};
+var createSelectors = function(store) {
+    var selectors = {};
+    var _iteratorNormalCompletion = true, _didIteratorError = false, _iteratorError = undefined;
+    try {
+        var _loop = function() {
+            var k = _step.value;
+            selectors[k] = function() {
+                return store(function(s) {
+                    return s[k];
+                });
+            };
+        };
+        for(var _iterator = Object.keys(store.getState())[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true)_loop();
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally{
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return != null) {
+                _iterator.return();
+            }
+        } finally{
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+    return selectors;
+};
+var useStoreValues = function(store, keys) {
+    var result = {};
+    keys.forEach(function(key) {
+        result[key] = store.use[key]();
+    });
+    return result;
+};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+    createSelectors: createSelectors,
     handleChange: handleChange,
     handleInvalid: handleInvalid,
     handlePaste: handlePaste,
+    setState: setState,
+    useStoreValues: useStoreValues,
     useValidation: useValidation
 });

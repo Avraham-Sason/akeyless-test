@@ -66,7 +66,6 @@ export const TableProvider = (props: TableProps & { children: React.ReactNode })
         keysToRender,
         sortKeys,
     });
-    console.log("table rendered");
     const providerValues = {
         ...props,
         sortColumn,

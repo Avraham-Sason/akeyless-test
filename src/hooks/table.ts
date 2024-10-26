@@ -2,6 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { TableContext } from "../components";
 import { TObject } from "akeyless-types-commons";
 import { UseFilterProps } from "../types";
+import { create } from "zustand";
+import { setState } from "../helpers";
 
 export const useTableContext = () => {
     const context = useContext(TableContext);
@@ -102,4 +104,21 @@ export const useSearch = () => {
         setSearchQuery(e.target.value);
     };
     return { searchQuery, handleSearch };
+};
+
+export const useCreateTableStore = () => {
+    return create<any>((set) => ({
+        type: "office",
+        setType: (updater) => setState(updater, set, "type"),
+        site: null,
+        setSite: (updater) => setState(updater, set, "site"),
+        hierarchy: null,
+        setHierarchy: (updater) => setState(updater, set, "hierarchy"),
+        globalHierarchy: null,
+        setGlobalHierarchy: (updater) => setState(updater, set, "globalHierarchy"),
+        sitesData: [],
+        setSitesData: (updater) => setState(updater, set, "sitesData"),
+        pathToExpended: [],
+        setPathToExpended: (updater) => setState(updater, set, "pathToExpended"),
+    }));
 };

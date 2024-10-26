@@ -1,4 +1,17 @@
 // src/helpers/forms.ts
+function _define_property(obj, key, value) {
+    if (key in obj) {
+        Object.defineProperty(obj, key, {
+            value: value,
+            enumerable: true,
+            configurable: true,
+            writable: true
+        });
+    } else {
+        obj[key] = value;
+    }
+    return obj;
+}
 var handleInvalid = function(e, requireError) {
     e.target.setCustomValidity(requireError || "This filed is required !");
 };
@@ -76,4 +89,46 @@ var useValidation = function(validationType, requireError) {
         "data-validation": validationType
     };
 };
-export { handleChange, handleInvalid, handlePaste, useValidation };
+// src/helpers/store.ts
+var setState = function(updater, set, stateName) {
+    return set(function(state) {
+        return _define_property({}, stateName, typeof updater === "function" ? updater(state[stateName]) : updater);
+    });
+};
+var createSelectors = function(store) {
+    var selectors = {};
+    var _iteratorNormalCompletion = true, _didIteratorError = false, _iteratorError = undefined;
+    try {
+        var _loop = function() {
+            var k = _step.value;
+            selectors[k] = function() {
+                return store(function(s) {
+                    return s[k];
+                });
+            };
+        };
+        for(var _iterator = Object.keys(store.getState())[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true)_loop();
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally{
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return != null) {
+                _iterator.return();
+            }
+        } finally{
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+    return selectors;
+};
+var useStoreValues = function(store, keys) {
+    var result = {};
+    keys.forEach(function(key) {
+        result[key] = store.use[key]();
+    });
+    return result;
+};
+export { createSelectors, handleChange, handleInvalid, handlePaste, setState, useStoreValues, useValidation };
