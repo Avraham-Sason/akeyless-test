@@ -6,7 +6,7 @@
     "license": "ISC",
     "scripts": {
         "dev": "vite",
-        "build": "tsup",
+        "build": "powershell -ExecutionPolicy Bypass -File ./ps/build.ps1",
         "lint": "eslint .",
         "preview": "vite preview",
         "uc": "npm i git+https://github.com/akeylesspro/akeyless-types-commons.git"
