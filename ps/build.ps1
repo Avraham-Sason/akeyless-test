@@ -16,7 +16,7 @@ tsup src/hooks/index.ts --format "esm,cjs" --dts --out-dir dist/hooks
 Write-Output "------------------- Hooks have been built successfully! -------------------"
 
 Write-Output "------------------- Building types... -------------------"
-tsup src/types/index.ts --format "esm,cjs" --dts --out-dir dist/types --
+tsup src/types/index.ts --format "esm,cjs" --dts --out-dir dist/types
 Write-Output "------------------- Types have been built successfully! -------------------"
 
 Write-Output "=> Build process successfully completed!"

@@ -93,8 +93,8 @@ declare const useFilter: ({ data, dataToRender, setDataToRender, filterableColum
 };
 type SortOptions = "asc" | "desc";
 declare const useSort: () => {
-    sortColumn: number | null;
-    sortOrder: SortOptions | null;
+    sortColumn: number;
+    sortOrder: SortOptions;
     handleSort: (columnIndex: number) => void;
 };
 declare const useSearch: () => {
