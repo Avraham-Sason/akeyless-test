@@ -11,7 +11,7 @@ export default defineConfig({
     },
     outDir: "dist",
     format: ["esm"],
-    dts: false,
+    dts: true,
     sourcemap: true,
     splitting: false,
     clean: true,
