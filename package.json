@@ -1,5 +1,5 @@
 {
-    "name": "akeyless-client-commons",
+    "name": "akeyless-client-commons2",
     "private": false,
     "version": "0.0.0",
     "type": "module",
@@ -7,8 +7,7 @@
     "scripts": {
         "dev": "vite",
         "build": "powershell -ExecutionPolicy Bypass -File ./ps/build.ps1",
-        "lint": "eslint .",
-        "preview": "vite preview",
+        "deploy": "npm run build && git add . && git commit -am 'build' && git push origin main",
         "uc": "npm i git+https://github.com/akeylesspro/akeyless-types-commons.git"
     },
     "dependencies": {
