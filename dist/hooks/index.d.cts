@@ -1,8 +1,10 @@
+import * as zustand from 'zustand';
 import { TObject } from 'akeyless-types-commons';
 import { Dispatch, SetStateAction, ReactNode } from 'react';
 
+declare function useSafeEffect(callback: () => void, dependencies: any[], error_message?: string): void;
+
 type Direction = "rtl" | "ltr";
-type SetState<T> = (updater: ((prev: T) => T) | T) => void;
 
 type SortOptions = "asc" | "desc";
 interface FilterableColumn {
@@ -81,9 +83,24 @@ interface TableProps {
     onRowClick?: (data?: any) => void;
     direction?: Direction;
 }
-interface FilterProps {
-    index: number;
-    filterableColumn: FilterableColumn;
-}
 
-export type { Direction as D, FilterProps as F, SortOptions as S, TableProps as T, UseFilterProps as U, TableProviderType as a, SetState as b };
+declare const useTableContext: () => TableProps & TableProviderType;
+declare const useFilter: ({ data, dataToRender, setDataToRender, filterableColumns, includeSearch, searchQuery, keysToRender, sortColumn, sortOrder, sortKeys, }: UseFilterProps) => {
+    filters: TObject<string[]>;
+    filterPopupsDisplay: string;
+    filterOptions: Record<string, any[]>;
+    handleFilterChange: (dataKey: string, value: string) => void;
+    handleFilterClick: (dataKey: string) => void;
+};
+declare const useSort: () => {
+    sortColumn: number;
+    sortOrder: SortOptions;
+    handleSort: (columnIndex: number) => void;
+};
+declare const useSearch: () => {
+    searchQuery: string;
+    handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
+declare const useCreateTableStore: () => zustand.UseBoundStore<zustand.StoreApi<any>>;
+
+export { useCreateTableStore, useFilter, useSafeEffect, useSearch, useSort, useTableContext };
