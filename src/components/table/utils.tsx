@@ -15,7 +15,7 @@ export const TableRow = ({ item }: { item: TObject<any> }) => {
     const { rowStyles, cellStyle, keysToRender, onRowClick } = useTableContext();
 
     return (
-        <tr onClick={() => onRowClick(item)} style={rowStyles}>
+        <tr onClick={() => onRowClick && onRowClick(item)} style={rowStyles}>
             {keysToRender.map((key, index) => (
                 <TableCell key={index} value={item[key]} />
             ))}
@@ -46,9 +46,9 @@ export const TableHead = memo((props: any) => {
         sortKeys,
         sortOrder,
         filterableColumns = [],
-        sort_label,
+        sortLabel,
     } = useTableContext();
-    const sortDisplay = useMemo<boolean>(() => Boolean(sortKeys.length), [sortKeys]);
+    const sortDisplay = useMemo<boolean>(() => Boolean(sortKeys?.length), [sortKeys]);
     return (
         <thead className="bg-gray-50 sticky top-0">
             <tr style={headerStyle}>
@@ -56,7 +56,7 @@ export const TableHead = memo((props: any) => {
                     const filterableColumn = filterableColumns.find((col) => col.header === header);
                     return (
                         <th
-                            title={sortDisplay ? `${sort_label} ${header}` : header}
+                            title={sortDisplay ? `${sortLabel} ${header}` : header}
                             style={headerCellStyle}
                             key={index}
                             className=" border-black border-[1px] max-w-[130px] px-2 text-center relative"
@@ -89,8 +89,8 @@ export const TableBody = memo((props: any) => {
 });
 
 export const Filter = memo<FilterProps>(({ filterableColumn, index }) => {
-    const { lang, headers, filters, filterOptions, filterPopupsDisplay, handleFilterChange, handleFilterClick, filterLabel } = useTableContext();
-    const displayRight = (lang === "he" && index === headers.length - 1) || (lang === "en" && index !== headers.length - 1);
+    const { direction, headers, filters, filterOptions, filterPopupsDisplay, handleFilterChange, handleFilterClick, filterLabel } = useTableContext();
+    const displayRight = (direction === "rtl" && index === headers.length - 1) || (direction === "ltr" && index !== headers.length - 1);
 
     return (
         <>
@@ -135,7 +135,7 @@ export const Filter = memo<FilterProps>(({ filterableColumn, index }) => {
 });
 
 export const ExportToExcel = memo((props: any) => {
-    const { exportToExcelKeys, dataToAddToExcelTable, excelFileName, dataToRender, headers, sumColumns, export_excel_label } = useTableContext();
+    const { exportToExcelKeys, dataToAddToExcelTable, excelFileName, dataToRender, headers, sumColumns, exportExcelLabel } = useTableContext();
     const addPropertiesToExcel = (properties: { key: string; value: any; header: string }[]) => {
         let newData = [...dataToRender];
         let newHeaders = [...headers];
@@ -178,7 +178,7 @@ export const ExportToExcel = memo((props: any) => {
         }
     };
     return (
-        <button onClick={onExportExcelClick} title={export_excel_label} className="px-2 py-[2px]  bg-[#547f22] text-white rounded-lg text-[16px]">
+        <button onClick={onExportExcelClick} title={exportExcelLabel} className="px-2 py-[2px]  bg-[#547f22] text-white rounded-lg text-[16px]">
             {exportToExcelSvg()}
         </button>
     );
@@ -205,19 +205,19 @@ export const Summary = memo((props: any) => {
         <div style={summaryContainerStyle} className="w-full h-8 flex justify-between items-center px-3 text-[18px] font-bold">
             <div style={summaryLabelStyle}>{summaryLabel}</div>
             <div style={summaryRowStyle} className="flex gap-3">
-                {sumColumns.map((val) => {
-                    const sum_res = dataToRender.reduce((acc, v) => acc + Number(v[val.dataKey]) || 0, 0);
-                    const sum_value = getFixedNumber(sum_res);
-                    return (
-                        <div key={val.dataKey + val.label} className="flex gap-1 justify-start">
-                            <div>{val.label}</div>
-                            <span>:</span>
-                            <div>{val.ui ? val.ui(sum_value) : sum_value}</div>
-                        </div>
-                    );
-                })}
+                {sumColumns?.length &&
+                    sumColumns.map((val) => {
+                        const sum_res = dataToRender.reduce((acc, v) => acc + Number(v[val.dataKey]) || 0, 0);
+                        const sum_value = getFixedNumber(sum_res);
+                        return (
+                            <div key={val.dataKey + val.label} className="flex gap-1 justify-start">
+                                <div>{val.label}</div>
+                                <span>:</span>
+                                <div>{val.ui ? val.ui(sum_value) : sum_value}</div>
+                            </div>
+                        );
+                    })}
             </div>
         </div>
     );
 });
-

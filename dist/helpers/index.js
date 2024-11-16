@@ -1,220 +1,468 @@
-"use strict";
-function _define_property(obj, key, value) {
-    if (key in obj) {
-        Object.defineProperty(obj, key, {
-            value: value,
-            enumerable: true,
-            configurable: true,
-            writable: true
-        });
+// src/helpers/firebase.ts
+import moment from "moment";
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  Timestamp,
+  where,
+  getFirestore
+} from "firebase/firestore";
+
+// src/helpers/cars.ts
+var formatCarNumber = (car_number) => {
+  var cn = car_number;
+  if (cn?.length == 8) return `${cn[0]}${cn[1]}${cn[2]}-${cn[3]}${cn[4]}-${cn[5]}${cn[6]}${cn[7]}`;
+  if (cn?.length == 7) return `${cn[0]}${cn[1]}-${cn[2]}${cn[3]}${cn[4]}-${cn[5]}${cn[6]}`;
+  if (cn?.length == 6) return `${cn[0]}${cn[1]}-${cn[2]}${cn[3]}-${cn[4]}${cn[5]}`;
+  if (cn?.length == 5) return `${cn[0]}-${cn[1]}${cn[2]}-${cn[3]}${cn[4]}`;
+  return cn;
+};
+
+// src/helpers/firebase.ts
+var initApp = () => {
+  const isNodeEnv = typeof process !== "undefined" && process.env;
+  const firebaseConfig = {
+    apiKey: isNodeEnv ? process.env.NEXT_PUBLIC_API_KEY : import.meta.env.VITE_API_KEY,
+    authDomain: isNodeEnv ? process.env.NEXT_PUBLIC_AUTH_DOMAIN : import.meta.env.VITE_AUTH_DOMAIN,
+    projectId: isNodeEnv ? process.env.NEXT_PUBLIC_PROJECT_ID : import.meta.env.VITE_PROJECT_ID,
+    storageBucket: isNodeEnv ? process.env.NEXT_PUBLIC_STORAGE_BUCKET : import.meta.env.VITE_STORAGE_BUCKET,
+    messagingSenderId: isNodeEnv ? process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID : import.meta.env.VITE_MESSAGING_SENDER_ID,
+    appId: isNodeEnv ? process.env.NEXT_PUBLIC_APP_ID : import.meta.env.VITE_APP_ID
+  };
+  const app = initializeApp(firebaseConfig);
+  const auth2 = getAuth(app);
+  const db2 = getFirestore(app);
+  return { db: db2, auth: auth2 };
+};
+var { db, auth } = initApp();
+var collections = {
+  clients: collection(db, "nx-clients"),
+  sites: collection(db, "nx-sites"),
+  cars: collection(db, "units"),
+  users: collection(db, "nx-users"),
+  lastLocations: collection(db, "last_locations"),
+  ermEvents: collection(db, "erm_events_general"),
+  erm2Events: collection(db, "erm2_events_general"),
+  ruptelaEvents: collection(db, "ruptela_events_general"),
+  polygons: collection(db, "nx-polygons"),
+  polygonEvents: collection(db, "polygon_events"),
+  polygonCars: collection(db, "polygon_cars"),
+  canbus: collection(db, "erm_canbus_parameters"),
+  states: collection(db, "erm_states"),
+  app_pro_commands_queue: collection(db, "app_pro_commands_queue"),
+  trips: collection(db, "erm2_trip"),
+  tripsDetails: collection(db, "erm2_trip_details"),
+  audit: collection(db, "nx-audit"),
+  nx_settings: collection(db, "nx-settings"),
+  settings: collection(db, "settings"),
+  translations: collection(db, "nx-translations"),
+  nx_cars: collection(db, "nx-cars"),
+  boards: collection(db, "boards"),
+  protection_types: collection(db, "protectionTypes"),
+  board_types: collection(db, "boardTypes"),
+  charge_capacities: collection(db, "nx-charge-capacities")
+};
+var fire_base_TIME_TEMP = Timestamp.now;
+var extractAlertsData = (doc2) => {
+  const data = doc2.data();
+  const { car_number, timestamp } = data;
+  return {
+    ...data,
+    timestamp_seconds: timestamp.seconds,
+    timestamp_ui: moment.unix(timestamp.seconds).format("DD/MM/YY HH:mm"),
+    car_number: formatCarNumber(car_number)
+  };
+};
+var simpleExtractData = (doc2) => {
+  const docData = doc2.data();
+  return {
+    ...docData,
+    id: doc2.id
+  };
+};
+var extractSiteData = (doc2) => {
+  const data = doc2.data();
+  const dateUpdated = new Date(data.updated?.seconds * 1e3 + data.updated.nanoseconds / 1e6);
+  const dateCreated = new Date(data.created?.seconds * 1e3 + data.created.nanoseconds / 1e6);
+  return {
+    ...data,
+    id: doc2.id,
+    created: moment(dateCreated).format("DD.MM.YYYY - HH:mm"),
+    updated: moment(dateUpdated).format("DD.MM.YYYY - HH:mm")
+  };
+};
+var extractClientData = (doc2) => {
+  const data = doc2.data();
+  const dateUpdated = new Date(data.updated?.seconds * 1e3 + data.updated.nanoseconds / 1e6);
+  const dateCreated = new Date(data.created?.seconds * 1e3 + data.created.nanoseconds / 1e6);
+  return {
+    ...data,
+    id: doc2.id,
+    created: moment(dateCreated).format("HH:mm  DD/MM/YY"),
+    updated: moment(dateUpdated).format("HH:mm  DD/MM/YY")
+  };
+};
+var extractBoardsData = (doc2) => {
+  const data = doc2.data();
+  const dateUploaded = typeof data.uploaded === "string" ? data.uploaded : moment.unix(data.uploaded?.seconds).format("DD/MM/YY HH:mm");
+  return {
+    ...data,
+    id: doc2.id,
+    uploaded: dateUploaded
+  };
+};
+var extractCarsData = (doc2) => {
+  const carData = doc2.data();
+  let icon;
+  const gov_info = carData.gov_info;
+  if (gov_info) {
+    if (carData.icon) {
+      icon = carData.icon;
+    } else if (gov_info.vehicle_type === "atv") {
+      icon = "truck";
+    } else if (gov_info.vehicle_type === "motorcycle") {
+      icon = "motorcycle";
     } else {
-        obj[key] = value;
+      icon = "car";
     }
-    return obj;
-}
-function _type_of(obj) {
-    "@swc/helpers - typeof";
-    return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj;
-}
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __export = function(target, all) {
-    for(var name in all)__defProp(target, name, {
-        get: all[name],
-        enumerable: true
+  } else {
+    icon = "car";
+  }
+  return {
+    ...carData,
+    id: doc2.id,
+    brand: carData.brand || carData.manufacturer,
+    car_number: carData.carId,
+    icon
+  };
+};
+var extractCanbusData = (doc2) => {
+  const data = doc2.data();
+  const newDate = new Date(data.timestamp.seconds * 1e3);
+  return {
+    ...data,
+    date_ui: moment(newDate).format("DD/MM/YYYY - HH:mm")
+  };
+};
+var extractLocationData = (doc2) => {
+  const locationData = doc2.data();
+  const { latitude, longitude, spd, timestamp, prev_latitude, prev_longitude } = locationData;
+  return {
+    ...locationData,
+    id: doc2.id,
+    lat: latitude,
+    lng: longitude,
+    prev_lat: prev_latitude,
+    prev_lng: prev_longitude,
+    timestamp: timestamp?.seconds,
+    spd: Number(spd).toFixed(0)
+  };
+};
+var get_all_documents = async (collection_path) => {
+  try {
+    const snapshot = await getDocs(collection(db, collection_path));
+    const documents = snapshot.docs.map((doc2) => simpleExtractData(doc2));
+    return documents;
+  } catch (error) {
+    return [];
+  }
+};
+var get_document_by_id = async (collection_path, doc_id) => {
+  try {
+    const doc_ref = doc(db, collection_path, doc_id);
+    const doc_snap = await getDoc(doc_ref);
+    if (!doc_snap.exists()) {
+      throw new Error("Document not found, document id: " + doc_id);
+    }
+    return simpleExtractData(doc_snap);
+  } catch (error) {
+    console.error("Error from get_document_by_id", error);
+    return null;
+  }
+};
+var set_document = async (collection_path, doc_id, data) => {
+  try {
+    const doc_ref = doc(db, collection_path, doc_id);
+    await setDoc(doc_ref, data, { merge: true });
+    return true;
+  } catch (error) {
+    console.error(`Failed to create document by id: ${doc_id} in collection: ${collection_path}`, { error, data });
+    return false;
+  }
+};
+var add_document = async (collection_path, data, include_id = false) => {
+  try {
+    const col_ref = collection(db, collection_path);
+    const doc_ref = await addDoc(col_ref, data);
+    if (include_id) {
+      await setDoc(doc_ref, { ...data, id: doc_ref.id }, { merge: true });
+    }
+    return true;
+  } catch (error) {
+    console.error(`Failed to create document in collection: ${collection_path}`, error);
+    return false;
+  }
+};
+var delete_document = async (collection_path, doc_id) => {
+  try {
+    const doc_ref = doc(db, collection_path, doc_id);
+    await deleteDoc(doc_ref);
+    return true;
+  } catch (error) {
+    console.error(`Failed to delete document with id ${doc_id} from collection ${collection_path}`, error);
+    return false;
+  }
+};
+var query_document = async (collection_path, field_name, operator, value, ignore_log = false) => {
+  try {
+    const q = query(collection(db, collection_path), where(field_name, operator, value));
+    const query_snapshot = await getDocs(q);
+    const documents = query_snapshot.docs.map((doc2) => simpleExtractData(doc2));
+    if (documents.length < 1) {
+      throw new Error(
+        `No data to return from: 
+collection: ${collection_path}, 
+field_name: ${field_name}, 
+operator: ${operator}, 
+value: ${value}`
+      );
+    }
+    return documents[0];
+  } catch (error) {
+    if (!ignore_log) {
+      console.error("Error querying document:", error);
+    }
+    return null;
+  }
+};
+var query_documents = async (collection_path, field_name, operator, value) => {
+  try {
+    const q = query(collection(db, collection_path), where(field_name, operator, value));
+    const query_snapshot = await getDocs(q);
+    const documents = query_snapshot.docs.map((doc2) => simpleExtractData(doc2));
+    return documents;
+  } catch (error) {
+    console.error(`Error querying documents: ${collection_path} - ${field_name} - ${operator} - ${value} `, error);
+    return [];
+  }
+};
+var query_documents_by_conditions = async (collection_path, where_conditions) => {
+  try {
+    let db_query = collection(db, collection_path);
+    where_conditions.forEach((condition) => {
+      db_query = query(db_query, where(condition.field_name, condition.operator, condition.value));
     });
+    const query_snapshot = await getDocs(db_query);
+    const documents = query_snapshot.docs.map((doc2) => simpleExtractData(doc2));
+    return documents;
+  } catch (error) {
+    console.error(`Error querying documents: ${collection_path} - ${JSON.stringify(where_conditions)} `, error);
+    return [];
+  }
 };
-var __copyProps = function(to, from, except, desc) {
-    if (from && (typeof from === "undefined" ? "undefined" : _type_of(from)) === "object" || typeof from === "function") {
-        var _iteratorNormalCompletion = true, _didIteratorError = false, _iteratorError = undefined;
-        try {
-            var _loop = function() {
-                var key = _step.value;
-                if (!__hasOwnProp.call(to, key) && key !== except) __defProp(to, key, {
-                    get: function() {
-                        return from[key];
-                    },
-                    enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
-                });
-            };
-            for(var _iterator = __getOwnPropNames(from)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true)_loop();
-        } catch (err) {
-            _didIteratorError = true;
-            _iteratorError = err;
-        } finally{
-            try {
-                if (!_iteratorNormalCompletion && _iterator.return != null) {
-                    _iterator.return();
-                }
-            } finally{
-                if (_didIteratorError) {
-                    throw _iteratorError;
-                }
-            }
-        }
+var query_document_by_conditions = async (collection_path, where_conditions) => {
+  try {
+    let db_query = collection(db, collection_path);
+    where_conditions.forEach((condition) => {
+      db_query = query(db_query, where(condition.field_name, condition.operator, condition.value));
+    });
+    const query_snapshot = await getDocs(db_query);
+    const documents = query_snapshot.docs.map((doc2) => simpleExtractData(doc2));
+    if (!documents[0]) {
+      throw new Error("No data returned from DB");
     }
-    return to;
+    return documents[0];
+  } catch (error) {
+    console.error(`Error querying documents: ${collection_path} - ${JSON.stringify(where_conditions)} `, error);
+    return null;
+  }
 };
-var __toCommonJS = function(mod) {
-    return __copyProps(__defProp({}, "__esModule", {
-        value: true
-    }), mod);
+
+// src/helpers/global.ts
+var calculateBearing = (startLat, startLng, endLat, endLng) => {
+  if (startLat === endLat || startLng === endLng) {
+    return 0;
+  }
+  if (startLat === void 0 || startLng === void 0 || endLat === void 0 || endLng === void 0) {
+    return 0;
+  }
+  const startLatRad = startLat * Math.PI / 180;
+  const startLngRad = startLng * Math.PI / 180;
+  const endLatRad = endLat * Math.PI / 180;
+  const endLngRad = endLng * Math.PI / 180;
+  const dLon = endLngRad - startLngRad;
+  const y = Math.sin(dLon) * Math.cos(endLatRad);
+  const x = Math.cos(startLatRad) * Math.sin(endLatRad) - Math.sin(startLatRad) * Math.cos(endLatRad) * Math.cos(dLon);
+  const bearing = Math.atan2(y, x) * 180 / Math.PI;
+  return (bearing + 360) % 360;
 };
-// src/helpers/index.ts
-var helpers_exports = {};
-__export(helpers_exports, {
-    createSelectors: function() {
-        return createSelectors;
-    },
-    handleChange: function() {
-        return handleChange;
-    },
-    handleInvalid: function() {
-        return handleInvalid;
-    },
-    handlePaste: function() {
-        return handlePaste;
-    },
-    setState: function() {
-        return setState;
-    },
-    useStoreValues: function() {
-        return useStoreValues;
-    },
-    useValidation: function() {
-        return useValidation;
-    }
-});
-module.exports = __toCommonJS(helpers_exports);
+
 // src/helpers/forms.ts
-var handleInvalid = function(e, requireError) {
-    e.target.setCustomValidity(requireError || "This filed is required !");
+var handleInvalid = (e, requireError) => {
+  e.target.setCustomValidity(requireError || "This filed is required !");
 };
-var handleChange = function(e) {
-    e.target.setCustomValidity("");
-    var validation = e.target.getAttribute("data-validation");
-    if (validation === "text") {
-        var cleanedValue = e.target.value.replace(/[^a-zA-Zא-ת\- ]/g, "");
-        e.target.value = cleanedValue;
-    } else if (validation === "numbers") {
-        var cleanedValue1 = e.target.value.replace(/[^0-9\- +]/g, "");
-        e.target.value = cleanedValue1;
-    } else if (validation === "numbersOnly") {
-        var cleanedValue2 = e.target.value.replace(/[^0-9]/g, "");
-        e.target.value = cleanedValue2;
-    } else if (validation === "price") {
-        var cleanedValue3 = e.target.value.replace(/[^0-9\.]/g, "");
-        e.target.value = cleanedValue3;
-    } else if (validation === "textNumbers") {
-        var cleanedValue4 = e.target.value.replace(/[^a-zA-Zא-ת0-9\- +]/g, "");
-        e.target.value = cleanedValue4;
-    } else if (validation === "email") {
-        var cleanedValue5 = e.target.value.replace(/[^a-zA-Zא-ת0-9.@\- ]/g, "");
-        e.target.value = cleanedValue5;
-    } else if (validation === "color") {
-        var cleanedValue6 = e.target.value.replace(/[^#0-9A-Fa-f]/g, "");
-        e.target.value = cleanedValue6;
-    } else if (validation === "address") {
-        var cleanedValue7 = e.target.value.replace(/[^a-zA-Zא-ת0-9\-., ]/g, "");
-        e.target.value = cleanedValue7;
-    } else if (validation === "cars") {
-        var cleanedValue8 = e.target.value.replace(/[^a-zA-Zא-ת0-9,_]/g, "");
-        e.target.value = cleanedValue8;
-    } else if (validation === "charts") {
-        var cleanedValue9 = e.target.value.replace(/[^a-zA-Zא-ת0-9\-.,_@! ]/g, "");
-        e.target.value = cleanedValue9;
-    } else {
-        e.target.value = e.target.value;
-    }
+var handleChange = (e) => {
+  e.target.setCustomValidity("");
+  const validation = e.target.getAttribute("data-validation");
+  if (validation === "text") {
+    const cleanedValue = e.target.value.replace(/[^a-zA-Zא-ת\- ]/g, "");
+    e.target.value = cleanedValue;
+  } else if (validation === "numbers") {
+    const cleanedValue = e.target.value.replace(/[^0-9\- +]/g, "");
+    e.target.value = cleanedValue;
+  } else if (validation === "numbersOnly") {
+    const cleanedValue = e.target.value.replace(/[^0-9]/g, "");
+    e.target.value = cleanedValue;
+  } else if (validation === "price") {
+    const cleanedValue = e.target.value.replace(/[^0-9\.]/g, "");
+    e.target.value = cleanedValue;
+  } else if (validation === "textNumbers") {
+    const cleanedValue = e.target.value.replace(/[^a-zA-Zא-ת0-9\- +]/g, "");
+    e.target.value = cleanedValue;
+  } else if (validation === "email") {
+    const cleanedValue = e.target.value.replace(/[^a-zA-Zא-ת0-9.@\- ]/g, "");
+    e.target.value = cleanedValue;
+  } else if (validation === "color") {
+    const cleanedValue = e.target.value.replace(/[^#0-9A-Fa-f]/g, "");
+    e.target.value = cleanedValue;
+  } else if (validation === "address") {
+    const cleanedValue = e.target.value.replace(/[^a-zA-Zא-ת0-9\-., ]/g, "");
+    e.target.value = cleanedValue;
+  } else if (validation === "cars") {
+    const cleanedValue = e.target.value.replace(/[^a-zA-Zא-ת0-9,_]/g, "");
+    e.target.value = cleanedValue;
+  } else if (validation === "charts") {
+    const cleanedValue = e.target.value.replace(/[^a-zA-Zא-ת0-9\-.,_@! ]/g, "");
+    e.target.value = cleanedValue;
+  } else {
+    e.target.value = e.target.value;
+  }
 };
-var handlePaste = function(e) {
-    var validation = e.currentTarget.getAttribute("data-validation");
-    var pasteData = e.clipboardData.getData("text");
-    if (validation === "text") {
-        pasteData = pasteData.replace(/[^a-zA-Zא-ת\- ]/g, "");
-    } else if (validation === "numbers") {
-        pasteData = pasteData.replace(/[^0-9\- +]/g, "");
-    } else if (validation === "numbersOnly") {
-        pasteData = pasteData.replace(/[^0-9]/g, "");
-    } else if (validation === "price") {
-        pasteData = pasteData.replace(/[^0-9\.]/g, "");
-    } else if (validation === "textNumbers") {
-        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9\- +]/g, "");
-    } else if (validation === "email") {
-        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9.@\- ]/g, "");
-    } else if (validation === "color") {
-        pasteData = pasteData.replace(/[^#0-9A-Fa-f]/g, "");
-    } else if (validation === "address") {
-        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9\-., ]/g, "");
-    } else if (validation === "cars") {
-        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9,_]/g, "");
-    } else if (validation === "charts") {
-        pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9\-.,_@! ]/g, "");
-    }
-    e.preventDefault();
-    document.execCommand("insertText", false, pasteData);
+var handlePaste = (e) => {
+  const validation = e.currentTarget.getAttribute("data-validation");
+  let pasteData = e.clipboardData.getData("text");
+  if (validation === "text") {
+    pasteData = pasteData.replace(/[^a-zA-Zא-ת\- ]/g, "");
+  } else if (validation === "numbers") {
+    pasteData = pasteData.replace(/[^0-9\- +]/g, "");
+  } else if (validation === "numbersOnly") {
+    pasteData = pasteData.replace(/[^0-9]/g, "");
+  } else if (validation === "price") {
+    pasteData = pasteData.replace(/[^0-9\.]/g, "");
+  } else if (validation === "textNumbers") {
+    pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9\- +]/g, "");
+  } else if (validation === "email") {
+    pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9.@\- ]/g, "");
+  } else if (validation === "color") {
+    pasteData = pasteData.replace(/[^#0-9A-Fa-f]/g, "");
+  } else if (validation === "address") {
+    pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9\-., ]/g, "");
+  } else if (validation === "cars") {
+    pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9,_]/g, "");
+  } else if (validation === "charts") {
+    pasteData = pasteData.replace(/[^a-zA-Zא-ת0-9\-.,_@! ]/g, "");
+  }
+  e.preventDefault();
+  document.execCommand("insertText", false, pasteData);
 };
-var useValidation = function(validationType, requireError) {
-    return {
-        onChange: handleChange,
-        onPaste: handlePaste,
-        onInvalid: function(e) {
-            return handleInvalid(e, requireError);
-        },
-        "data-validation": validationType
-    };
+var useValidation = (validationType, requireError) => {
+  return {
+    onChange: handleChange,
+    onPaste: handlePaste,
+    onInvalid: (e) => handleInvalid(e, requireError),
+    "data-validation": validationType
+  };
 };
+
 // src/helpers/store.ts
-var setState = function(updater, set, stateName) {
-    return set(function(state) {
-        return _define_property({}, stateName, typeof updater === "function" ? updater(state[stateName]) : updater);
-    });
+var setState = (updater, set, stateName) => {
+  return set((state) => ({
+    [stateName]: typeof updater === "function" ? updater(state[stateName]) : updater
+  }));
 };
-var createSelectors = function(store) {
-    var selectors = {};
-    var _iteratorNormalCompletion = true, _didIteratorError = false, _iteratorError = undefined;
-    try {
-        var _loop = function() {
-            var k = _step.value;
-            selectors[k] = function() {
-                return store(function(s) {
-                    return s[k];
-                });
-            };
-        };
-        for(var _iterator = Object.keys(store.getState())[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true)_loop();
-    } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-    } finally{
-        try {
-            if (!_iteratorNormalCompletion && _iterator.return != null) {
-                _iterator.return();
-            }
-        } finally{
-            if (_didIteratorError) {
-                throw _iteratorError;
-            }
-        }
+var createSelectors = (store) => {
+  let selectors = {};
+  for (let k of Object.keys(store.getState())) {
+    selectors[k] = () => store((s) => s[k]);
+  }
+  return selectors;
+};
+var useStoreValues = (store, keys) => {
+  const result = {};
+  keys.forEach((key) => {
+    result[key] = store.use[key]();
+  });
+  return result;
+};
+
+// src/helpers/phoneNumber.ts
+import { parsePhoneNumberFromString } from "libphonenumber-js";
+var isInternational = (phone_number) => {
+  return phone_number.startsWith("+");
+};
+var isInternationalIsraelPhone = (phone_number) => {
+  return phone_number.startsWith("+9725");
+};
+var local_israel_phone_format = (international_number) => {
+  return international_number.replace("+972", "0");
+};
+var international_israel_phone_format = (phone) => {
+  const validNumber = phone.slice(1, phone.length);
+  return "+972".concat(validNumber);
+};
+var displayFormatPhoneNumber = (phoneNumber) => {
+  if (isInternational(phoneNumber)) {
+    const phoneNumberObject = parsePhoneNumberFromString(phoneNumber);
+    if (!phoneNumberObject) {
+      return phoneNumber;
     }
-    return selectors;
+    return phoneNumberObject.formatInternational().replace(/\s/g, "-");
+  }
+  return phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
 };
-var useStoreValues = function(store, keys) {
-    var result = {};
-    keys.forEach(function(key) {
-        result[key] = store.use[key]();
-    });
-    return result;
+export {
+  add_document,
+  auth,
+  calculateBearing,
+  collections,
+  createSelectors,
+  db,
+  delete_document,
+  displayFormatPhoneNumber,
+  extractAlertsData,
+  extractBoardsData,
+  extractCanbusData,
+  extractCarsData,
+  extractClientData,
+  extractLocationData,
+  extractSiteData,
+  fire_base_TIME_TEMP,
+  formatCarNumber,
+  get_all_documents,
+  get_document_by_id,
+  handleChange,
+  handleInvalid,
+  handlePaste,
+  international_israel_phone_format,
+  isInternational,
+  isInternationalIsraelPhone,
+  local_israel_phone_format,
+  query_document,
+  query_document_by_conditions,
+  query_documents,
+  query_documents_by_conditions,
+  setState,
+  set_document,
+  simpleExtractData,
+  useStoreValues,
+  useValidation
 };
-// Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-    createSelectors: createSelectors,
-    handleChange: handleChange,
-    handleInvalid: handleInvalid,
-    handlePaste: handlePaste,
-    setState: setState,
-    useStoreValues: useStoreValues,
-    useValidation: useValidation
-});
+//# sourceMappingURL=index.js.map

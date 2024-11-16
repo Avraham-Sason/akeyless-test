@@ -1,91 +1,10 @@
-import { TObject } from 'akeyless-types-commons';
-import { Dispatch, SetStateAction, ReactNode } from 'react';
-
-interface FilterableColumn {
-    header: string;
-    dataKey: string;
-    ui?: (value: any) => ReactNode;
-}
-interface TableProviderType {
-    sortColumn: number;
-    sortOrder: "asc" | "desc";
-    handleSort: (columnIndex: number) => void;
-    searchQuery: string;
-    handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    dataToRender: TObject<any>[];
-    filters: TObject<string[]>;
-    filterPopupsDisplay: string;
-    filterOptions: any;
-    handleFilterChange: (dataKey: string, value: string) => void;
-    handleFilterClick: (dataKey: string) => void;
-}
-interface UseFilterProps {
-    data: Record<string, any>[];
-    dataToRender: Record<string, any>[];
-    setDataToRender: Dispatch<SetStateAction<Record<string, any>[]>>;
-    filterableColumns: FilterableColumn[];
-    includeSearch?: boolean;
-    searchQuery: string;
-    keysToRender: string[];
-    sortColumn: number | null;
-    sortOrder: "asc" | "desc" | null;
-    sortKeys: string[];
-}
-interface TableProps {
-    data: Record<string, any>[];
-    headers: string[];
-    keysToRender: string[];
-    optionalElement?: ReactNode;
-    containerStyle?: React.CSSProperties;
-    containerClassName?: string;
-    includeSearch?: boolean;
-    searchInputStyle?: React.CSSProperties;
-    searchInputClassName?: string;
-    tableContainerStyle?: React.CSSProperties;
-    tableContainerClass?: string;
-    tableStyle?: React.CSSProperties;
-    rowStyles?: React.CSSProperties;
-    headerStyle?: React.CSSProperties;
-    headerCellStyle?: React.CSSProperties;
-    cellStyle?: React.CSSProperties;
-    filterableColumns?: {
-        header: string;
-        dataKey: string;
-        ui?: (value: any) => ReactNode;
-    }[];
-    sortKeys?: string[];
-    exportToExcelKeys?: string[];
-    excelFileName?: string;
-    dataToAddToExcelTable?: {
-        key: string;
-        value: any;
-        header: string;
-    }[];
-    sumColumns?: {
-        label: string;
-        dataKey: string;
-        ui?: (value: any) => ReactNode;
-    }[];
-    searchPlaceHolder?: string;
-    summaryContainerStyle?: React.CSSProperties;
-    summaryLabelStyle?: React.CSSProperties;
-    summaryRowStyle?: React.CSSProperties;
-    summaryLabel?: string;
-    filterLabel?: string;
-    sort_label?: string;
-    export_excel_label?: string;
-    onRowClick?: (data?: any) => void;
-    lang: "en" | "he";
-}
-interface FilterProps {
-    index: number;
-    filterableColumn: FilterableColumn;
-}
-
-type Direction = "rtl" | "ltr";
+import { D as Direction } from '../tables-w6Z3LoIM.js';
+export { F as FilterProps, b as SetState, S as SortOptions, T as TableProps, a as TableProviderType, U as UseFilterProps } from '../tables-w6Z3LoIM.js';
+import 'akeyless-types-commons';
+import 'react';
 
 interface BaseElementProps {
-    name: string;
+    name?: string;
     labelContent: string;
     defaultValue?: string;
     required?: boolean;
@@ -95,9 +14,9 @@ interface BaseElementProps {
 }
 interface InputElement extends BaseElementProps {
     type: "input";
-    validationType?: string;
-    inputType: string;
+    inputType?: string;
     validationName?: string;
+    validationError?: string;
     onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 interface SelectElement extends BaseElementProps {
@@ -116,15 +35,15 @@ type FormElement = InputElement | SelectElement;
 interface ModularFormProps {
     submitFunction?: (form: React.FormEvent<HTMLFormElement>) => Promise<void>;
     elements?: FormElement[];
-    headerContent?: string;
+    headerContent?: JSX.Element;
     buttonContent?: string;
     formClassName?: string;
     headerClassName?: string;
     direction?: Direction;
 }
 interface ConfirmFormProps {
-    onV: () => Promise<void>;
-    onX: () => Promise<void>;
+    onV: () => Promise<void> | void;
+    onX: () => Promise<void> | void;
     headline?: string;
     direction?: Direction;
 }
@@ -143,4 +62,4 @@ interface DatePickerProps {
     buttonText?: string;
 }
 
-export type { BaseElementProps, ConfirmFormProps, DatePickerProps, Direction, FilterProps, InputContainerProps, InputElement, ModularFormProps, SelectContainerProps, SelectElement, TableProps, TableProviderType, UseFilterProps };
+export { type BaseElementProps, type ConfirmFormProps, type DatePickerProps, Direction, type FormElement, type InputContainerProps, type InputElement, type ModularFormProps, type SelectContainerProps, type SelectElement };

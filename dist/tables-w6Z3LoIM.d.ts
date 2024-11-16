@@ -1,9 +1,10 @@
-import * as zustand from 'zustand';
 import { TObject } from 'akeyless-types-commons';
 import { Dispatch, SetStateAction, ReactNode } from 'react';
 
-declare const useSomeHook: () => void;
+type Direction = "rtl" | "ltr";
+type SetState<T> = (updater: ((prev: T) => T) | T) => void;
 
+type SortOptions = "asc" | "desc";
 interface FilterableColumn {
     header: string;
     dataKey: string;
@@ -11,7 +12,7 @@ interface FilterableColumn {
 }
 interface TableProviderType {
     sortColumn: number;
-    sortOrder: "asc" | "desc";
+    sortOrder: SortOptions;
     handleSort: (columnIndex: number) => void;
     searchQuery: string;
     handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -31,8 +32,8 @@ interface UseFilterProps {
     searchQuery: string;
     keysToRender: string[];
     sortColumn: number | null;
-    sortOrder: "asc" | "desc" | null;
-    sortKeys: string[];
+    sortOrder: SortOptions;
+    sortKeys?: string[];
 }
 interface TableProps {
     data: Record<string, any>[];
@@ -75,29 +76,14 @@ interface TableProps {
     summaryRowStyle?: React.CSSProperties;
     summaryLabel?: string;
     filterLabel?: string;
-    sort_label?: string;
-    export_excel_label?: string;
+    sortLabel?: string;
+    exportExcelLabel?: string;
     onRowClick?: (data?: any) => void;
-    lang: "en" | "he";
+    direction?: Direction;
+}
+interface FilterProps {
+    index: number;
+    filterableColumn: FilterableColumn;
 }
 
-declare const useTableContext: () => TableProps & TableProviderType;
-declare const useFilter: ({ data, dataToRender, setDataToRender, filterableColumns, includeSearch, searchQuery, keysToRender, sortColumn, sortOrder, sortKeys, }: UseFilterProps) => {
-    filters: TObject<string[]>;
-    filterPopupsDisplay: string;
-    filterOptions: Record<string, any[]>;
-    handleFilterChange: (dataKey: string, value: string) => void;
-    handleFilterClick: (dataKey: string) => void;
-};
-declare const useSort: () => {
-    sortColumn: number;
-    sortOrder: "asc" | "desc";
-    handleSort: (columnIndex: number) => void;
-};
-declare const useSearch: () => {
-    searchQuery: string;
-    handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
-};
-declare const useCreateTableStore: () => zustand.UseBoundStore<zustand.StoreApi<any>>;
-
-export { useCreateTableStore, useFilter, useSearch, useSomeHook, useSort, useTableContext };
+export type { Direction as D, FilterProps as F, SortOptions as S, TableProps as T, UseFilterProps as U, TableProviderType as a, SetState as b };

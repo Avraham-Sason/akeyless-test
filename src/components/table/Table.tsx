@@ -13,10 +13,10 @@ export const TableProvider = (props: TableProps & { children: React.ReactNode })
         headers,
         optionalElement,
         keysToRender = [],
-        lang = "en",
+        direction = "ltr",
         onRowClick = (data) => {},
         // container styles props
-        containerStyle = {},
+        containerStyle,
         containerClassName = "",
         tableContainerClass = "",
         tableContainerStyle = {},
@@ -33,14 +33,14 @@ export const TableProvider = (props: TableProps & { children: React.ReactNode })
         searchPlaceHolder = "Search in table ...",
         // sort
         sortKeys,
-        sort_label = "Sort by",
+        sortLabel = "Sort by",
         // filter
         filterableColumns = [],
         filterLabel = "Filter by",
         // export to excel
         exportToExcelKeys,
         dataToAddToExcelTable,
-        export_excel_label = "Export to excel",
+        exportExcelLabel = "Export to excel",
         excelFileName,
         // summary
         sumColumns,
@@ -68,6 +68,11 @@ export const TableProvider = (props: TableProps & { children: React.ReactNode })
     });
     const providerValues = {
         ...props,
+        //
+        direction,
+        keysToRender,
+        filterableColumns,
+        //
         sortColumn,
         sortOrder,
         handleSort,
@@ -82,7 +87,7 @@ export const TableProvider = (props: TableProps & { children: React.ReactNode })
     };
     return (
         <TableContext.Provider value={providerValues}>
-            <div className={`flex flex-col gap-2  ${containerClassName}`} style={containerStyle}>
+            <div className={`flex flex-col gap-2 ${containerClassName}`} style={containerStyle}>
                 {props.children}
             </div>
         </TableContext.Provider>
@@ -113,10 +118,10 @@ export const Table = (props: TableProps) => {
                 {optionalElement && optionalElement}
             </div>
             {/* table */}
-            <div style={tableContainerStyle} className={`animate-slide-in-up overflow-y-auto  ${tableContainerClass}`}>
+            <div style={tableContainerStyle} className={`animate-slide-in-up overflow-y-auto ${tableContainerClass}`}>
                 <table style={tableStyle} className="min-w-full text-sm font-light relative">
                     <TableHead />
-                    <TableBody render={false}/>
+                    <TableBody render={false} />
                 </table>
             </div>
             {/* summary */}

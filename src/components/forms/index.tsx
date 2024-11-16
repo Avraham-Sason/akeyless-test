@@ -2,10 +2,11 @@ import { useState } from "react";
 import moment from "moment";
 import { useValidation } from "../../helpers";
 import { GreenVSvg, RedXSvg } from "../../assets";
-import { Loader } from "../loaders";
+import { Loader } from "../utils";
 import { ConfirmFormProps, DatePickerProps, InputContainerProps, ModularFormProps, SelectContainerProps } from "../../types";
 
 export const InputContainer = ({
+    validationError,
     name = "",
     inputType = "text",
     labelContent = "",
@@ -15,7 +16,6 @@ export const InputContainer = ({
     labelClassName = "",
     elementClassName = "",
     required = false,
-    validationType,
     onKeyDown,
 }: InputContainerProps) => {
     return (
@@ -26,7 +26,7 @@ export const InputContainer = ({
             <input
                 className={`w-[70%] bg-none border-b-[1px] border-black ${elementClassName}`}
                 defaultValue={defaultValue}
-                {...useValidation(validationName, validationType)}
+                {...useValidation(validationName)}
                 required={required}
                 name={name}
                 onKeyDown={onKeyDown}

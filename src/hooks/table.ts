@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { TableContext } from "../components";
 import { TObject } from "akeyless-types-commons";
-import { UseFilterProps } from "../types";
+import { SortOptions, UseFilterProps } from "../types";
 import { create } from "zustand";
 import { setState } from "../helpers";
 
@@ -58,6 +58,8 @@ export const useFilter = ({
 
     const handleFilterChange = (dataKey: string, value: string) => {
         const newFilters = { ...filters };
+        console.log("data from filter", {filters,newFilters,dataKey,value});
+        
         if (newFilters[dataKey].includes(value)) {
             newFilters[dataKey] = newFilters[dataKey].filter((item) => item !== value);
         } else {
@@ -86,10 +88,10 @@ export const useFilter = ({
     };
 };
 export const useSort = () => {
-    const [sortColumn, setSortColumn] = useState<number | null>(null);
-    const [sortOrder, setSortOrder] = useState<"asc" | "desc" | null>(null);
+    const [sortColumn, setSortColumn] = useState<number>(0);
+    const [sortOrder, setSortOrder] = useState<SortOptions >("asc");
     const handleSort = (columnIndex: number) => {
-        let newSortOrder: "asc" | "desc" = "asc";
+        let newSortOrder: SortOptions = "asc";
         if (sortColumn === columnIndex && sortOrder === "asc") {
             newSortOrder = "desc";
         }

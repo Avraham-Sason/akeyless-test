@@ -1,5 +1,7 @@
 import { TObject } from "akeyless-types-commons";
 import { Dispatch, ReactNode, SetStateAction } from "react";
+import { Direction } from "../types";
+export type SortOptions = "asc" | "desc";
 
 interface FilterableColumn {
     header: string;
@@ -8,7 +10,7 @@ interface FilterableColumn {
 }
 export interface TableProviderType {
     sortColumn: number;
-    sortOrder: "asc" | "desc";
+    sortOrder: SortOptions;
     handleSort: (columnIndex: number) => void;
     searchQuery: string;
     handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -28,8 +30,8 @@ export interface UseFilterProps {
     searchQuery: string;
     keysToRender: string[];
     sortColumn: number | null;
-    sortOrder: "asc" | "desc" | null;
-    sortKeys: string[];
+    sortOrder: SortOptions ;
+    sortKeys?: string[];
 }
 export interface TableProps {
     data: Record<string, any>[];
@@ -60,10 +62,10 @@ export interface TableProps {
     summaryRowStyle?: React.CSSProperties;
     summaryLabel?: string;
     filterLabel?: string;
-    sort_label?: string;
-    export_excel_label?: string;
+    sortLabel?: string;
+    exportExcelLabel?: string;
     onRowClick?: (data?: any) => void;
-    lang: "en" | "he";
+    direction?: Direction;
 }
 
 export interface FilterProps {

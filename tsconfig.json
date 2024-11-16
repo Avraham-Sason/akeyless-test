@@ -1,16 +1,26 @@
 {
     "compilerOptions": {
-        "target": "ES5",
+        "target": "ESNext",
         "module": "ESNext",
+        "moduleResolution": "Node",
         "jsx": "react-jsx",
-        "declaration": true,
-        "declarationDir": "./dist/types",
-        "outDir": "./dist",
+        "strict": true,
         "esModuleInterop": true,
-        "moduleResolution": "node",
         "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true
+        "forceConsistentCasingInFileNames": true,
+        "emitDeclarationOnly": true,
+        "isolatedModules": true,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "noFallthroughCasesInSwitch": true,
+        "declaration": true,
+        "declarationMap": true,
+        "outDir": "dist",
+        "lib": ["ES2020", "DOM", "DOM.Iterable"],
+        "sourceMap": true,
+        "resolveJsonModule": true,
+        "noEmit": false
     },
-    "include": ["src/**/*"],
+    "include": ["src", "vite.config.ts"],
     "exclude": ["node_modules", "dist"]
 }
