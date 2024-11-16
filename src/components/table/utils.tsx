@@ -48,7 +48,7 @@ export const TableHead = memo((props: any) => {
         filterableColumns = [],
         sortLabel,
     } = useTableContext();
-    const sortDisplay = useMemo<boolean>(() => Boolean(sortKeys?.length), [sortKeys]);
+    const sortDisplay = useMemo<boolean>(() => Boolean(sortKeys.length), [sortKeys]);
     return (
         <thead className="bg-gray-50 sticky top-0">
             <tr style={headerStyle}>
@@ -205,18 +205,17 @@ export const Summary = memo((props: any) => {
         <div style={summaryContainerStyle} className="w-full h-8 flex justify-between items-center px-3 text-[18px] font-bold">
             <div style={summaryLabelStyle}>{summaryLabel}</div>
             <div style={summaryRowStyle} className="flex gap-3">
-                {sumColumns?.length &&
-                    sumColumns.map((val) => {
-                        const sum_res = dataToRender.reduce((acc, v) => acc + Number(v[val.dataKey]) || 0, 0);
-                        const sum_value = getFixedNumber(sum_res);
-                        return (
-                            <div key={val.dataKey + val.label} className="flex gap-1 justify-start">
-                                <div>{val.label}</div>
-                                <span>:</span>
-                                <div>{val.ui ? val.ui(sum_value) : sum_value}</div>
-                            </div>
-                        );
-                    })}
+                {sumColumns.map((val) => {
+                    const sum_res = dataToRender.reduce((acc, v) => acc + Number(v[val.dataKey]) || 0, 0);
+                    const sum_value = getFixedNumber(sum_res);
+                    return (
+                        <div key={val.dataKey + val.label} className="flex gap-1 justify-start">
+                            <div>{val.label}</div>
+                            <span>:</span>
+                            <div>{val.ui ? val.ui(sum_value) : sum_value}</div>
+                        </div>
+                    );
+                })}
             </div>
         </div>
     );

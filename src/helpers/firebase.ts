@@ -18,7 +18,6 @@ import {
     WhereFilterOp,
     Firestore,
     getFirestore,
-    QueryDocumentSnapshot,
 } from "firebase/firestore";
 import { formatCarNumber } from "./cars";
 import { TObject } from "akeyless-types-commons";
@@ -33,10 +32,15 @@ const initApp = () => {
         messagingSenderId: isNodeEnv ? process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID : import.meta.env.VITE_MESSAGING_SENDER_ID,
         appId: isNodeEnv ? process.env.NEXT_PUBLIC_APP_ID : import.meta.env.VITE_APP_ID,
     };
-    const app: FirebaseApp = initializeApp(firebaseConfig);
-    const auth: Auth = getAuth(app);
-    const db: Firestore = getFirestore(app);
-    return { db, auth };
+    try {
+        const app: FirebaseApp = initializeApp(firebaseConfig);
+        const auth: Auth = getAuth(app);
+        const db: Firestore = getFirestore(app);
+        return { db, auth };
+    } catch (error) {
+        console.error("Failed to initialize Firebase app:", error);
+        return { db: null, auth: null };
+    }
 };
 
 // Initialize app
@@ -114,7 +118,7 @@ export const extractAlertsData = (doc: DocumentSnapshot<DocumentData>) => {
     };
 };
 
-export const simpleExtractData = (doc: DocumentSnapshot<DocumentData> | QueryDocumentSnapshot<any, DocumentData>) => {
+export const simpleExtractData = (doc: DocumentSnapshot<DocumentData>) => {
     const docData = doc.data();
     return {
         ...docData,

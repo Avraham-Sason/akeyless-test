@@ -232,7 +232,7 @@ var TableHead = memo((props) => {
     filterableColumns = [],
     sortLabel
   } = useTableContext();
-  const sortDisplay = useMemo(() => Boolean(sortKeys?.length), [sortKeys]);
+  const sortDisplay = useMemo(() => Boolean(sortKeys.length), [sortKeys]);
   return /* @__PURE__ */ jsx6("thead", { className: "bg-gray-50 sticky top-0", children: /* @__PURE__ */ jsx6("tr", { style: headerStyle, children: headers.map((header, index) => {
     const filterableColumn = filterableColumns.find((col) => col.header === header);
     return /* @__PURE__ */ jsxs4(
@@ -348,7 +348,7 @@ var Summary = memo((props) => {
   const { summaryContainerStyle, summaryLabelStyle, summaryLabel, summaryRowStyle, sumColumns, dataToRender } = useTableContext();
   return /* @__PURE__ */ jsxs4("div", { style: summaryContainerStyle, className: "w-full h-8 flex justify-between items-center px-3 text-[18px] font-bold", children: [
     /* @__PURE__ */ jsx6("div", { style: summaryLabelStyle, children: summaryLabel }),
-    /* @__PURE__ */ jsx6("div", { style: summaryRowStyle, className: "flex gap-3", children: sumColumns?.length && sumColumns.map((val) => {
+    /* @__PURE__ */ jsx6("div", { style: summaryRowStyle, className: "flex gap-3", children: sumColumns.map((val) => {
       const sum_res = dataToRender.reduce((acc, v) => acc + Number(v[val.dataKey]) || 0, 0);
       const sum_value = getFixedNumber(sum_res);
       return /* @__PURE__ */ jsxs4("div", { className: "flex gap-1 justify-start", children: [
@@ -396,10 +396,15 @@ var initApp = () => {
     messagingSenderId: isNodeEnv ? process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID : import.meta.env.VITE_MESSAGING_SENDER_ID,
     appId: isNodeEnv ? process.env.NEXT_PUBLIC_APP_ID : import.meta.env.VITE_APP_ID
   };
-  const app = initializeApp(firebaseConfig);
-  const auth2 = getAuth(app);
-  const db2 = getFirestore(app);
-  return { db: db2, auth: auth2 };
+  try {
+    const app = initializeApp(firebaseConfig);
+    const auth2 = getAuth(app);
+    const db2 = getFirestore(app);
+    return { db: db2, auth: auth2 };
+  } catch (error) {
+    console.error("Failed to initialize Firebase app:", error);
+    return { db: null, auth: null };
+  }
 };
 var { db, auth } = initApp();
 var collections = {
@@ -519,8 +524,8 @@ var useFilter = ({
   };
 };
 var useSort = () => {
-  const [sortColumn, setSortColumn] = useState3(0);
-  const [sortOrder, setSortOrder] = useState3("asc");
+  const [sortColumn, setSortColumn] = useState3(null);
+  const [sortOrder, setSortOrder] = useState3(null);
   const handleSort = (columnIndex) => {
     let newSortOrder = "asc";
     if (sortColumn === columnIndex && sortOrder === "asc") {

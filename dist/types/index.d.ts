@@ -4,7 +4,6 @@ import { Dispatch, SetStateAction, ReactNode } from 'react';
 type Direction = "rtl" | "ltr";
 type SetState<T> = (updater: ((prev: T) => T) | T) => void;
 
-type SortOptions = "asc" | "desc";
 interface FilterableColumn {
     header: string;
     dataKey: string;
@@ -12,7 +11,7 @@ interface FilterableColumn {
 }
 interface TableProviderType {
     sortColumn: number;
-    sortOrder: SortOptions;
+    sortOrder: "asc" | "desc";
     handleSort: (columnIndex: number) => void;
     searchQuery: string;
     handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -32,8 +31,8 @@ interface UseFilterProps {
     searchQuery: string;
     keysToRender: string[];
     sortColumn: number | null;
-    sortOrder: SortOptions;
-    sortKeys?: string[];
+    sortOrder: "asc" | "desc" | null;
+    sortKeys: string[];
 }
 interface TableProps {
     data: Record<string, any>[];
@@ -145,4 +144,4 @@ interface DatePickerProps {
     buttonText?: string;
 }
 
-export type { BaseElementProps, ConfirmFormProps, DatePickerProps, Direction, FilterProps, FormElement, InputContainerProps, InputElement, ModularFormProps, SelectContainerProps, SelectElement, SetState, SortOptions, TableProps, TableProviderType, UseFilterProps };
+export type { BaseElementProps, ConfirmFormProps, DatePickerProps, Direction, FilterProps, FormElement, InputContainerProps, InputElement, ModularFormProps, SelectContainerProps, SelectElement, SetState, TableProps, TableProviderType, UseFilterProps };

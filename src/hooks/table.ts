@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { TableContext } from "../components";
 import { TObject } from "akeyless-types-commons";
-import { SortOptions, UseFilterProps } from "../types";
+import { UseFilterProps } from "../types";
 import { create } from "zustand";
 import { setState } from "../helpers";
 
@@ -87,9 +87,10 @@ export const useFilter = ({
         handleFilterClick,
     };
 };
+type SortOptions = "asc" | "desc";
 export const useSort = () => {
-    const [sortColumn, setSortColumn] = useState<number>(0);
-    const [sortOrder, setSortOrder] = useState<SortOptions >("asc");
+    const [sortColumn, setSortColumn] = useState<number | null>(null);
+    const [sortOrder, setSortOrder] = useState<SortOptions | null>(null);
     const handleSort = (columnIndex: number) => {
         let newSortOrder: SortOptions = "asc";
         if (sortColumn === columnIndex && sortOrder === "asc") {

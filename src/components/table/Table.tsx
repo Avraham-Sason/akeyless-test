@@ -118,7 +118,7 @@ export const Table = (props: TableProps) => {
                 {optionalElement && optionalElement}
             </div>
             {/* table */}
-            <div style={tableContainerStyle} className={`animate-slide-in-up overflow-y-auto ${tableContainerClass}`}>
+            <div style={tableContainerStyle} className={`animate-slide-in-up overflow-y-auto  ${tableContainerClass}`}>
                 <table style={tableStyle} className="min-w-full text-sm font-light relative">
                     <TableHead />
                     <TableBody render={false} />

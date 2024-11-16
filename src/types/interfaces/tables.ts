@@ -1,7 +1,6 @@
 import { TObject } from "akeyless-types-commons";
 import { Dispatch, ReactNode, SetStateAction } from "react";
 import { Direction } from "../types";
-export type SortOptions = "asc" | "desc";
 
 interface FilterableColumn {
     header: string;
@@ -10,7 +9,7 @@ interface FilterableColumn {
 }
 export interface TableProviderType {
     sortColumn: number;
-    sortOrder: SortOptions;
+    sortOrder: "asc" | "desc";
     handleSort: (columnIndex: number) => void;
     searchQuery: string;
     handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -30,8 +29,8 @@ export interface UseFilterProps {
     searchQuery: string;
     keysToRender: string[];
     sortColumn: number | null;
-    sortOrder: SortOptions ;
-    sortKeys?: string[];
+    sortOrder: "asc" | "desc" | null;
+    sortKeys: string[];
 }
 export interface TableProps {
     data: Record<string, any>[];

@@ -34,12 +34,22 @@ __export(components_exports, {
   ConfirmForm: () => ConfirmForm,
   DatePicker: () => DatePicker,
   ErrorBoundary: () => ErrorBoundary,
+  ExportToExcel: () => ExportToExcel,
+  Filter: () => Filter,
   InputContainer: () => InputContainer,
   Loader: () => Loader,
   ModularForm: () => ModularForm,
+  Search: () => Search,
   SelectContainer: () => SelectContainer,
+  Summary: () => Summary,
   Table: () => Table,
-  TableContext: () => TableContext
+  TableBody: () => TableBody,
+  TableCell: () => TableCell,
+  TableContext: () => TableContext,
+  TableHead: () => TableHead,
+  TableProvider: () => TableProvider,
+  TableRow: () => TableRow,
+  getFixedNumber: () => getFixedNumber
 });
 module.exports = __toCommonJS(components_exports);
 
@@ -383,8 +393,8 @@ var useFilter = ({
   };
 };
 var useSort = () => {
-  const [sortColumn, setSortColumn] = (0, import_react3.useState)(0);
-  const [sortOrder, setSortOrder] = (0, import_react3.useState)("asc");
+  const [sortColumn, setSortColumn] = (0, import_react3.useState)(null);
+  const [sortOrder, setSortOrder] = (0, import_react3.useState)(null);
   const handleSort = (columnIndex) => {
     let newSortOrder = "asc";
     if (sortColumn === columnIndex && sortOrder === "asc") {
@@ -440,7 +450,7 @@ var TableHead = (0, import_react5.memo)((props) => {
     filterableColumns = [],
     sortLabel
   } = useTableContext();
-  const sortDisplay = (0, import_react5.useMemo)(() => Boolean(sortKeys?.length), [sortKeys]);
+  const sortDisplay = (0, import_react5.useMemo)(() => Boolean(sortKeys.length), [sortKeys]);
   return /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("thead", { className: "bg-gray-50 sticky top-0", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("tr", { style: headerStyle, children: headers.map((header, index) => {
     const filterableColumn = filterableColumns.find((col) => col.header === header);
     return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
@@ -556,7 +566,7 @@ var Summary = (0, import_react5.memo)((props) => {
   const { summaryContainerStyle, summaryLabelStyle, summaryLabel, summaryRowStyle, sumColumns, dataToRender } = useTableContext();
   return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: summaryContainerStyle, className: "w-full h-8 flex justify-between items-center px-3 text-[18px] font-bold", children: [
     /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { style: summaryLabelStyle, children: summaryLabel }),
-    /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { style: summaryRowStyle, className: "flex gap-3", children: sumColumns?.length && sumColumns.map((val) => {
+    /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { style: summaryRowStyle, className: "flex gap-3", children: sumColumns.map((val) => {
       const sum_res = dataToRender.reduce((acc, v) => acc + Number(v[val.dataKey]) || 0, 0);
       const sum_value = getFixedNumber(sum_res);
       return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "flex gap-1 justify-start", children: [
@@ -670,7 +680,7 @@ var Table = (props) => {
       exportToExcelKeys && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(ExportToExcel, { render: false }),
       optionalElement && optionalElement
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: tableContainerStyle, className: `animate-slide-in-up overflow-y-auto ${tableContainerClass}`, children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("table", { style: tableStyle, className: "min-w-full text-sm font-light relative", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: tableContainerStyle, className: `animate-slide-in-up overflow-y-auto  ${tableContainerClass}`, children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("table", { style: tableStyle, className: "min-w-full text-sm font-light relative", children: [
       /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(TableHead, {}),
       /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(TableBody, { render: false })
     ] }) }),
@@ -698,10 +708,15 @@ var initApp = () => {
     messagingSenderId: isNodeEnv ? process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID : import_meta.env.VITE_MESSAGING_SENDER_ID,
     appId: isNodeEnv ? process.env.NEXT_PUBLIC_APP_ID : import_meta.env.VITE_APP_ID
   };
-  const app = (0, import_app.initializeApp)(firebaseConfig);
-  const auth2 = (0, import_auth.getAuth)(app);
-  const db2 = (0, import_firestore.getFirestore)(app);
-  return { db: db2, auth: auth2 };
+  try {
+    const app = (0, import_app.initializeApp)(firebaseConfig);
+    const auth2 = (0, import_auth.getAuth)(app);
+    const db2 = (0, import_firestore.getFirestore)(app);
+    return { db: db2, auth: auth2 };
+  } catch (error) {
+    console.error("Failed to initialize Firebase app:", error);
+    return { db: null, auth: null };
+  }
 };
 var { db, auth } = initApp();
 var collections = {
@@ -1024,11 +1039,21 @@ var DatePicker = ({
   ConfirmForm,
   DatePicker,
   ErrorBoundary,
+  ExportToExcel,
+  Filter,
   InputContainer,
   Loader,
   ModularForm,
+  Search,
   SelectContainer,
+  Summary,
   Table,
-  TableContext
+  TableBody,
+  TableCell,
+  TableContext,
+  TableHead,
+  TableProvider,
+  TableRow,
+  getFixedNumber
 });
 //# sourceMappingURL=index.cjs.map

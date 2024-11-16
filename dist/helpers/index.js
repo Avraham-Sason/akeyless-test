@@ -37,10 +37,15 @@ var initApp = () => {
     messagingSenderId: isNodeEnv ? process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID : import.meta.env.VITE_MESSAGING_SENDER_ID,
     appId: isNodeEnv ? process.env.NEXT_PUBLIC_APP_ID : import.meta.env.VITE_APP_ID
   };
-  const app = initializeApp(firebaseConfig);
-  const auth2 = getAuth(app);
-  const db2 = getFirestore(app);
-  return { db: db2, auth: auth2 };
+  try {
+    const app = initializeApp(firebaseConfig);
+    const auth2 = getAuth(app);
+    const db2 = getFirestore(app);
+    return { db: db2, auth: auth2 };
+  } catch (error) {
+    console.error("Failed to initialize Firebase app:", error);
+    return { db: null, auth: null };
+  }
 };
 var { db, auth } = initApp();
 var collections = {

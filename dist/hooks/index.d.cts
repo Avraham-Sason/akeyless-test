@@ -6,7 +6,6 @@ declare function useSafeEffect(callback: () => void, dependencies: any[], error_
 
 type Direction = "rtl" | "ltr";
 
-type SortOptions = "asc" | "desc";
 interface FilterableColumn {
     header: string;
     dataKey: string;
@@ -14,7 +13,7 @@ interface FilterableColumn {
 }
 interface TableProviderType {
     sortColumn: number;
-    sortOrder: SortOptions;
+    sortOrder: "asc" | "desc";
     handleSort: (columnIndex: number) => void;
     searchQuery: string;
     handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -34,8 +33,8 @@ interface UseFilterProps {
     searchQuery: string;
     keysToRender: string[];
     sortColumn: number | null;
-    sortOrder: SortOptions;
-    sortKeys?: string[];
+    sortOrder: "asc" | "desc" | null;
+    sortKeys: string[];
 }
 interface TableProps {
     data: Record<string, any>[];
@@ -92,9 +91,10 @@ declare const useFilter: ({ data, dataToRender, setDataToRender, filterableColum
     handleFilterChange: (dataKey: string, value: string) => void;
     handleFilterClick: (dataKey: string) => void;
 };
+type SortOptions = "asc" | "desc";
 declare const useSort: () => {
-    sortColumn: number;
-    sortOrder: SortOptions;
+    sortColumn: number | null;
+    sortOrder: SortOptions | null;
     handleSort: (columnIndex: number) => void;
 };
 declare const useSearch: () => {

@@ -1,4 +1,4 @@
-export const calculateBearing = (startLat: number, startLng: number, endLat: number, endLng: number) => {
+export const calculateBearing = (startLat, startLng, endLat, endLng) => {
     if (startLat === endLat || startLng === endLng) {
         return 0;
     }
