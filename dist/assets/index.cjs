@@ -211,4 +211,3 @@ var exportToExcelSvg = () => {
   slashFilterSvg,
   sortSvg
 });
-//# sourceMappingURL=index.cjs.map

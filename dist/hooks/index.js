@@ -557,4 +557,3 @@ export {
   useSort,
   useTableContext
 };
-//# sourceMappingURL=index.js.map

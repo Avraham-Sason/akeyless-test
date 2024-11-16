@@ -179,4 +179,3 @@ export {
   slashFilterSvg,
   sortSvg
 };
-//# sourceMappingURL=index.js.map

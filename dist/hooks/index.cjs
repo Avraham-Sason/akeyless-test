@@ -588,4 +588,3 @@ var import_react7 = require("react");
   useSort,
   useTableContext
 });
-//# sourceMappingURL=index.cjs.map
