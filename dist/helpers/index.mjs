@@ -1,77 +1,20 @@
-var __create = Object.create;
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-
-// src/helpers/index.ts
-var helpers_exports = {};
-__export(helpers_exports, {
-  add_document: () => add_document,
-  auth: () => auth,
-  calculateBearing: () => calculateBearing,
-  collections: () => collections,
-  createSelectors: () => createSelectors,
-  db: () => db,
-  delete_document: () => delete_document,
-  displayFormatPhoneNumber: () => displayFormatPhoneNumber,
-  extractAlertsData: () => extractAlertsData,
-  extractBoardsData: () => extractBoardsData,
-  extractCanbusData: () => extractCanbusData,
-  extractCarsData: () => extractCarsData,
-  extractClientData: () => extractClientData,
-  extractLocationData: () => extractLocationData,
-  extractSiteData: () => extractSiteData,
-  fire_base_TIME_TEMP: () => fire_base_TIME_TEMP,
-  formatCarNumber: () => formatCarNumber,
-  get_all_documents: () => get_all_documents,
-  get_document_by_id: () => get_document_by_id,
-  handleChange: () => handleChange,
-  handleInvalid: () => handleInvalid,
-  handlePaste: () => handlePaste,
-  international_israel_phone_format: () => international_israel_phone_format,
-  isInternational: () => isInternational,
-  isInternationalIsraelPhone: () => isInternationalIsraelPhone,
-  local_israel_phone_format: () => local_israel_phone_format,
-  query_document: () => query_document,
-  query_document_by_conditions: () => query_document_by_conditions,
-  query_documents: () => query_documents,
-  query_documents_by_conditions: () => query_documents_by_conditions,
-  setState: () => setState,
-  set_document: () => set_document,
-  simpleExtractData: () => simpleExtractData,
-  useStoreValues: () => useStoreValues,
-  useValidation: () => useValidation
-});
-module.exports = __toCommonJS(helpers_exports);
-
 // src/helpers/firebase.ts
-var import_moment = __toESM(require("moment"));
-var import_app = require("firebase/app");
-var import_auth = require("firebase/auth");
-var import_firestore = require("firebase/firestore");
+import moment from "moment";
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  Timestamp,
+  where,
+  getFirestore
+} from "firebase/firestore";
 
 // src/helpers/cars.ts
 var formatCarNumber = (car_number) => {
@@ -84,21 +27,20 @@ var formatCarNumber = (car_number) => {
 };
 
 // src/helpers/firebase.ts
-var import_meta = {};
 var initApp = () => {
   const isNodeEnv = typeof process !== "undefined" && process.env;
   const firebaseConfig = {
-    apiKey: isNodeEnv ? process.env.NEXT_PUBLIC_API_KEY : import_meta.env.VITE_API_KEY,
-    authDomain: isNodeEnv ? process.env.NEXT_PUBLIC_AUTH_DOMAIN : import_meta.env.VITE_AUTH_DOMAIN,
-    projectId: isNodeEnv ? process.env.NEXT_PUBLIC_PROJECT_ID : import_meta.env.VITE_PROJECT_ID,
-    storageBucket: isNodeEnv ? process.env.NEXT_PUBLIC_STORAGE_BUCKET : import_meta.env.VITE_STORAGE_BUCKET,
-    messagingSenderId: isNodeEnv ? process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID : import_meta.env.VITE_MESSAGING_SENDER_ID,
-    appId: isNodeEnv ? process.env.NEXT_PUBLIC_APP_ID : import_meta.env.VITE_APP_ID
+    apiKey: isNodeEnv ? process.env.NEXT_PUBLIC_API_KEY : import.meta.env.VITE_API_KEY,
+    authDomain: isNodeEnv ? process.env.NEXT_PUBLIC_AUTH_DOMAIN : import.meta.env.VITE_AUTH_DOMAIN,
+    projectId: isNodeEnv ? process.env.NEXT_PUBLIC_PROJECT_ID : import.meta.env.VITE_PROJECT_ID,
+    storageBucket: isNodeEnv ? process.env.NEXT_PUBLIC_STORAGE_BUCKET : import.meta.env.VITE_STORAGE_BUCKET,
+    messagingSenderId: isNodeEnv ? process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID : import.meta.env.VITE_MESSAGING_SENDER_ID,
+    appId: isNodeEnv ? process.env.NEXT_PUBLIC_APP_ID : import.meta.env.VITE_APP_ID
   };
   try {
-    const app = (0, import_app.initializeApp)(firebaseConfig);
-    const auth2 = (0, import_auth.getAuth)(app);
-    const db2 = (0, import_firestore.getFirestore)(app);
+    const app = initializeApp(firebaseConfig);
+    const auth2 = getAuth(app);
+    const db2 = getFirestore(app);
     return { db: db2, auth: auth2 };
   } catch (error) {
     console.error("Failed to initialize Firebase app:", error);
@@ -107,40 +49,40 @@ var initApp = () => {
 };
 var { db, auth } = initApp();
 var collections = {
-  clients: (0, import_firestore.collection)(db, "nx-clients"),
-  sites: (0, import_firestore.collection)(db, "nx-sites"),
-  cars: (0, import_firestore.collection)(db, "units"),
-  users: (0, import_firestore.collection)(db, "nx-users"),
-  lastLocations: (0, import_firestore.collection)(db, "last_locations"),
-  ermEvents: (0, import_firestore.collection)(db, "erm_events_general"),
-  erm2Events: (0, import_firestore.collection)(db, "erm2_events_general"),
-  ruptelaEvents: (0, import_firestore.collection)(db, "ruptela_events_general"),
-  polygons: (0, import_firestore.collection)(db, "nx-polygons"),
-  polygonEvents: (0, import_firestore.collection)(db, "polygon_events"),
-  polygonCars: (0, import_firestore.collection)(db, "polygon_cars"),
-  canbus: (0, import_firestore.collection)(db, "erm_canbus_parameters"),
-  states: (0, import_firestore.collection)(db, "erm_states"),
-  app_pro_commands_queue: (0, import_firestore.collection)(db, "app_pro_commands_queue"),
-  trips: (0, import_firestore.collection)(db, "erm2_trip"),
-  tripsDetails: (0, import_firestore.collection)(db, "erm2_trip_details"),
-  audit: (0, import_firestore.collection)(db, "nx-audit"),
-  nx_settings: (0, import_firestore.collection)(db, "nx-settings"),
-  settings: (0, import_firestore.collection)(db, "settings"),
-  translations: (0, import_firestore.collection)(db, "nx-translations"),
-  nx_cars: (0, import_firestore.collection)(db, "nx-cars"),
-  boards: (0, import_firestore.collection)(db, "boards"),
-  protection_types: (0, import_firestore.collection)(db, "protectionTypes"),
-  board_types: (0, import_firestore.collection)(db, "boardTypes"),
-  charge_capacities: (0, import_firestore.collection)(db, "nx-charge-capacities")
+  clients: collection(db, "nx-clients"),
+  sites: collection(db, "nx-sites"),
+  cars: collection(db, "units"),
+  users: collection(db, "nx-users"),
+  lastLocations: collection(db, "last_locations"),
+  ermEvents: collection(db, "erm_events_general"),
+  erm2Events: collection(db, "erm2_events_general"),
+  ruptelaEvents: collection(db, "ruptela_events_general"),
+  polygons: collection(db, "nx-polygons"),
+  polygonEvents: collection(db, "polygon_events"),
+  polygonCars: collection(db, "polygon_cars"),
+  canbus: collection(db, "erm_canbus_parameters"),
+  states: collection(db, "erm_states"),
+  app_pro_commands_queue: collection(db, "app_pro_commands_queue"),
+  trips: collection(db, "erm2_trip"),
+  tripsDetails: collection(db, "erm2_trip_details"),
+  audit: collection(db, "nx-audit"),
+  nx_settings: collection(db, "nx-settings"),
+  settings: collection(db, "settings"),
+  translations: collection(db, "nx-translations"),
+  nx_cars: collection(db, "nx-cars"),
+  boards: collection(db, "boards"),
+  protection_types: collection(db, "protectionTypes"),
+  board_types: collection(db, "boardTypes"),
+  charge_capacities: collection(db, "nx-charge-capacities")
 };
-var fire_base_TIME_TEMP = import_firestore.Timestamp.now;
+var fire_base_TIME_TEMP = Timestamp.now;
 var extractAlertsData = (doc2) => {
   const data = doc2.data();
   const { car_number, timestamp } = data;
   return {
     ...data,
     timestamp_seconds: timestamp.seconds,
-    timestamp_ui: import_moment.default.unix(timestamp.seconds).format("DD/MM/YY HH:mm"),
+    timestamp_ui: moment.unix(timestamp.seconds).format("DD/MM/YY HH:mm"),
     car_number: formatCarNumber(car_number)
   };
 };
@@ -158,8 +100,8 @@ var extractSiteData = (doc2) => {
   return {
     ...data,
     id: doc2.id,
-    created: (0, import_moment.default)(dateCreated).format("DD.MM.YYYY - HH:mm"),
-    updated: (0, import_moment.default)(dateUpdated).format("DD.MM.YYYY - HH:mm")
+    created: moment(dateCreated).format("DD.MM.YYYY - HH:mm"),
+    updated: moment(dateUpdated).format("DD.MM.YYYY - HH:mm")
   };
 };
 var extractClientData = (doc2) => {
@@ -169,13 +111,13 @@ var extractClientData = (doc2) => {
   return {
     ...data,
     id: doc2.id,
-    created: (0, import_moment.default)(dateCreated).format("HH:mm  DD/MM/YY"),
-    updated: (0, import_moment.default)(dateUpdated).format("HH:mm  DD/MM/YY")
+    created: moment(dateCreated).format("HH:mm  DD/MM/YY"),
+    updated: moment(dateUpdated).format("HH:mm  DD/MM/YY")
   };
 };
 var extractBoardsData = (doc2) => {
   const data = doc2.data();
-  const dateUploaded = typeof data.uploaded === "string" ? data.uploaded : import_moment.default.unix(data.uploaded?.seconds).format("DD/MM/YY HH:mm");
+  const dateUploaded = typeof data.uploaded === "string" ? data.uploaded : moment.unix(data.uploaded?.seconds).format("DD/MM/YY HH:mm");
   return {
     ...data,
     id: doc2.id,
@@ -212,7 +154,7 @@ var extractCanbusData = (doc2) => {
   const newDate = new Date(data.timestamp.seconds * 1e3);
   return {
     ...data,
-    date_ui: (0, import_moment.default)(newDate).format("DD/MM/YYYY - HH:mm")
+    date_ui: moment(newDate).format("DD/MM/YYYY - HH:mm")
   };
 };
 var extractLocationData = (doc2) => {
@@ -231,7 +173,7 @@ var extractLocationData = (doc2) => {
 };
 var get_all_documents = async (collection_path) => {
   try {
-    const snapshot = await (0, import_firestore.getDocs)((0, import_firestore.collection)(db, collection_path));
+    const snapshot = await getDocs(collection(db, collection_path));
     const documents = snapshot.docs.map((doc2) => simpleExtractData(doc2));
     return documents;
   } catch (error) {
@@ -240,8 +182,8 @@ var get_all_documents = async (collection_path) => {
 };
 var get_document_by_id = async (collection_path, doc_id) => {
   try {
-    const doc_ref = (0, import_firestore.doc)(db, collection_path, doc_id);
-    const doc_snap = await (0, import_firestore.getDoc)(doc_ref);
+    const doc_ref = doc(db, collection_path, doc_id);
+    const doc_snap = await getDoc(doc_ref);
     if (!doc_snap.exists()) {
       throw new Error("Document not found, document id: " + doc_id);
     }
@@ -253,8 +195,8 @@ var get_document_by_id = async (collection_path, doc_id) => {
 };
 var set_document = async (collection_path, doc_id, data) => {
   try {
-    const doc_ref = (0, import_firestore.doc)(db, collection_path, doc_id);
-    await (0, import_firestore.setDoc)(doc_ref, data, { merge: true });
+    const doc_ref = doc(db, collection_path, doc_id);
+    await setDoc(doc_ref, data, { merge: true });
     return true;
   } catch (error) {
     console.error(`Failed to create document by id: ${doc_id} in collection: ${collection_path}`, { error, data });
@@ -263,10 +205,10 @@ var set_document = async (collection_path, doc_id, data) => {
 };
 var add_document = async (collection_path, data, include_id = false) => {
   try {
-    const col_ref = (0, import_firestore.collection)(db, collection_path);
-    const doc_ref = await (0, import_firestore.addDoc)(col_ref, data);
+    const col_ref = collection(db, collection_path);
+    const doc_ref = await addDoc(col_ref, data);
     if (include_id) {
-      await (0, import_firestore.setDoc)(doc_ref, { ...data, id: doc_ref.id }, { merge: true });
+      await setDoc(doc_ref, { ...data, id: doc_ref.id }, { merge: true });
     }
     return true;
   } catch (error) {
@@ -276,8 +218,8 @@ var add_document = async (collection_path, data, include_id = false) => {
 };
 var delete_document = async (collection_path, doc_id) => {
   try {
-    const doc_ref = (0, import_firestore.doc)(db, collection_path, doc_id);
-    await (0, import_firestore.deleteDoc)(doc_ref);
+    const doc_ref = doc(db, collection_path, doc_id);
+    await deleteDoc(doc_ref);
     return true;
   } catch (error) {
     console.error(`Failed to delete document with id ${doc_id} from collection ${collection_path}`, error);
@@ -286,8 +228,8 @@ var delete_document = async (collection_path, doc_id) => {
 };
 var query_document = async (collection_path, field_name, operator, value, ignore_log = false) => {
   try {
-    const q = (0, import_firestore.query)((0, import_firestore.collection)(db, collection_path), (0, import_firestore.where)(field_name, operator, value));
-    const query_snapshot = await (0, import_firestore.getDocs)(q);
+    const q = query(collection(db, collection_path), where(field_name, operator, value));
+    const query_snapshot = await getDocs(q);
     const documents = query_snapshot.docs.map((doc2) => simpleExtractData(doc2));
     if (documents.length < 1) {
       throw new Error(
@@ -308,8 +250,8 @@ value: ${value}`
 };
 var query_documents = async (collection_path, field_name, operator, value) => {
   try {
-    const q = (0, import_firestore.query)((0, import_firestore.collection)(db, collection_path), (0, import_firestore.where)(field_name, operator, value));
-    const query_snapshot = await (0, import_firestore.getDocs)(q);
+    const q = query(collection(db, collection_path), where(field_name, operator, value));
+    const query_snapshot = await getDocs(q);
     const documents = query_snapshot.docs.map((doc2) => simpleExtractData(doc2));
     return documents;
   } catch (error) {
@@ -319,11 +261,11 @@ var query_documents = async (collection_path, field_name, operator, value) => {
 };
 var query_documents_by_conditions = async (collection_path, where_conditions) => {
   try {
-    let db_query = (0, import_firestore.collection)(db, collection_path);
+    let db_query = collection(db, collection_path);
     where_conditions.forEach((condition) => {
-      db_query = (0, import_firestore.query)(db_query, (0, import_firestore.where)(condition.field_name, condition.operator, condition.value));
+      db_query = query(db_query, where(condition.field_name, condition.operator, condition.value));
     });
-    const query_snapshot = await (0, import_firestore.getDocs)(db_query);
+    const query_snapshot = await getDocs(db_query);
     const documents = query_snapshot.docs.map((doc2) => simpleExtractData(doc2));
     return documents;
   } catch (error) {
@@ -333,11 +275,11 @@ var query_documents_by_conditions = async (collection_path, where_conditions) =>
 };
 var query_document_by_conditions = async (collection_path, where_conditions) => {
   try {
-    let db_query = (0, import_firestore.collection)(db, collection_path);
+    let db_query = collection(db, collection_path);
     where_conditions.forEach((condition) => {
-      db_query = (0, import_firestore.query)(db_query, (0, import_firestore.where)(condition.field_name, condition.operator, condition.value));
+      db_query = query(db_query, where(condition.field_name, condition.operator, condition.value));
     });
-    const query_snapshot = await (0, import_firestore.getDocs)(db_query);
+    const query_snapshot = await getDocs(db_query);
     const documents = query_snapshot.docs.map((doc2) => simpleExtractData(doc2));
     if (!documents[0]) {
       throw new Error("No data returned from DB");
@@ -467,7 +409,7 @@ var useStoreValues = (store, keys) => {
 };
 
 // src/helpers/phoneNumber.ts
-var import_libphonenumber_js = require("libphonenumber-js");
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 var isInternational = (phone_number) => {
   return phone_number.startsWith("+");
 };
@@ -483,7 +425,7 @@ var international_israel_phone_format = (phone) => {
 };
 var displayFormatPhoneNumber = (phoneNumber) => {
   if (isInternational(phoneNumber)) {
-    const phoneNumberObject = (0, import_libphonenumber_js.parsePhoneNumberFromString)(phoneNumber);
+    const phoneNumberObject = parsePhoneNumberFromString(phoneNumber);
     if (!phoneNumberObject) {
       return phoneNumber;
     }
@@ -491,8 +433,7 @@ var displayFormatPhoneNumber = (phoneNumber) => {
   }
   return phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
 };
-// Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
+export {
   add_document,
   auth,
   calculateBearing,
@@ -528,4 +469,4 @@ var displayFormatPhoneNumber = (phoneNumber) => {
   simpleExtractData,
   useStoreValues,
   useValidation
-});
+};

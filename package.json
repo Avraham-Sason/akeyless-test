@@ -2,7 +2,6 @@
     "name": "akeyless-client-commons2",
     "private": false,
     "version": "0.0.0",
-    "type": "module",
     "license": "ISC",
     "scripts": {
         "dev": "vite",
